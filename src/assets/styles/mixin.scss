@@ -1,0 +1,165 @@
+// border 1px(1物理像素边框)
+@mixin border-1px($color: null, $style: null) {
+  position: relative;
+  border-width: 0 !important;
+  // 有参数调用时 $style 默认值为 solid
+  // 无参数调用时，需要在目标元素自行声明 style，否则 border 不可见
+  @if ($color or $style) {
+   border-color: $color;
+   border-style: if($style, $style, solid);
+  }
+
+  &:after {
+    border-width: 1px; /* no */
+    border-color: inherit;
+    border-style: inherit;
+  }
+  // 目标元素有背景时，由于针对 dpr 的缩放处理没有作用于 border-raidus
+  // 所以实际显示的 border-radius 会比目标元素要小，无法贴合目标元素
+  // 理想的情况应该是伪元素 border-radius 是目标元素的 dpr 倍
+  // 使用另一伪元素来填补 border-radius 不贴合的背景露出
+  &:before {
+    background: inherit;
+    z-index: -1; // 作为背景
+  }
+  @extend %border-1px;
+}
+%border-1px {
+  &:before,
+  &:after {
+    content: '';
+    // 总是把目标元素的 border-width 设为 0
+    // 并且伪元素使用 border-box 而不是 content-box
+    // 保证伪元素边框始终绘制在目标元素的 padding-box 之上
+    box-sizing: border-box;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 100%;
+    height: 100%;
+    transform: translate(-50%, -50%);
+    border-radius: inherit;
+    @media (-webkit-min-device-pixel-ratio: 1.5), (min-device-pixel-ratio: 1.5) {
+      width: 150% !important;
+      height: 150% !important;
+      transform: translate(-50%, -50%) scale(0.66) !important;
+    }
+    @media (-webkit-min-device-pixel-ratio: 2), (min-device-pixel-ratio: 2) {
+      width: 200% !important;
+      height: 200% !important;
+      transform: translate(-50%, -50%) scale(0.5) !important;
+    }
+  }
+}
+
+// 浮动闭合
+@mixin clearfix() {
+  &:before,
+  &:after {
+    content: ' ';
+    display: talbe; // 防止 margin collapse?
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+// 矩形框
+@mixin rect($w, $h: $w) {
+  width: $w;
+  height: $h;
+}
+
+// 固定宽高比
+@mixin aspect-ratio($w, $h: $w) {
+  box-sizing: border-box;
+  position: relative;
+  & > * {
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+  &:after {
+    content: '';
+    box-sizing: border-box;
+    position: relative;
+    display: block;
+      padding-top: $h / $w * 100%;
+  }
+}
+
+// 单行省略号
+@mixin ellipsis() {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+// 多行省略号
+@mixin line-clamp($line: 3) {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $line;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// 遮罩层
+@mixin mask($z: 999, $hidden: false, $pos: fixed) {
+  position: $pos;
+  z-index: $z;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+
+  @if ($hidden) {
+    visibility: hidden;
+    & > * {
+      visibility: visible;
+    }
+  }
+}
+
+// 伪元素下边栏
+@mixin pseudo-border-bottom($width: 1px) {
+  &:after {
+    content: ' ';
+    position: absolute;
+    bottom: 0;
+    left: 1px;
+    right: 1px;
+    border: $width solid blue;
+  }
+  &:first-child:after {
+    left: 0;
+  }
+  &:last-child:after {
+    right: 0;
+  }
+}
+
+@mixin fx-full() {
+  display: flex;
+  & > * {
+    flex: 1;
+  }
+}
+
+@mixin fx-l-full() {
+  display: flex;
+  & > :first-child {
+    flex: 1;
+  }
+}
+
+@mixin fx-r-full() {
+  display: flex;
+  & > :last-child {
+    flex: 1;
+  }
+}
+
+/* file: mixin.scss */

@@ -1,0 +1,325 @@
+/* 布局类 */
+  .l-fx {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    &:before,
+    &:after {
+     position: absolute;
+    }
+   }
+  .l-fxc {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .l-ib {
+    font-size: 0;
+    text-align: center;
+    & > * {
+      display: inline-block;
+      vertical-align: middle;
+      font-size: medium;
+      text-align: left;
+      text-align: start;
+    }
+    &:after {
+      content: '';
+      display: inline-block;
+      vertical-align: middle;
+      height: 100%;
+    }
+  }
+  .l-fl {
+    & > * {
+      float: left;
+    }
+    &:after {
+      content: '';
+      display: block;
+      clear: both;
+    }
+  }
+  .l-tc {
+    & > * {
+      display: table-cell;
+      vertical-align: middle;
+    }
+  }
+
+/* 工具类 */
+  .clearfix {
+    &:before,
+    &:after {
+      content: ' ';
+      display: table;
+    }
+    &:after {
+      clear: both;
+    }
+  }
+  .ellipsis {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+// 原子类
+// ----------------------------------------
+
+/* position */
+  .pos-s { position: static; }
+  .pos-r { position: relative; }
+  .pos-a { position: absolute; }
+  .pos-f { position: fixed; }
+  .pos-sk { position: sticky; }
+
+/* z-index */
+  .z-a { z-index: auto; }
+  .z-0 { z-index: 0; }
+  .z-1 { z-index: 1; }
+  .z-m1 { z-index: -1; }
+  .z-9999 { z-index: 9999; }
+
+/* left */
+  .l-a { left: auto; }
+  .l-0 { left: 0; }
+  .l-50p { left: 50%; }
+  .l-100p { left: 100%; }
+
+/* top */
+  .t-a { top: auto; }
+  .t-0 { top: 0; }
+  .t-50p { top: 50%; }
+  .t-100p { top: 100%; }
+
+/* right */
+  .r-a { right: auto; }
+  .r-0 { right: 0; }
+  .r-50p { right: 50%; }
+  .r-100p { right: 100%; }
+
+/* bottom */
+  .b-a { bottom: auto; }
+  .b-0 { bottom: 0; }
+  .b-50p { bottom: 50%; }
+  .b-100p { bottom: 100%; }
+
+/* float */
+  .f-n { float: none; }
+  .f-l { float: left; }
+  .f-r { float: right; }
+
+/* box-sizing */
+  .bs-b { box-sizing: border-box; }
+  .bs-c { box-sizing: content-box; }
+
+/* overflow */
+  .o-v { overflow: visible; }
+  .o-h { overflow: hidden; }
+
+/* visibility */
+  .v-v { visibility: visible; }
+  .v-h { visibility: hidden; }
+  .v-c { visibility: collapse; }
+
+/* display */
+  .d-n { display: none; }
+  .d-i { display: inline; }
+  .d-b { display: block; }
+  .d-ib { display: inline-block; }
+  .d-t { display: table; }
+  .d-tc { display: table-cell; }
+  .d-f { display: flex; }
+  .d-if { display: inline-flex; }
+
+/* justify-content */
+  .jc-fs { justify-content: flex-start; }
+  .jc-fe { justify-content: flex-end; }
+  .jc-c { justify-content: center; }
+  .jc-sb { justify-content: space-between; }
+  .jc-sa { justify-content: space-around; }
+
+/* align-items */
+  .ai-fs { align-items: flex-start; }
+  .ai-fe { align-items: flex-end; }
+  .ai-c { align-items: center; }
+  .ai-b { align-items: baseline; }
+  .ai-s { align-items: stretch; }
+
+/* flex */
+  .fx-i,
+  .fx-0a,
+  .fx-01a {
+    flex: 0 1 auto;
+  }
+  .fx-n,
+  .fx-00a {
+    flex: none;
+  }
+  .fx-a,
+  .fx-1a,
+  .fx-11a {
+    flex: auto;
+  }
+  .fx-1,
+  .fx-11,
+  .fx-110 {
+    flex: 1;
+  }
+  .fx-0,
+  .fx-01,
+  .fx-010 {
+    flex: 0;
+  }
+  .fx-10,
+  .fx-100 {
+    flex: 1 0;
+  }
+  .fx-00,
+  .fx-000 {
+    flex: 0 1;
+  }
+  .fx-10a {
+    flex: 1 0 auto;
+  }
+
+/* width */
+  .w-a { width: auto; }
+  .w-0 { width: 0; }
+  .w-100p { width: 100%; }
+
+/* height */
+  .h-a { height: auto; }
+  .h-0 { height: 0; }
+  .h-100p { height: 100%; }
+
+/* white-space */
+  .ws-n { white-space: normal; }
+  .ws-nw { white-space: nowrap; }
+  .ws-p { white-space: pre; }
+  .ws-pl { white-space: pre-line; }
+  .ws-pw { white-space: pre-wrap; }
+
+/* text-align */
+  .ta-s { text-align: start; }
+  .ta-e { text-align: end; }
+  .ta-l { text-align: left; }
+  .ta-r { text-align: right; }
+  .ta-c { text-align: center; }
+  .ta-j { text-align: justify; }
+
+/* vertial-align */
+  .va-bl { vertical-align: baseline;}
+  .va-m { vertical-align: middle; }
+  .va-t { vertical-align: top; }
+  .va-b { vertical-align: bottom; }
+
+/* text-decoration */
+  .td-n { text-decoration: none; }
+  .td-u { text-decoration: underline; }
+
+/* TODO */
+/* margin */
+
+/* TODO */
+/* padding */
+
+/* TODO */
+/* line-height */
+
+/* TODO */
+/* font-size */
+$box-prop-map: (
+  padding: 'p',
+  margin: 'm',
+  left: 'l',
+  right: 'r',
+  top: 't',
+  bottom: 'b',
+  font-size: 'fz',
+  line-height: 'lh',
+);
+
+@function strip-unit($number) {
+  @return $number / ($number * 0 + 1);
+}
+
+@function range($start, $end, $step: 1, $trailing: true) {
+  $rst: ();
+  @if ($trailing) {
+    $end: $end + 1;
+  }
+  @while ($start < $end) {
+    $rst: append($rst, $start);
+    $start: $start + $step;
+  }
+  @return $rst;
+}
+
+@mixin make-box-props($prop, $value, $prop-map: $box-prop-map) {
+  // if value
+  //   is unitless, append 'px'
+  //   with valid unit, go on
+  //   with invalid unit, replace unit with 'px'
+  $units: 'px', '%', 'em', 'rem', 'ex', 'ch', 'vw', 'vh', 'vmax', 'vmin';
+  $currUnit: unit($value);
+  $unitlessValue: strip-unit($value);
+  $value: if(index($units, $currUnit), $value, if($unitlessValue == 0, $unitlessValue, $unitlessValue + 'px'));
+  @if index((font-size, line-height), $prop){
+    .#{map-get($prop-map, $prop)}-#{$unitlessValue} {
+      #{$prop}: #{$value}
+    }
+  } @else {
+    @each $direction in null, top, right, bottom, left {
+      .#{map-get($prop-map, $prop)}#{map-get($prop-map, $direction)}-#{$unitlessValue} {
+        #{$prop}#{if($direction == null, '', '-')}#{$direction}: #{$value} /* !important */;
+      }
+    }
+  }
+}
+
+// Classes for margin, padding, font-size, line-height
+// ---------------------------------------------------
+
+$prop-values-map: (
+ font-size: join((0), range(12, 60, 1)),
+ line-height: join((0), range(12, 100, 2)),
+ margin: range(0, 100, 8),
+ padding: range(0, 100, 8),
+);
+
+@each $prop, $values in $prop-values-map {
+  @if type-of($values) == 'number' {
+    @include make-box-props($prop, $values);
+  } @else {
+  @each $value in $values {
+    @include make-box-props($prop, $value);
+  }
+  }
+}
+
+// 等宽列
+// ----------------------------------------------------
+
+/* col 容器 */
+// @mixin makeColContainer($max_col:24) {
+//   @for $i from 1 through $max_col {
+//     .col-div-#{$i} > * {
+//       width: 100% / $i;
+//     }
+//   }
+// }
+// @include makeColContainer(24);
+
+/* col 条目 */
+@mixin makeColItem($max_col:24) {
+  @for $i from 1 through $max_col {
+    .col-#{$i} {
+      width: 100% * $i / $max_col;
+    }
+  }
+}
+@include makeColItem(24);
+
+/* file: util.scss */
