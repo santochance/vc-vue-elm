@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld :msg="msg"/>
+    <HelloWorld class="bd" :msg="msg"/>
   </div>
 </template>
 
@@ -28,3 +28,15 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+  .home {
+    text-align: center;
+  }
+  .bd {
+    border: 1px solid $some-color;
+    /* no */
+    font-size: 28px;
+    // @include border-1px;
+  }
+</style>
