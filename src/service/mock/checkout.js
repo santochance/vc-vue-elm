@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   "account_address_count": 2, // 地址数量
   "app_abandoned_info": {
     "description": "",

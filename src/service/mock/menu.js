@@ -10,7 +10,7 @@
   价格 Food.specfoods[0].price
  */
 
-export default [{
+module.exports = [{
     "description": "大家喜欢吃，才叫真好吃。",
     "is_selected": true,
     "icon_url": "06a05b267f338acfeb8bd682d16e836dpng",

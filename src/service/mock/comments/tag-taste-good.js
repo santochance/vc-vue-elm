@@ -1,4 +1,4 @@
-export default [
+module.exports = [
   {
     avatar: "10463b3181aa6b023229df6d5f47ed85jpeg",
     food_ratings: [

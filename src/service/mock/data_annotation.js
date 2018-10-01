@@ -1,4 +1,4 @@
-export default [
+module.exports = [
   {
     "item_id": "200000172377869816",
     "name": "超值版午餐：1鸡排3鸡肉1饮料套餐", // 食品标题

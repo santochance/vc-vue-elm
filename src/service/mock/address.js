@@ -1,4 +1,4 @@
-export default [
+module.exports = [
   {
     "address": "民治大道", // 短地址
     "address_detail": "广东省深圳市龙华区民治大道", // 长地址

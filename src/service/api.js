@@ -13,19 +13,19 @@ export const fetchRestaurant = (restaurantId) =>
  * 查询餐厅菜单
  */
 export const  fetchFoodMenu = (restaurantId) =>
-  request(`/restaurant/${restaurantId}/menu`)
+  request(`/restaurants/${restaurantId}/menu`)
 
 /**
  * 查询餐厅评分概况
  */
 export const fetchRatingOverview = (restaurantId) =>
-  request(`/restaurant/${restaurantId}/ratings`)
+  request(`/restaurants/${restaurantId}/ratings`)
 
 /**
  * 查询餐厅评价
  */
 export const fetchComments = ({ restaurantId, tagName, offset, limit }) =>
-  request(`/restaurant/${restaurantId}/comments?${stringify({
+  request(`/restaurants/${restaurantId}/comments?${stringify({
     tag_name: tagName,
     offset,
     limit,

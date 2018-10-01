@@ -38,7 +38,7 @@
 
  */
 
-export default {
+module.exports = {
   "activities": [
     {
       "attribute": "17.0",

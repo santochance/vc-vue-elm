@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   comments: {
     code: 200,
     body:
