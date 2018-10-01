@@ -17,7 +17,7 @@
 
   // reset rem unit on page resize
   window.addEventListener('resize', function () {
-    console.log('resize')
+    // console.log('resize')
     refresh()
   })
   window.addEventListener('pageshow', function (e) {
