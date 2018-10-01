@@ -20,7 +20,7 @@
         </div>
       </div>
       <div class="shop__activity" v-if="shopDetails.activities && shopDetails.activities.length > 0"
-        @click.stop.prevent="toggleActivityListVisible(true)">
+        @click.stop.prevent="activityListShow = true">
         <div class="shop__activity-abstract">
           <tag class="shop__activity-icon" :style="{ fontSize: $toRem(18), backgroundColor: '#' + shopDetails.activities[0].icon_color }"
             >{{ shopDetails.activities[0].icon_name }}</tag>
@@ -33,22 +33,38 @@
       <div class="shop__promotion">公告: {{ shopDetails.promotion_info }}
       </div>
     </div>
+
+    <modal :visible="shopInfoShow" panel="center" closeBtn="center" @close="shopInfoShow = false">
+      <ShopInfo :shopDetails="shopDetails" />
+    </modal>
+    <modal :visible="activityListShow" panel="bottom" @close="activityListShow = false">
+      <ActivityList :shopDetails="shopDetails" />
+    </modal>
   </section>
 </template>
 
 <script>
-  import { Tag } from '@/components/common'
+  import { Tag, Modal } from '@/components/common'
+
+  import ShopInfo from './ShopInfo'
+  import ActivityList from './ActivityList'
 
   export default {
     name: 'ShopHeader',
     components: {
       Tag,
+      Modal,
+      ShopInfo,
+      ActivityList,
     },
     props: {
       shopDetails: Object,
     },
     data() {
       return {
+        shopInfoShow: false,
+        activityListShow: false,
+
         /* img params */
         shopPostImgParam: '?imageMogr/format/webp/thumbnail/750x/',
         shopLogoImgParam: '?imageMogr/format/webp/thumbnail/150x/',
@@ -116,6 +132,7 @@
     width: 150px;
     height: 150px;
     & > img {
+      width: 100%;
       border-radius: 6px;
       box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 0.4vw 0px;
     }

@@ -1,6 +1,7 @@
 <template>
   <div v-if="shopDetails" class="shop__block">
-    <shop-header :shop-details="shopDetails"></shop-header>
+    <ShopHeader :shopDetails="shopDetails"
+    />
     <tabs :tabs="tabs" lazy>
       <component v-for="(tab) in tabs" :key="tab.key"
         :is="tab.key"></component>
@@ -12,7 +13,7 @@
   import { fetchRestaurant } from '@/service/api'
   import { Tabs } from '@/components/common'
 
-  import ShopHeader from './ShopHeader'
+  import ShopHeader from './ShopHeader/ShopHeader'
   import FoodMenu from './FoodMenu/FoodMenu'
   import Rating from './Rating'
   import Seller from './Seller'
