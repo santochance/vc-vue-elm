@@ -4,6 +4,24 @@
   </div>
 </template>
 
+<script>
+
+  export default {
+    name: 'App',
+    components: {
+
+    },
+    data() {
+      return {
+
+      }
+    },
+    created() {
+      this.$store.dispatch('fetchCurrentUser')
+    },
+  }
+</script>
+
 <style lang="scss" scoped>
 #app {
   display: flex;

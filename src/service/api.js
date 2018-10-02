@@ -4,6 +4,11 @@ import request from '@/util/request'
 export const fetchHello = () => request(`/hello`)
 
 /**
+ * 查询当前登录用户
+ */
+export const fetchCurrentUser = () => request(`/users/current`)
+
+/**
  * 查询餐厅信息
  */
 export const fetchRestaurant = (restaurantId) =>

@@ -24,6 +24,10 @@ module.exports = function (app) {
     res.json({ message: 'Hello, world!' })
   })
 
+  app.get('/users/current', (req, res) => {
+    res.json({ id: 123456, username: 'Vincent' })
+  })
+
   app.get('/restaurants/:id', (req, res) => {
     res.json(shopDetails)
   })
