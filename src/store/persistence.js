@@ -2,8 +2,14 @@ import persistence from '@/util/persistence'
 
 export function initState(state) {
   let initial = {}
-  initial.userId = persistence.getItem('USER_ID')
-  initial.cartMap = persistence.getItem('CART_MAP')
+  const userId = persistence.getItem('USER_ID')
+  if (userId && typeof userId === 'number') {
+    initial.userId = userId
+  }
+  const cartMap = persistence.getItem('CART_MAP')
+  if (cartMap && typeof cartMap === 'object') {
+    initial.cartMap = cartMap
+  }
 
   return { ...state, ...initial }
 }
