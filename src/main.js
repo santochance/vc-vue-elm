@@ -5,12 +5,15 @@ import store from './store';
 
 import { parseImgHash } from '@/util/utils'
 import Sticker from '@/util/Sticker'
+import persistence from '@/util/persistence'
 
 import '@/util/flexible';
 import '@/assets/styles/base.scss';
 import '@/assets/styles/util.scss';
 
 Vue.config.productionTip = false;
+
+Vue.prototype.$persistence = persistence
 
 const host = '//fuss10.elemecdn.com'
 Vue.prototype.$getImage = function (hash, param) {
