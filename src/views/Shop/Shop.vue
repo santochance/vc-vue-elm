@@ -14,7 +14,7 @@
   import { Tabs } from '@/components/common'
 
   import ShopHeader from './ShopHeader/ShopHeader'
-  import FoodMenu from './FoodMenu/FoodMenu'
+  import OrderFood from './OrderFood/OrderFood'
   import Rating from './Rating'
   import Seller from './Seller'
 
@@ -23,7 +23,7 @@
     components: {
       Tabs,
       ShopHeader,
-      FoodMenu,
+      OrderFood,
       Rating,
       Seller,
     },
@@ -36,7 +36,7 @@
 
         shopId: 157158603, // 餐厅 id
         tabs: [{
-          key: 'food-menu',
+          key: 'order-food',
           title: '点餐',
         }, {
           key: 'rating',

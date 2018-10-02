@@ -1,11 +1,23 @@
 <template>
   <div>FoodMenu</div>
+
 </template>
 
 <script>
 
   export default {
-    name: 'food-menu',
+    name: 'FoodMenu',
+    components: {
+
+    },
+    props: {
+
+    },
+    data() {
+      return {
+
+      }
+    },
   }
 </script>
 
