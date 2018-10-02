@@ -8,12 +8,13 @@
 
   export default {
     name: 'OrderFood',
+    inheritAttrs: false,
     components: {
       FoodMenu,
       CartView,
     },
     props: {
-
+      shopDetails: Object,
     },
     data() {
       return {

@@ -5,7 +5,8 @@
 <script>
 
   export default {
-    name: 'seller',
+    name: 'Seller',
+    inheritAttrs: false,
   }
 </script>
 
