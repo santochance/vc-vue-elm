@@ -5,6 +5,8 @@
 </template>
 
 <script>
+  import SvgIcon from '@/components/SvgIcon'
+  import Vue from 'vue'
 
   export default {
     name: 'App',
@@ -17,8 +19,16 @@
       }
     },
     created() {
+      this.mountSvgIcon()
       this.$store.dispatch('fetchCurrentUser')
     },
+    methods: {
+      mountSvgIcon() {
+        const icons = new (Vue.extend(SvgIcon))()
+        icons.$mount()
+        document.body.appendChild(icons.$el)
+      }
+    }
   }
 </script>
 
