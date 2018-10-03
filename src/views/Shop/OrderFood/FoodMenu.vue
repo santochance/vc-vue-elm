@@ -77,6 +77,10 @@
           </ul>
       </li>
     </ul>
+    <modal :visible="specShow" panel="center" :closable="false" :zIndex="1001" @close="closeSpecPanel">
+      <FoodSpec :item="specItem"
+        @ok="saveSpecPanel"></FoodSpec>
+    </modal>
   </div>
 </template>
 
@@ -85,7 +89,7 @@
 
   import { Tag, Modal } from '@/components/common'
   import CartButton from '@/components/CartButton'
-
+  import FoodSpec from './FoodSpec.vue'
 
   export default {
     name: 'FoodMenu',
@@ -93,6 +97,7 @@
       Tag,
       Modal,
       CartButton,
+      FoodSpec,
     },
     props: {
       menu: Array,
@@ -112,6 +117,10 @@
 
         iconImgParam: '?imageMogr/format/webp/thumbnail/26x/',
         foodImgParam: '?imageMogr/format/webp/thumbnail/!140x140r/gravity/Center/crop/140x140/',
+
+        // FoodSpec modal
+        specShow: false,
+        specItem: null, // FoodSpec 组件显示的 food 实体
 
       }
     },
@@ -208,7 +217,25 @@
           restaurant_id: this.restaurantId,
         })
       },
-
+      /*
+        Spec Panel
+       */
+      openSpecPanel(item) {
+        this.specShow = true
+        this.specItem = item
+      },
+      closeSpecPanel() {
+        this.specShow = false
+        this.specItem = null
+      },
+      saveSpecPanel(item) {
+        this.ADD_CART({
+          ...item,
+          ...item.specfoods[0],
+        })
+        this.closeSpecPanel()
+      },
+    },
     watch: {
       /*
         Selected nums of menu category

@@ -1,5 +1,8 @@
 <template>
-  <div>OrderFood</div>
+  <div>
+    <FoodMenu :menu="menu" />
+    <!-- <CartView :shopDetails="shopDetails" /> -->
+  </div>
 </template>
 
 <script>
@@ -15,6 +18,7 @@
     },
     props: {
       shopDetails: Object,
+      menu: Array,
     },
     data() {
       return {
