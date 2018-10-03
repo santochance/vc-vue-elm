@@ -68,6 +68,9 @@
                       >￥{{ item.specfoods[0].original_price }}</del>
                   </strong>
 
+                  <cart-button class="food__btns" :item="item"
+                    @showspec="openSpecPanel"
+                  />
                 </div>
               </div>
             </li>
@@ -81,6 +84,7 @@
   import { mapState, mapMutations } from 'vuex'
 
   import { Tag, Modal } from '@/components/common'
+  import CartButton from '@/components/CartButton'
 
 
   export default {
@@ -88,6 +92,7 @@
     components: {
       Tag,
       Modal,
+      CartButton,
     },
     props: {
       menu: Array,
@@ -176,8 +181,34 @@
         this.activeMenuItem = key
         this.needToScroll = true
       },
+      /*
+        Vuex mutaions/actions
+       */
+      ...mapMutations([
+        'ADD_CART', 'REDUCE_CART', 'CLEAR_CART',
+      ]),
 
-    },
+      /*
+        Cart
+       */
+      addCart(entity) {
+        this.ADD_CART({
+          restaurant_id: this.restaurantId,
+          ...entity,
+        })
+      },
+      reduceCart(entity) {
+        this.REDUCE_CART({
+          restaurant_id: this.restaurantId,
+           ...entity,
+        })
+      },
+      clearCart() {
+        this.CLEAR_CART({
+          restaurant_id: this.restaurantId,
+        })
+      },
+
     watch: {
       /*
         Selected nums of menu category
