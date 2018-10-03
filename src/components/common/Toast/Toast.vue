@@ -108,10 +108,10 @@
       margin-bottom: 80px;
     }
     .toast__content {
-      padding: 40px;
+      padding: 24px 30px;
       margin: auto;
       border-radius: 10px;
-      font-size: 32px;
+      font-size: 26px;
       color: #fff;
       background-color: rgba(0, 0, 0, .6);
     }
