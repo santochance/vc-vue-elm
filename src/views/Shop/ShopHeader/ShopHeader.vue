@@ -210,8 +210,8 @@
     text-overflow: ellipsis;
   }
   .shop__activity-icon {
-    padding: 6px 9px;
-    margin-right: 12px;
+    padding: 4px 6px;
+    margin-right: 8px;
   }
   .shop__activity-show-btn {
     position: relative;

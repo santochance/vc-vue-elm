@@ -91,7 +91,7 @@
   .toast {@at-root {
     .toast__block {
       position: fixed;
-      z-index: 999;
+      z-index: 9999;
       top: 0;
       left: 0;
       bottom: 0;
