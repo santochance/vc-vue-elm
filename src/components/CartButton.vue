@@ -1,21 +1,31 @@
 <template>
   <div class="cart__entity-btns">
-    <a v-if="quantity > 0" href="javascript:" class="cart__entity-btn-minus" @click.stop.prevent="reduceCart()">
-      <svg><use xlink:href="#cart-minus"></use></svg>
-    </a>
-    <span v-if="quantity > 0" class="cart__entity-quantity">{{ quantity }}</span>
-    <a v-if="item.attrs.length <= 0" href="javascript:" class="cart__entity-btn-add" @click.stop.prevent="addCart()">
-      <svg><use xlink:href="#cart-add"></use></svg>
-    </a>
-    <a v-else href="javascript:" class="cart__entity-btn-spec" @click.stop.prevent="onShowSpec">
-      <span class="cart__entitiy-btn-specBtn">选规格</span>
-    </a>
+    <template v-if="item.attrs.length <= 0">
+      <a v-if="quantity > 0" href="javascript:" class="cart__entity-btn-minus" @click.stop.prevent="reduceCart()">
+        <svg><use xlink:href="#cart-minus"></use></svg>
+      </a>
+      <span v-if="quantity > 0" class="cart__entity-quantity">{{ quantity }}</span>
+      <a href="javascript:" class="cart__entity-btn-add" @click.stop.prevent="addCart()">
+        <svg><use xlink:href="#cart-add"></use></svg>
+      </a>
+    </template>
+    <template v-else>
+      <a v-if="quantity > 0" href="javascript:" class="cart__entity-btn-minus" @click.stop.prevent="showToast">
+        <svg><use xlink:href="#cart-minus"></use></svg>
+      </a>
+      <span v-if="quantity > 0" class="cart__entity-quantity">{{ quantity }}</span>
+      <a href="javascript:" class="cart__entity-btn-spec" @click.stop.prevent="onShowSpec">
+        <span class="cart__entitiy-btn-specBtn">选规格</span>
+      </a>
+    </template>
   </div>
 </template>
 
 <script>
   /* eslint-disable no-console, no-debugger  */
   import { mapState, mapMutations } from 'vuex'
+
+  import { Toast } from '@/components/common'
 
   export default {
     props: {
@@ -60,6 +70,12 @@
           ...this.item.specfoods[0],
         })
       },
+      showToast() {
+        Toast.open({
+          content: '多规格食品只能在购物车中减少数量',
+          mask: false,
+        })
+      },
       onShowSpec() {
         this.$emit('showspec', this.item)
       },
@@ -81,13 +97,13 @@
   .cart__entity-btn-add {
     display: inline-block;
     vertical-align: middle;
-    padding: 7px;
     text-decoration: none;
   }
   .cart__entity-quantity {
     overflow: hidden;
     display: inline-block;
     vertical-align: middle;
+    padding: 8px;
     text-align: center;
     font-size: 28px;
     color: #666;
