@@ -81,6 +81,10 @@
       <FoodSpec :item="specItem"
         @ok="saveSpecPanel"></FoodSpec>
     </modal>
+    <FoodDetail :visible="foodDetailVisible"
+      :food="showingFood"
+      @close="(foodDetailVisible = false, showingFood = null)"
+      @showspec="openSpecPanel"></FoodDetail>
   </div>
 </template>
 
@@ -88,8 +92,9 @@
   import { mapState, mapMutations } from 'vuex'
 
   import { Tag, Modal } from '@/components/common'
-  import CartButton from '@/components/CartButton'
+  import CartButton from './CartButton'
   import FoodSpec from './FoodSpec.vue'
+  import FoodDetail from './FoodDetail'
 
   export default {
     name: 'FoodMenu',
@@ -98,6 +103,7 @@
       Modal,
       CartButton,
       FoodSpec,
+      FoodDetail,
     },
     props: {
       menu: Array,
@@ -121,6 +127,9 @@
         // FoodSpec modal
         specShow: false,
         specItem: null, // FoodSpec 组件显示的 food 实体
+        /* 食品明细面板 */
+        showingFood: null,
+        foodDetailVisible: false,
 
       }
     },
