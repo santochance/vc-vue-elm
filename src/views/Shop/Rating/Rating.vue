@@ -35,7 +35,7 @@
           </li>
         </ul>
 
-        <ul class="rating__comments" v-show="comments.length">
+        <ul class="rating__comments" v-if="comments.length">
           <li v-for="(comment, index) in comments" :key="String(comment.food_id) + index"
             class="comment"
           >
@@ -63,12 +63,15 @@
                   </div>
                   <div class="comment__rating-text">{{ comment.rating_text }}</div>
                   <div class="comment__reply-content">{{ comment.reply && comment.reply.content }}</div>
+                  <!--
                   <ul class="comment__food-images">
                     <li v-for="(image, index) in comment.order_images" :key="index"
                       class="comment__food-image">
                       <img :src="$getImage(image.image_hash, commentImgParam)" alt="">
                     </li>
                   </ul>
+                   -->
+                  <viewer :items="transformForViewer(comment.order_images)"></viewer>
                   <div class="comment__food-list">
                     <svg><use xlink:href="#like"></use></svg>
                     <template>
@@ -97,12 +100,14 @@
 <script>
   import { fetchRatingOverview, fetchComments } from '@/service/api'
   import LoadingImage from '@/components/LoadingImage'
+  import Viewer from '@/components/Viewer'
   import InfiniteLoading from 'vue-infinite-loading'
 
   export default {
     components: {
       InfiniteLoading,
       LoadingImage,
+      Viewer,
     },
     data () {
       return {
@@ -119,6 +124,7 @@
 
         avatarImgParam: '?imageMogr/format/webp/thumbnail/!60x60r/gravity/Center/crop/60x60/',
         commentImgParam: '?imageMogr/format/webp/thumbnail/300x/',
+        commentBigImgParam: '?imageMogr/format/webp/thumbnail/750x/',
 
         ratingGradeMap: {
           1: ['吐槽', 'rgb(137, 159, 188)'],
@@ -175,6 +181,14 @@
           this.offset = this.comments.length
           return comments.length > 1 ? 'loaded' : 'complete'
         })
+      },
+      transformForViewer(items) {
+        return (items || []).map(item => ({
+          thumbnail: this.$getImage(item.image_hash, this.commentImgParam),
+          image: this.$getImage(item.image_hash, this.commentBigImgParam),
+          caption: item.food_names[0],
+          loaded: false,
+        }))
       },
     },
     filters: {
