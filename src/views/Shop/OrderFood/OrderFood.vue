@@ -1,19 +1,22 @@
 <template>
   <div>
     <FoodMenu :menu="menu"
+      :shopDetails="shopDetails"
       :entities="entities"
      />
     <CartView :entities="entities"
       :minAmount="shopDetails && shopDetails.float_minimum_order_amount"
-      @addcart="$emit('addcart', $event)"
-      @reducecart="$emit('reducecart', $event)"
-      @clearcart="$emit('clearcart', $event)"
-      @submitcart="$emit('submitcart', $event)"
+      @addcart="addCart"
+      @reducecart="reduceCart"
+      @clearcart="clearCart"
+      @submitcart="toCheckout"
     />
   </div>
 </template>
 
 <script>
+  import { mapMutations } from 'vuex'
+
   import FoodMenu from './FoodMenu'
   import CartView from './CartView'
 
@@ -41,6 +44,31 @@
         } catch(e) {
           return []
         }
+      },
+    },
+    methods: {
+      ...mapMutations([
+        'ADD_CART', 'REDUCE_CART', 'CLEAR_CART',
+      ]),
+      addCart(entity) {
+        this.ADD_CART({
+          restaurant_id: this.shopDetails.id,
+          ...entity,
+        })
+      },
+      reduceCart(entity) {
+        this.REDUCE_CART({
+          restaurant_id: this.shopDetails.id,
+          ...entity,
+        })
+      },
+      clearCart() {
+        this.CLEAR_CART({
+          restaurant_id: this.shopDetails.id,
+        })
+      },
+      toCheckout() {
+
       },
     }
   }

@@ -106,8 +106,18 @@
       FoodDetail,
     },
     props: {
-      menu: Array,
-      shopDetails: Object,
+      shopDetails: {
+        type: Object,
+        required: true,
+      },
+      menu: {
+        type: Array,
+        required: true,
+      },
+      entities: {
+        type: Array,
+        required: true,
+      },
     },
     data() {
       return {
@@ -134,18 +144,6 @@
       }
     },
     computed: {
-      /* menu, cart, checkout */
-      restaurantId() {
-        return this.shopDetails && this.shopDetails.id
-      },
-      /* Vuex state */
-      ...mapState({
-        entities(state) {
-          let restaurant = state.cartMap[this.restaurantId] || {}
-          let entities = restaurant.entities || []
-          return entities
-        },
-      }),
       /* menu nav 各条目的选中数量 */
       selectedNums() {
         const entities = this.entities;

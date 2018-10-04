@@ -203,7 +203,7 @@
 }
 .cartview__entitylist {
   overflow: auto;
-  max-height: 550;
+  max-height: 550px;
 }
 .entityitem {
   box-sizing: border-box;
