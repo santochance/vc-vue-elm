@@ -1,8 +1,10 @@
 <template>
   <div class="viewer__container">
-    <div v-show="transitionVisible" class="viewer__mask"
-      @click.stop.prevent="close(currentIdx)"
-    ></div>
+    <transition name="fade">
+      <div v-show="transitionVisible" class="viewer__mask"
+        @click.stop.prevent="close(currentIdx)"
+      ></div>
+    </transition>
     <div class="viewer__wrap">
       <transition name="view"
         @beforeEnter="beforeEnter"
@@ -12,7 +14,8 @@
         @leave="leave"
         @afterLeave="afterLeave"
       >
-        <div v-if="activeItem" v-show="transitionVisible"
+        <div v-if="activeItem"
+          v-show="transitionVisible"
           class="transition-container"
           :style="[rectStyle, transformStyle]"
           @click.stop.prevent="close(currentIdx)">
@@ -25,7 +28,7 @@
         <div class="gallery__wrap">
           <div v-for="(item, idx) in items" :key="idx"
             class="gallery__item">
-            <div class="o-image__item" @click.stop.prevent="/*close(galleryCurrentIdx)*/$emit('close', galleryCurrentIdx)">
+            <div class="o-image__item" @click.stop.prevent="close(galleryCurrentIdx)">
               <img :src="item.image" alt="">
               <div class="o-image__caption">{{ item.caption }}</div>
             </div>
@@ -187,6 +190,7 @@
       },
       /* js 过渡钩子 */
       beforeEnter() {
+        // console.log('debug - ViewerModal.beforeEnter')
         const { rectStyle, transformStyle } = this.computedStyles
 
         // 设置过渡开始状态
@@ -308,7 +312,7 @@
       right: 0;
       bottom: 0;
       margin: auto;
-      background-color: rgba(0, 0, 0, .5);
+      background-color: rgba(0, 0, 0, .9);
     }
     .viewer__wrap {
       position: fixed;
@@ -354,7 +358,7 @@
   .o-image {@at-root {
     .o-image__gallery {
       position: fixed;
-      z-index: 1;
+      z-index: 10;
       top: 0;
       left: 0;
       bottom: 0;
@@ -396,10 +400,21 @@
   .transition-container {
     position: fixed;
     z-index: 5;
-    transition: all .2s;
+    transition: all .3s;
 
     & > img {
       width: 100%;
     }
+  }
+
+  .fade-enter-active {
+    transition: opacity .3s;
+  }
+  .fade-leave-active {
+    transition: opacity .3s;
+  }
+  .fade-enter,
+  .fade-leave-to {
+    opacity: 0;
   }
 </style>
