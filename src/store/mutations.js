@@ -28,7 +28,6 @@ function createCartDetail(payload) {
     name,
     packing_fee,
     price,
-    quantity: 0,
     sku_id,
     specs,
     stock,
@@ -67,14 +66,12 @@ export default {
     const entities = cart.entities || (cart.entities = [])
 
     let [entity, entityIndex] = getCartDetail(cart, payload)
-
     if (!entity) {
       entity = createCartDetail(payload)
-      entities.push(entity)
-      entityIndex = entities.length
+      entityIndex = entities.length + 1
     }
 
-    const newQuantity = entity.quantity + quantity
+    const newQuantity = (entity.quantity || 0) + quantity
     if (newQuantity > stock) {
       Toast.open({
         content: '超过库存，无法添加!',
@@ -82,7 +79,6 @@ export default {
       })
     } else {
       entities.splice(entityIndex, 1, { ...entity, quantity: newQuantity })
-      // entity.quantity = newQuantity
     }
 
     // state.cartMap = {...cartMap}
@@ -100,7 +96,7 @@ export default {
     let [entity, entityIndex] = getCartDetail(cart, payload)
     if (!entity) return
 
-    const newQuantity = entity.quantity - quantity
+    const newQuantity = (entity.quantity || 0) - quantity
     if (newQuantity <= 0) {
       entities.splice(entityIndex, 1)
     } else {
