@@ -6,7 +6,11 @@
 
   export default {
     name: 'Seller',
-    inheritAttrs: false,
+    props: {
+      shopDetails: {
+        type: Object,
+      }
+    }
   }
 </script>
 

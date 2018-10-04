@@ -5,8 +5,7 @@
     <tabs :tabs="tabs" lazy>
       <component v-for="(tab) in tabs" :key="tab.key"
         :is="tab.key"
-        :shopDetails="shopDetails"
-        :menu="menu"
+        v-bind="propsMap[tab.key]"
         ></component>
     </tabs>
   </div>
@@ -42,14 +41,28 @@
         tabs: [{
           key: 'order-food',
           title: '点餐',
+          props: ['shopDetails', 'menu'],
         }, {
           key: 'rating',
           title: '评价',
         }, {
           key: 'seller',
           title: '商家',
+          props: ['shopDetails'],
         }],
       }
+    },
+    computed: {
+      propsMap() {
+        return this.tabs.reduce((rst, tab) =>
+          ({
+            ...rst,
+            [tab.key]: (tab.props || []).reduce((props, name) =>
+              ({ ...props, [name]: this[name] })
+            , {})
+          })
+        , {})
+      },
     },
     created() {
       this.shopId = this.$route.query.id || this.shopId

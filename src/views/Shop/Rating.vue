@@ -6,7 +6,6 @@
 
   export default {
     name: 'Rating',
-    inheritAttrs: false,
   }
 </script>
 

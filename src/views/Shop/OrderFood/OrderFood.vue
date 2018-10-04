@@ -42,7 +42,6 @@
 
   export default {
     name: 'OrderFood',
-    inheritAttrs: false,
     components: {
       Modal,
       FoodMenu,
