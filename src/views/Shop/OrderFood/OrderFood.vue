@@ -3,6 +3,10 @@
     <FoodMenu :menu="menu"
       :shopDetails="shopDetails"
       :entities="entities"
+      @add="addCart"
+      @reduce="reduceCart"
+      @showspec="openSpecPanel"
+      @showdetail="openFoodDetail"
      />
     <CartView :entities="entities"
       :minAmount="shopDetails && shopDetails.float_minimum_order_amount"
@@ -11,21 +15,40 @@
       @clearcart="clearCart"
       @submitcart="toCheckout"
     />
+    <modal :visible="specShow" panel="center" :closable="false" :zIndex="1001" @close="closeSpecPanel">
+      <FoodSpec :item="specItem"
+        @ok="saveSpecPanel"></FoodSpec>
+    </modal>
+    <FoodDetail :visible="foodDetailVisible"
+      :food="showingFood"
+      @close="closeFoodDetail"
+      @add="addCart"
+      @reduce="reduceCart"
+      @showspec="openSpecPanel"
+    ></FoodDetail>
   </div>
 </template>
 
 <script>
   import { mapMutations } from 'vuex'
 
+  import { Modal } from '@/components/common'
+
   import FoodMenu from './FoodMenu'
   import CartView from './CartView'
+  import FoodSpec from './FoodSpec.vue'
+  import FoodDetail from './FoodDetail'
+
 
   export default {
     name: 'OrderFood',
     inheritAttrs: false,
     components: {
+      Modal,
       FoodMenu,
       CartView,
+      FoodSpec,
+      FoodDetail,
     },
     props: {
       shopDetails: Object,
@@ -33,7 +56,12 @@
     },
     data() {
       return {
-
+        // FoodSpec modal
+        specShow: false,
+        specItem: null, // FoodSpec 组件显示的 food 实体
+        /* 食品明细面板 */
+        showingFood: null,
+        foodDetailVisible: false,
       }
     },
     computed: {
@@ -47,6 +75,7 @@
       },
     },
     methods: {
+      /* Cart */
       ...mapMutations([
         'ADD_CART', 'REDUCE_CART', 'CLEAR_CART',
       ]),
@@ -69,6 +98,33 @@
       },
       toCheckout() {
 
+      },
+
+      /*
+        Spec Panel
+       */
+      openSpecPanel(food) {
+        this.specShow = true
+        this.specItem = food
+      },
+      closeSpecPanel() {
+        this.specShow = false
+        this.specItem = null
+      },
+      saveSpecPanel(entity) {
+        this.addCart(entity)
+        this.closeSpecPanel()
+      },
+      /*
+        Food Detail Panel
+       */
+      openFoodDetail(food) {
+        this.showingFood = food
+        this.foodDetailVisible = true
+      },
+      closeFoodDetail() {
+        this.showingFood = null
+        this.foodDetailVisible = false
       },
     }
   }

@@ -40,10 +40,7 @@
           <ul class="menu__list">
             <li v-for="item in list.foods" :key="item.item_id"
               class="menu__list-item"
-              @click.stop.prevent="(
-                foodDetailVisible = true,
-                showingFood = item
-              )">
+              @click.stop.prevent="onShowDetail(item)">
               <div class="food__container">
                 <div class="food__img">
                   <tag v-if="item.attributes.length"
@@ -68,8 +65,11 @@
                       >￥{{ item.specfoods[0].original_price }}</del>
                   </strong>
 
-                  <cart-button class="food__btns" :item="item"
-                    @showspec="openSpecPanel"
+                  <cart-button class="food__btns"
+                    :item="item"
+                    @add="onAdd"
+                    @reduce="onReduce"
+                    @showspec="onShowSpec"
                   />
                 </div>
               </div>
@@ -77,33 +77,18 @@
           </ul>
       </li>
     </ul>
-    <modal :visible="specShow" panel="center" :closable="false" :zIndex="1001" @close="closeSpecPanel">
-      <FoodSpec :item="specItem"
-        @ok="saveSpecPanel"></FoodSpec>
-    </modal>
-    <FoodDetail :visible="foodDetailVisible"
-      :food="showingFood"
-      @close="(foodDetailVisible = false, showingFood = null)"
-      @showspec="openSpecPanel"></FoodDetail>
   </div>
 </template>
 
 <script>
-  import { mapState, mapMutations } from 'vuex'
-
-  import { Tag, Modal } from '@/components/common'
+  import { Tag } from '@/components/common'
   import CartButton from './CartButton'
-  import FoodSpec from './FoodSpec.vue'
-  import FoodDetail from './FoodDetail'
 
   export default {
     name: 'FoodMenu',
     components: {
       Tag,
-      Modal,
       CartButton,
-      FoodSpec,
-      FoodDetail,
     },
     props: {
       shopDetails: {
@@ -133,14 +118,6 @@
 
         iconImgParam: '?imageMogr/format/webp/thumbnail/26x/',
         foodImgParam: '?imageMogr/format/webp/thumbnail/!140x140r/gravity/Center/crop/140x140/',
-
-        // FoodSpec modal
-        specShow: false,
-        specItem: null, // FoodSpec 组件显示的 food 实体
-        /* 食品明细面板 */
-        showingFood: null,
-        foodDetailVisible: false,
-
       }
     },
     computed: {
@@ -165,6 +142,19 @@
       }
     },
     methods: {
+      /* event */
+      onShowDetail(food) {
+        this.$emit('showdetail', food)
+      },
+      onAdd($event) {
+        this.$emit('add', $event)
+      },
+      onReduce($event) {
+        this.$emit('reduce', $event)
+      },
+      onShowSpec($event) {
+        this.$emit('showspec', $event)
+      },
       // scroll active 监听器
       onScroll() {
         const scroller = this.$refs.scroller || window
@@ -197,67 +187,8 @@
         this.activeMenuItem = key
         this.needToScroll = true
       },
-      /*
-        Vuex mutaions/actions
-       */
-      ...mapMutations([
-        'ADD_CART', 'REDUCE_CART', 'CLEAR_CART',
-      ]),
-
-      /*
-        Cart
-       */
-      addCart(entity) {
-        this.ADD_CART({
-          restaurant_id: this.restaurantId,
-          ...entity,
-        })
-      },
-      reduceCart(entity) {
-        this.REDUCE_CART({
-          restaurant_id: this.restaurantId,
-           ...entity,
-        })
-      },
-      clearCart() {
-        this.CLEAR_CART({
-          restaurant_id: this.restaurantId,
-        })
-      },
-      /*
-        Spec Panel
-       */
-      openSpecPanel(item) {
-        this.specShow = true
-        this.specItem = item
-      },
-      closeSpecPanel() {
-        this.specShow = false
-        this.specItem = null
-      },
-      saveSpecPanel(item) {
-        this.ADD_CART({
-          ...item,
-          ...item.specfoods[0],
-        })
-        this.closeSpecPanel()
-      },
     },
     watch: {
-      /*
-        Selected nums of menu category
-       */
-      // entities(value) {
-      //   let nums = {};
-      //   value.forEach(ent => {
-      //     let id = ent.category_id
-      //     if (!(id in nums)) {
-      //       nums[id] = 0
-      //     }
-      //     nums[id] += ent.quantity
-      //   })
-      //   this.selectedNums = nums;
-      // },
       foodDetailVisible(value) {
         if (value) {
           document.documentElement.style.overflowY = 'hidden'
@@ -311,10 +242,8 @@
       background: #f8f8f8;
     }
     .menu__nav-item {
-      // border-bottom: 1px solid #e8e8e8;
       position: relative;
       padding: 33.6px 14.4px;
-      margin: 2px;
       font-size: .32rem;
       color: #666;
 
@@ -369,6 +298,7 @@
 
   .food {@at-root{
     .food__container {
+      overflow: hidden;
       position: relative;
       display: flex;
       box-sizing: border-box;
@@ -420,6 +350,7 @@
       line-height: 1.2;
       font-size: .4rem;
       font-weight: 700;
+      width: 300px;
     }
     .food__desc {
       margin: 10px 0;

@@ -53,6 +53,7 @@
       ok () {
         this.$emit('ok', {
           ...this.item,
+          ...this.item.specfoods[0], // 如果有多种规格属性？
           attrs: this.selectedAttrs,
         })
       },

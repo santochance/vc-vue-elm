@@ -12,7 +12,9 @@
           </div>
           <div class="food-detail__price-row">
             <span class="food-detail__price">{{ food.specfoods[0].price }}</span>
-            <cart-button class="food-detail__cart-btns" :item="food" @showspec="onShowSpec" />
+            <cart-button class="food-detail__cart-btns"
+              :item="food"
+              @showspec="onShowSpec" />
           </div>
           <div class="food-detail__description">{{ food.description }}</div>
         </div>
@@ -48,11 +50,12 @@
       }
     },
     methods: {
+      /* event */
       onClose() {
         this.$emit('close')
       },
-      onShowSpec() {
-        this.$emit('showspec', this.food)
+      onShowSpec($event) {
+        this.$emit('showspec', $event)
       },
     },
   }

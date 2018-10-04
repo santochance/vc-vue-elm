@@ -35,12 +35,12 @@
                 </a>
               </div>
             </li>
+            <li class="entityitem">
+              <div class="entityitem__info">餐盒</div>
+              <div class="entityitem__price">{{ total.packingFee }}</div>
+              <div class="entityitem__cart-btns"></div>
+            </li>
           </ul>
-          <div class="entityitem">
-            <div class="entityitem__info">餐盒</div>
-            <div class="entityitem__price">{{ total.packingFee }}</div>
-            <div class="entityitem__cart-btns"></div>
-          </div>
         </div>
       </collapse-transition>
     </div>
@@ -54,7 +54,7 @@
       <a v-show="entities.length <= 0" class="cartbar__btn-toggle-panel cartbar__btn-toggle-panel_empty" href="javascript:"></a>
 
       <div class="cartbar__total-price">&#xA5;{{ total.price }}
-        <div class="cartbar__delivery-fee">配送费&#xA5;8</div>
+        <div class="cartbar__delivery-fee">另需配送费8元</div>
       </div>
       <a class="cartbar__btn-checkout" href="javascript:"
         :class="{ 'cartbar__btn-checkout_disabled': diffAmount > 0 }"
@@ -203,7 +203,7 @@
 }
 .cartview__entitylist {
   overflow: auto;
-  max-height: 550px;
+  max-height: 605px;
 }
 .entityitem {
   box-sizing: border-box;
