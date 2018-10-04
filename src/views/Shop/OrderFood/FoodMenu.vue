@@ -17,7 +17,7 @@
         <span class="menu__nav-item-text"
           >{{ item.name }}</span>
         <span class="menu__nav-item-quantity"
-          >{{ selectedNums[item.id] }}</span>
+          >{{ selectedNums.category[item.id] || '' }}</span>
       </li>
     </ul>
     <ul class="menu__list"
@@ -67,6 +67,7 @@
 
                   <cart-button class="food__btns"
                     :item="item"
+                    :quantity="selectedNums.item[item.item_id]"
                     @add="onAdd"
                     @reduce="onReduce"
                     @showspec="onShowSpec"
@@ -121,20 +122,15 @@
       }
     },
     computed: {
-      /* menu nav 各条目的选中数量 */
       selectedNums() {
-        const entities = this.entities;
-        let nums = {};
-        entities.forEach(ent => {
-          let id = ent.category_id
-          if (!(id in nums)) {
-            nums[id] = 0
-          }
-          nums[id] += ent.quantity
-        })
-        return nums
+        return this.entities.reduce((rst, ent) => {
+          const itemId = ent.item_id
+          const categoryId = ent.category_id
+          rst.item[itemId] = (rst.item[itemId] || 0) + ent.quantity
+          rst.category[categoryId] = (rst.category[categoryId] || 0) + ent.quantity
+          return rst
+        }, { item: {}, category: {} })
       },
-      /* local scroll */
       menuHeight() {
         // 根据所在视口情况动态设置 local scroll 容器高度
         // 顶部 tab 导航高度是80px, 下面 cartbar 高度是96px

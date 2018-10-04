@@ -49,6 +49,11 @@
     created() {
       this.init()
     },
+    watch: {
+      item () {
+        this.init()
+      },
+    },
     methods: {
       ok () {
         this.$emit('ok', {
@@ -68,11 +73,6 @@
         this.selectedAttrs = attrs.map(attr => ({ name: attr.name, value: attr.values[0] }))
       }
     },
-    watch: {
-      item () {
-        this.init()
-      },
-    }
   }
 </script>
 

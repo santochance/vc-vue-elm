@@ -1,11 +1,11 @@
 <template>
   <div class="cart__entity-btns">
     <template v-if="item.attrs.length <= 0">
-      <a v-if="quantity > 0" href="javascript:" class="cart__entity-btn-minus" @click.stop.prevent="reduceCart()">
+      <a v-if="quantity > 0" href="javascript:" class="cart__entity-btn-minus" @click.stop.prevent="onReduce">
         <svg><use xlink:href="#cart-minus"></use></svg>
       </a>
       <span v-if="quantity > 0" class="cart__entity-quantity">{{ quantity }}</span>
-      <a href="javascript:" class="cart__entity-btn-add" @click.stop.prevent="addCart()">
+      <a href="javascript:" class="cart__entity-btn-add" @click.stop.prevent="onAdd">
         <svg><use xlink:href="#cart-add"></use></svg>
       </a>
     </template>
@@ -22,14 +22,18 @@
 </template>
 
 <script>
-  /* eslint-disable no-console, no-debugger  */
-  import { mapState, mapMutations } from 'vuex'
-
   import { Toast } from '@/components/common'
 
   export default {
     props: {
-      item: Object // item 即购物车中的 entity
+      item: {
+        type: Object,
+        required: true,
+      }, // item 是 menu 数据中的 food 实体
+      quantity: {
+        type: Number,
+        default: 0,
+      }
     },
     data () {
       return {
@@ -37,38 +41,24 @@
       }
     },
     computed: {
-      ...mapState({
-        entities(state) {
-          let restaurant_id = this.item.restaurant_id
-          let restaurant = state.cartMap[restaurant_id] || {}
-          let entities = restaurant.entities || []
-          return entities
-        }
-      }),
-      quantity() {
-        return this.entities.reduce((sum, enti) => {
-          if (enti.item_id === this.item.item_id) {
-            sum += enti.quantity;
-          }
-          return sum;
-        }, 0)
-      },
+
     },
     methods: {
-      ...mapMutations([
-        'ADD_CART', 'REDUCE_CART',
-      ]),
-      addCart() {
-        this.ADD_CART({
+      /* events */
+      onAdd() {
+        this.$emit('add', {
           ...this.item,
           ...this.item.specfoods[0],
         })
       },
-      reduceCart() {
-        this.REDUCE_CART({
+      onReduce() {
+        this.$emit('reduce', {
           ...this.item,
           ...this.item.specfoods[0],
         })
+      },
+      onShowSpec() {
+        this.$emit('showspec', this.item)
       },
       showToast() {
         Toast.open({
@@ -76,16 +66,16 @@
           mask: false,
         })
       },
-      onShowSpec() {
-        this.$emit('showspec', this.item)
-      },
     }
   }
 </script>
 
 <style lang="scss" scoped>
   .cart__entity-btns {
+    display: flex;
+    align-items: center;
     white-space: nowrap;
+    min-height: 50px;
     svg {
       width: 40px;
       height: 40px;
@@ -103,11 +93,11 @@
     overflow: hidden;
     display: inline-block;
     vertical-align: middle;
-    padding: 8px;
+    margin: 8px;
     text-align: center;
     font-size: 28px;
     color: #666;
-    min-width: 30px;
+    min-width: 36px;
     max-width: 56px;
   }
   .cart__entity-btn-spec {
