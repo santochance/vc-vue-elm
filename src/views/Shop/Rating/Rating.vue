@@ -84,17 +84,25 @@
           </li>
         </ul>
 
+        <infinite-loading @infinite="infiniteHandler" ref="infiniteLoading">
+          <span class="infinite__feedback" slot="no-results">没有更多了哦~</span>
+          <span class="infinite__feedback" slot="no-more">没有更多了哦~</span>
+        </infinite-loading>
       </div>
     </template>
+    <loading-image :visible="loading"></loading-image>
   </div>
 </template>
 
 <script>
-  import { fetchRatingOverview } from '@/service/api'
+  import { fetchRatingOverview, fetchComments } from '@/service/api'
+  import LoadingImage from '@/components/LoadingImage'
+  import InfiniteLoading from 'vue-infinite-loading'
 
   export default {
     components: {
-
+      InfiniteLoading,
+      LoadingImage,
     },
     data () {
       return {
@@ -133,6 +141,39 @@
           this.tags = overview.tags
           this.tagNameCurrent = overview.tags[0].name
           this.loading = false
+        })
+      },
+      onTabsNavTap(tagName) {
+        if (this.tagNameCurrent === tagName) return
+
+        this.tagNameCurrent = tagName
+        this.offset = 0
+        this.comments = []
+
+        // 在过滤器 tab 改变时主动触发 inifinteLoading 的 reset 事件
+        this.$refs.infiniteLoading.$emit('$InfiniteLoading:reset')
+      },
+      infiniteHandler($state) {
+        this.loadComments(/*this.tagNameCurrent*/)
+          .then(method => {
+            $state[method]()
+          })
+      },
+      loadComments() {
+        const { tagNameCurrent: tagName, limit, offset } = this
+        // 返回 promise 供 infiniteLoading决定状态
+        return fetchComments({
+          tagName,
+          limit,
+          offset
+        }).then(comments => {
+          if (offset === 0) {
+            this.comments = comments
+          } else {
+            this.comments = this.comments.concat(comments)
+          }
+          this.offset = this.comments.length
+          return comments.length > 1 ? 'loaded' : 'complete'
         })
       },
     },
