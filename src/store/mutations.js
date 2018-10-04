@@ -56,7 +56,7 @@ export default {
   },
   [ADD_CART]: function (state, payload) {
     const {
-      quantity = 1,
+      deltaQuantity = 1,
       restaurant_id,
       stock,
     } = payload
@@ -71,7 +71,7 @@ export default {
       entityIndex = entities.length + 1
     }
 
-    const newQuantity = (entity.quantity || 0) + quantity
+    const newQuantity = (entity.quantity || 0) + deltaQuantity
     if (newQuantity > stock) {
       Toast.open({
         content: '超过库存，无法添加!',
@@ -85,7 +85,7 @@ export default {
   },
   [REDUCE_CART]: function (state, payload) {
     const  {
-      quantity = 1,
+      deltaQuantity = 1,
       restaurant_id,
     } = payload
 
@@ -96,7 +96,7 @@ export default {
     let [entity, entityIndex] = getCartDetail(cart, payload)
     if (!entity) return
 
-    const newQuantity = (entity.quantity || 0) - quantity
+    const newQuantity = (entity.quantity || 0) - deltaQuantity
     if (newQuantity <= 0) {
       entities.splice(entityIndex, 1)
     } else {
