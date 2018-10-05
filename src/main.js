@@ -5,7 +5,8 @@ import store from './store';
 
 import { parseImgHash } from '@/util/utils'
 import Sticker from '@/util/Sticker'
-import ScrollLocker from '@/util/ScrollLocker'
+// import ScrollLocker from '@/util/ScrollLocker'
+import { HoldUpScroll, LazyLocalScroll } from '@/util/VuePlugins'
 import persistence from '@/util/persistence'
 
 import '@/util/flexible';
@@ -13,6 +14,9 @@ import '@/assets/styles/base.scss';
 import '@/assets/styles/util.scss';
 
 Vue.config.productionTip = false;
+
+Vue.use(HoldUpScroll)
+Vue.use(LazyLocalScroll)
 
 Vue.prototype.$persistence = persistence
 
@@ -35,7 +39,6 @@ Vue.directive('stick', {
   },
 })
 
-Vue.use(ScrollLocker)
 
 window.Vue = Vue
 

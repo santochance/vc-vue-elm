@@ -2,7 +2,9 @@
   <div v-if="menu && menu.length > 0"
     class="menu__container"
     :style="{height: menuHeight}">
-    <ul class="menu__nav">
+    <ul class="menu__nav"
+      v-lazy-local-scroll
+    >
       <li v-for="(item, index) in menu" :key="item.id"
         class="menu__nav-item"
         :class="{ 'menu__nav-item_active': activeMenuItem !== '' ?
@@ -21,9 +23,8 @@
       </li>
     </ul>
     <ul class="menu__list"
-      :style="{overflow: menuOverflow}"
       @scroll="onScroll"
-      v-scroller
+      v-lazy-local-scroll
       ref="scroller">
       <li v-for="(list, index) in menu" :key="list.id"
         class="menu__list-item"
@@ -107,8 +108,6 @@
     },
     data() {
       return {
-        menuOverflow: 'hidden', // menu content 的 overflow 状态
-
         // scroll active
         activeMenuItem: '', // 当前 menu nav 的活动项
         needToScroll: false,
@@ -169,16 +168,6 @@
           this.activeMenuItem = activeItemKey
         }
       },
-      // 监听 local scroll 的 touchmove 和 wheel 事件，根据 global scroll 是否触及底端时开关 local scroll
-      toggleScroll(ev) {
-        const touched = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight
-        if (touched) {
-          // 全局 scroll 触及底端
-          ev.currentTarget.style.overflow = 'auto'
-        } else {
-          ev.currentTarget.style.overflow = 'hidden'
-        }
-      },
       changeActiveItem(key) {
         this.activeMenuItem = key
         this.needToScroll = true
@@ -210,16 +199,6 @@
           }
         },
       },
-      scroller: {
-        inserted(el, binding, vnode) {
-          el.addEventListener('touchmove', vnode.context.toggleScroll)
-          el.addEventListener('wheel', vnode.context.toggleScroll)
-        },
-        unbind(el, binding, vnode) {
-          el.removeEventListener('touchmove', vnode.context.toggleScroll)
-          el.removeEventListener('wheel', vnode.context.toggleScroll)
-        }
-      }
     },
   }
 </script>
@@ -235,6 +214,7 @@
     .menu__nav {
       height: 100%;
       width: 154px;
+      padding-bottom: 40px;
       background: #f8f8f8;
     }
     .menu__nav-item {
@@ -273,6 +253,7 @@
     .menu__list {
       height: 100%;
       width: 596px;
+      padding-bottom: 40px;
       background-color: #fff;
     }
     .menu__list-title-wrap {
