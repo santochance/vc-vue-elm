@@ -1,6 +1,8 @@
 <template>
   <transition name="slide">
-    <div v-if="visible && food" class="modal__container">
+    <div v-if="visible && food"
+      class="modal__container"
+      v-hold-up-scroll>
       <div class="modal__overlay" @click.stop.prevent="onClose"></div>
       <div class="modal__panel food-detail__container">
         <img :src="$getImage(food.image_path, foodDetailImgParam)" alt="">

@@ -3,7 +3,8 @@
     <div v-if="visible"
         class="modal__container"
         :class="panel === 'center' ? 'modal__container_center' : 'modal__container_bottom'"
-        :style="{ zIndex: zIndex }">
+        :style="{ zIndex: zIndex }"
+        v-hold-up-scroll>
         <template v-if="overlay">
           <div v-if="overlayCloseable" class="modal__overlay" @click.stop.prevent="onClose"></div>
           <div v-else class="modal__overlay"></div>
@@ -30,7 +31,6 @@
 </template>
 
 <script>
-  let modalCount = 0
 
   export default {
     props: {
@@ -75,42 +75,18 @@
         default: false,
       },
     },
+    data() {
+      return {
+
+      }
+    },
     methods: {
       onClose() {
         this.$emit('close')
       },
-      forbidScroll(e) {
-        e.preventDefault()
-      }
-    },
-    watch: {
-      visible(value) {
-        if (value) {
-          if (!modalCount) {
-            document.documentElement.classList.add('modaling')
-          }
-          modalCount++
-        } else {
-          modalCount--
-          if (!modalCount) {
-            document.documentElement.classList.remove('modaling')
-          }
-        }
-      }
     },
   }
 </script>
-
-
-<style lang="scss">
-  // modal 显示时屏蔽滚动条
-  html.modaling {
-    overflow-y: hidden;
-    body {
-      overflow-y: scroll;
-    }
-  }
-</style>
 
 <style lang="scss" scoped>
   // 居中方案使用flex

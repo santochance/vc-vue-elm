@@ -5,6 +5,7 @@ import store from './store';
 
 import { parseImgHash } from '@/util/utils'
 import Sticker from '@/util/Sticker'
+import ScrollLocker from '@/util/ScrollLocker'
 import persistence from '@/util/persistence'
 
 import '@/util/flexible';
@@ -26,13 +27,17 @@ Vue.prototype.$toRem = function (px) {
 }
 Vue.directive('stick', {
   inserted(el, binding, vnode) {
-    vnode.context.stikcer = new Sticker(el)
+    vnode.context.sticker = new Sticker(el)
   },
   unbind(el, binding, vnode) {
     const sticker = vnode.context.sticker;
     if (sticker) sticker.destory()
   },
 })
+
+Vue.use(ScrollLocker)
+
+window.Vue = Vue
 
 new Vue({
   router,
