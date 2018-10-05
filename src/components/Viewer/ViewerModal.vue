@@ -189,7 +189,7 @@
         })
       },
       /* js 过渡钩子 */
-      beforeEnter() {
+      beforeEnter(el) {
         // console.log('debug - ViewerModal.beforeEnter')
         const { rectStyle, transformStyle } = this.computedStyles
 
@@ -198,9 +198,11 @@
         this.rectStyle = rectStyle
         this.transformStyle = null
 
+
         // （下一帧）设置过渡结束状态
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
+            el.style.transition = 'all .3s'
             this.transformStyle = transformStyle
           })
         })
@@ -209,10 +211,14 @@
         // 设置过渡完成回调
         el.addEventListener('transitionend', done)
       },
-      afterEnter() {
+      afterEnter(el) {
+        el.style.transition = ''
+        this.rectStyle = null
+        this.transformStyle = null
+
         this.$emit('afterEnter')
       },
-      beforeLeave() {
+      beforeLeave(el) {
         const { rectStyle, transformStyle } = this.computedStyles
 
         // 设置过渡开始状态
@@ -223,6 +229,7 @@
         // （下一帧）设置过渡结束状态
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
+            el.style.transition = 'all .3s'
             this.transformStyle = null
           })
         })
@@ -231,7 +238,11 @@
         // 设置过渡完成回调
         el.addEventListener('transitionend', done)
       },
-      afterLeave() {
+      afterLeave(el) {
+        el.style.transition = ''
+        this.rectStyle = null
+        this.transformStyle = null
+
         this.$emit('afterLeave')
       },
       loadImage(src) {
@@ -370,8 +381,13 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
+      align-items: center;
       height: 100%;
       width: 100%;
+      & > img {
+        width: 100%;
+      }
+
     }
     .o-image__caption {
       position: absolute;
@@ -400,8 +416,7 @@
   .transition-container {
     position: fixed;
     z-index: 5;
-    transition: all .3s;
-
+    width: 100%;
     & > img {
       width: 100%;
     }
