@@ -1,6 +1,6 @@
 <template>
   <div class="viewer-thumbnail__container">
-    <div v-for="(item, idx) in items" :key="idx"
+    <div v-for="(item, idx) in usedItems" :key="idx"
       class="viewer-thumbnail__item" >
       <img :src="item.thumbnail" alt=""
         @click="onThumbnailClick($event, idx)"
@@ -26,12 +26,33 @@
       items: {
         type: Array,
         required: true,
-      }
+      },
+      thumbnailIndex: {
+        type: [String, Number, Array],
+      },
     },
     data() {
       return {
         modal: viewerModal,
         clickLocking: false,
+      }
+    },
+    computed: {
+      usedItems() {
+        if (!this.thumbnailIndex) return this.items
+
+        if (Array.isArray(this.thumbnailIndex)) {
+          const length = this.items.length
+
+          return this.thumbnailIndex.reduce((rst, index) => {
+            if (index >= 0 && index < length) {
+              rst.push(this.items[index])
+            }
+            return rst
+          }, [])
+        } else {
+          return [this.items[this.thumbnailIndex]]
+        }
       }
     },
     mounted() {

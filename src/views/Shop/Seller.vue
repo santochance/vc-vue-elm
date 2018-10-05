@@ -30,7 +30,12 @@
       <div class="album__content">
         <a v-for="(album, index) in shopDetails.albums" :key="album.name + index"
           class="album__item" href="javascript:">
+          <!--
           <img class="album__cover" :src="$getImage(album.cover_image_hash, albumImgParam)" alt="">
+           -->
+          <viewer :items="transformForViewer(album.photos)"
+            thumbnailIndex="0"
+          ></viewer>
           <span class="album__name">{{ album.name }}({{ album.count }}张)</span>
         </a>
       </div>
@@ -70,10 +75,12 @@
 
 <script>
   import { Tag } from '@/components/common'
+  import Viewer from '@/components/Viewer'
 
   export default {
     components: {
       Tag,
+      Viewer,
     },
     props: {
       shopDetails: {
@@ -84,7 +91,17 @@
     data () {
       return {
         albumImgParam: '?imageMogr/format/webp/thumbnail/!200x200r/gravity/Center/crop/200x200/',
+        albumBigImgParam: '?imageMogr/format/webp/thumbnail/!750x750r/gravity/Center/crop/750x750/',
       }
+    },
+    methods: {
+      transformForViewer(photos) {
+        return (photos || []).map(photo => ({
+          thumbnail: this.$getImage(photo.image_hash, this.albumImgParam),
+          image: this.$getImage(photo.image_hash, this.albumBigImgParam),
+          loaded: false,
+        }))
+      },
     }
   }
 </script>
