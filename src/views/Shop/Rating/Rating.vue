@@ -53,10 +53,10 @@
                   <div class="comment__rating">
                     <div class="star">
                       <div class="star__gray">
-                        <img src="@/assets/stars-gray.svg" alt="">
+                        <img src="./stars-gray.svg" alt="">
                       </div>
                       <div class="star__active" :style="{ right: (5 - comment.rating) / 5 * 100 + '%'}">
-                        <img src="@/assets/stars-active.svg" alt="">
+                        <img src="./stars-active.svg" alt="">
                       </div>
                     </div>
                     <span class="comment__rating-start-text" :style="{ color: ratingGradeMap[comment.rating][1] }">{{ ratingGradeMap[comment.rating][0] }}</span>
