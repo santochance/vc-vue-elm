@@ -93,12 +93,15 @@
     }
     .viewer-thumbnail__item {
       position: relative;
+      flex: 1 1 auto;
       margin: 10px 10px 10px 0;
       &:last-child {
         margin-right: 0;
       }
 
-      flex: 1 1 auto;
+      & > img {
+        width: 100%;
+      }
     }
   }}
 </style>
