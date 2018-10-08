@@ -1,6 +1,6 @@
 <template>
   <div v-if="tabs && tabs.length" class="tabs__block">
-    <div class="tabs__bar">
+    <div class="tabs__bar" v-stick>
       <div v-for="(tab, idx) in tabs" :key="idx"
         class="tabs__tab"
         :class="{ 'tabs__tab_active': current === idx || current === tab.key }"
