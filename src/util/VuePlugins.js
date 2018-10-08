@@ -2,25 +2,30 @@ export const LazyLocalScroll = {
   directive: {
     bind(el, binding, vnode) {
       // 监听 local scroll 的 touchmove 和 wheel 事件，根据 global scroll 是否触及底端时开关 local scroll
-      const handler = vnode.context[`directive-${binding.name}`] = function (ev) {
-        const touched = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight
+      const handler = vnode.context[`directive-${binding.name}`] = function () {
+        // const touched = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight
+        const touched = window.scrollY >= el.getBoundingClientRect().top
         if (touched) {
           // 全局 scroll 触及底端
-          ev.currentTarget.style.overflow = 'auto'
+          el.style.overflow = 'auto'
+          vnode.context.menuOverflow = 'auto'
         } else {
-          ev.currentTarget.style.overflow = 'hidden'
+          el.style.overflow = 'hidden'
+          vnode.context.menuOverflow = 'hidden'
         }
       }.bind(vnode.context)
 
       el.style.overflow = 'hidden'
 
-      el.addEventListener('touchmove', handler)
-      el.addEventListener('wheel', handler)
+      // el.addEventListener('touchmove', handler)
+      // el.addEventListener('wheel', handler)
+      window.addEventListener('scroll', handler)
     },
     unbind(el, binding, vnode) {
       const handler = vnode.context[`directive-${binding.name}`]
-      el.removeEventListener('touchmove', handler)
-      el.removeEventListener('wheel', handler)
+      // el.removeEventListener('touchmove', handler)
+      // el.removeEventListener('wheel', handler)
+      window.removeEventListener('scroll', handler)
     }
   },
   install(Vue, options) {
