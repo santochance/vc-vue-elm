@@ -87,11 +87,13 @@
           </li>
         </ul>
 
-        <infinite-loading @infinite="infiniteHandler" ref="infiniteLoading">
-          <span class="infinite__feedback" slot="no-results">没有更多了哦~</span>
-          <span class="infinite__feedback" slot="no-more">没有更多了哦~</span>
-        </infinite-loading>
       </div>
+      <infinite-loading @infinite="infiniteHandler"
+        :distance="200"
+        ref="infiniteLoading">
+        <span class="infinite__feedback" slot="no-results">没有更多了哦~</span>
+        <span class="infinite__feedback" slot="no-more">没有更多了哦~</span>
+      </infinite-loading>
     </template>
     <loading-image :visible="loading"></loading-image>
   </div>
@@ -162,6 +164,9 @@
       infiniteHandler($state) {
         this.loadComments(/*this.tagNameCurrent*/)
           .then(method => {
+            method
+            console.log('debug - before infinite')
+
             $state[method]()
           })
       },
@@ -423,5 +428,19 @@
 
   .infinite__feedback {
     font-size: 28px;
+    background-color: #fff;
+  }
+</style>
+
+<style lang="scss">
+  // 覆写 vue-infinite-loading 的 spinner 样式
+  .infinite-loading-container {
+    background-color: #fff !important;
+    .loading-default {
+      font-size: 48px !important;
+      line-height: 1 !important;
+      width: 1em !important;
+      height: 1em !important;
+    }
   }
 </style>
