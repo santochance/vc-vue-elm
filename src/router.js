@@ -24,5 +24,19 @@ export default new Router({
       path: '/shop',
       component: () => import(/* webpackChunkName: "shop" */ '@/views/Shop/Shop'),
     },
+    {
+      path: '/checkout',
+      component: () => import(/* webpackChunkName: "checkout" */ '@/views/Checkout'),
+      children: [{
+        path: '',
+        component: () => import(/* webpackChunkName: "confirm-order" */ '@/views/Checkout/ConfirmOrder'),
+      }, {
+        path: 'address',
+        component: () => import(/* webpackChunkName: "address" */ '@/views/Checkout/Address'),
+      }, {
+        path: 'remark',
+        component: () => import(/* webpackChunkName: "remark" */ '@/views/Checkout/Remark'),
+      }]
+    },
   ],
 });
