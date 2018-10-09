@@ -10,6 +10,7 @@ import {
   REDUCE_CART,
   CLEAR_CART,
   INIT_CART,
+  SAVE_CURRENT_RESTAURANT_ID,
 } from './mutation-types'
 
 
@@ -110,6 +111,9 @@ export default {
   },
   [INIT_CART]: function (state, { restaurant_id }) {
     state.cartMap[restaurant_id] = {}
+  },
+  [SAVE_CURRENT_RESTAURANT_ID]: function (state, restaurant_id) {
+    state.currentRestaurantId = restaurant_id
   },
 }
 

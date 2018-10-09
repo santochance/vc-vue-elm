@@ -76,7 +76,7 @@
     methods: {
       /* Cart */
       ...mapMutations([
-        'ADD_CART', 'REDUCE_CART', 'CLEAR_CART',
+        'ADD_CART', 'REDUCE_CART', 'CLEAR_CART', 'SAVE_CURRENT_RESTAURANT_ID'
       ]),
       addCart(entity) {
         this.ADD_CART({
@@ -96,7 +96,8 @@
         })
       },
       toCheckout() {
-
+        this.SAVE_CURRENT_RESTAURANT_ID(this.shopDetails.id)
+        this.$router.push('/checkout')
       },
 
       /*

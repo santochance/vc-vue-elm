@@ -12,6 +12,8 @@ Vue.use(Vuex);
     user: null, // 用户信息
 
     cartMap: {}, // 店铺购物车集合
+    currentRestaurantId: '', // 当前结算餐厅 id
+
   }),
   mutations,
   actions,

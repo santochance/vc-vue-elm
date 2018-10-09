@@ -3,12 +3,16 @@ import persistence from '@/util/persistence'
 export function initState(state) {
   let initial = {}
   const userId = persistence.getItem('USER_ID')
-  if (userId && typeof userId === 'number') {
+  if (userId != null && typeof userId === 'number') {
     initial.userId = userId
   }
   const cartMap = persistence.getItem('CART_MAP')
-  if (cartMap && typeof cartMap === 'object') {
+  if (cartMap != null && typeof cartMap === 'object') {
     initial.cartMap = cartMap
+  }
+  const currentRestaurantId = persistence.getItem('CURRENT_RESTAURANT_ID')
+  if (currentRestaurantId != null && typeof currentRestaurantId === 'number') {
+    initial.currentRestaurantId = currentRestaurantId
   }
 
   return { ...state, ...initial }
@@ -29,5 +33,12 @@ export function wrapPersistence(store) {
       persistence.setItem('CART_MAP', value)
     },
     { deep: true }
+  )
+
+  store.watch(
+    (state) => state.currentRestaurantId,
+    (value) => {
+      persistence.setItem('CURRENT_RESTAURANT_ID', value)
+    }
   )
 }
