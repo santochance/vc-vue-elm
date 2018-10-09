@@ -11,6 +11,15 @@ import {
   CLEAR_CART,
   INIT_CART,
   SAVE_CURRENT_RESTAURANT_ID,
+
+  SAVE_ADDRESS_LIST,
+  ADD_ADDRESS,
+  SAVE_ADDRESS,
+  REMOVE_ADDRESS,
+  SAVE_SELECTED_ADDRESS,
+
+  SAVE_REMARK_LIST,
+  SAVE_USED_REMARK,
 } from './mutation-types'
 
 
@@ -114,6 +123,39 @@ export default {
   },
   [SAVE_CURRENT_RESTAURANT_ID]: function (state, restaurant_id) {
     state.currentRestaurantId = restaurant_id
+  },
+
+  /* address */
+  [SAVE_ADDRESS_LIST]: function (state, addressList) {
+    state.addressList = addressList
+  },
+  [ADD_ADDRESS]: function (state, address) {
+    state.addressList.push(address)
+  },
+  [SAVE_ADDRESS]: function (state, address) {
+    const index = state.addressList.findIndex(item => item.id === address.id)
+    if (index > -1) {
+      state.addressList.splice(index, 1, address)
+    } else {
+      state.addressList.push(address)
+    }
+  },
+  [REMOVE_ADDRESS]: function (state, address) {
+    const index = state.addressList.findIndex(item => item.id === address.id)
+    if (index > -1) {
+      state.addressList.splice(index, 1)
+    }
+  },
+  [SAVE_SELECTED_ADDRESS]: function (state, address) {
+    state.selectedAddressId = address.id
+  },
+
+  /* remark */
+  [SAVE_REMARK_LIST]: function (state, remarkList) {
+    state.remarkList = remarkList
+  },
+  [SAVE_USED_REMARK]: function (state, usedRemark) {
+    state.usedRemark = usedRemark
   },
 }
 

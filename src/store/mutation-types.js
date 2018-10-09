@@ -9,3 +9,14 @@ export const REDUCE_CART = 'REDUCE_CART'
 export const CLEAR_CART = 'CLEAR_CART'
 export const INIT_CART = 'INIT_CART'
 export const SAVE_CURRENT_RESTAURANT_ID = 'SAVE_CURRENT_RESTAURANT_ID'
+
+/* address */
+export const SAVE_ADDRESS_LIST = 'SAVE_ADDRESS_LIST'
+export const ADD_ADDRESS = 'ADD_ADDRESS'
+export const SAVE_ADDRESS = 'SAVE_ADDRESS'
+export const REMOVE_ADDRESS = 'REMOVE_ADDRESS'
+export const SAVE_SELECTED_ADDRESS = 'SAVE_SELECTED_ADDRESS'
+
+/* remark */
+export const SAVE_REMARK_LIST = 'SAVE_REMARK_LIST'
+export const SAVE_USED_REMARK = 'SAVE_USED_REMARK'
