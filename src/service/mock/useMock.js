@@ -9,6 +9,9 @@ const {
   tagTasteGood,
   tagFastDelivery,
 } = require('./comments')
+const checkout = require('./checkout')
+const addressList = require('./address')
+const remarkList = require('./remarkList')
 
 const tagMap = {
   '全部': tagAll,
@@ -70,5 +73,18 @@ module.exports = function (app) {
     result = offset < count ? source : []
 
     resWith(res)(result)
+  })
+
+  app.get('/checkout', (req, res) => {
+    res.json(checkout)
+  })
+
+  app.get('/addresses', (req, res) => {
+    // const { user_id: userId } = req.query
+    res.json(addressList)
+  })
+
+  app.get('/restaurant/:id/remarks', (req, res) => {
+    res.json(remarkList)
   })
 }
