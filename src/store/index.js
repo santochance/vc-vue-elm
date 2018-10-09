@@ -23,7 +23,7 @@ Vue.use(Vuex);
   getters: {
     selectedAddress(state) {
       const id = state.selectedAddressId;
-      return state.addressList.find(addr => addr.id === id)
+      return (state.addressList || []).find(addr => addr.id === id)
     },
     remarkText(state) {
       if (!state.usedRemark) return ''
