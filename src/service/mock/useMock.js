@@ -75,7 +75,7 @@ module.exports = function (app) {
     resWith(res)(result)
   })
 
-  app.get('/checkout', (req, res) => {
+  app.post('/checkout', (req, res) => {
     res.json(checkout)
   })
 
