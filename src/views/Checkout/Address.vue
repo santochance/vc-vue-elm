@@ -1,25 +1,254 @@
 <template>
-  <div>Address</div>
+  <page class="address__container"
+    :title="mode === 'normal' ? '收货地址' : '选择收货地址'"
+  >
+    <div class="address__main">
+      <a class="address__btn-add" href="javascript:" @click="openEditor()">
+        <img class="address__icon-add" src="./add.png" alt="">
+        <span class="">新增收货地址</span>
+      </a>
+      <ul>
+        <li v-for="address in addressList" :key="address.id"
+          class="address__addr-item"
+          @click.stop.prevent="mode === 'normal' ? openEditor(address) : selectAddr(address)">
+          <div class="address__select">
+            <img v-if="selectedAddress && address.id === selectedAddress.id" src="./checked.png" alt="">
+          </div>
+          <div class="address__body">
+            <div class="address__title ellipsis">
+              <span class="address__name">{{ address.name }}</span><span class="address__sex">{{ ['', '先生', '女士'][address.sex] }}</span><span class="address__phone">{{ address.phone }}</span>
+            </div>
+            <div class="address__detail">
+              <span v-if="address.tag_type" class="address__tag" :content="['', '家', '学校', '公司'][address.tag_type]">{{ ['', '家', '学校', '公司'][address.tag_type] }}</span>
+              {{ address.address + address.address_detail }}
+            </div>
+          </div>
+          <div class="address__btn-edit" @click.stop.prevent="openEditor(address)">
+            <svg><use xlink:href="#edit"></use></svg>
+          </div>
+          <!-- <button class="" @click.stop.prevent="openConfirm(address)">删除</button> -->
+        </li>
+      </ul>
+      <div v-if="editorShow && editingEntity" class="editor">
+        <form action="">
+          <input type="text" v-model="editingEntity.location">
+          <button @click.stop.prevent="saveEditor(editingEntity)">保存</button>
+          <button @click.stop.prevent="closeEditor">取消</button>
+        </form>
+      </div>
+      <div v-if="confirmShow && confirmingEntity" class="confirm">
+        <h2>删除地址</h2>
+        <p>确定删除该收货地址？</p>
+        <button @click.stop.prevent="submitConfirm(confirmingEntity)">确认</button>
+        <button @click.stop.prevent="closeConfirm">取消</button>
+      </div>
+    </div>
+  </page>
 </template>
 
 <script>
+  import { mapState, mapGetters, mapMutations } from 'vuex'
+  import { fetchAddressList } from '@/service/api'
+  import Page from '@/components/Page'
 
   export default {
     name: 'Address',
     components: {
-
+      Page,
     },
     props: {
 
     },
-    data() {
+    data () {
       return {
-
+        editorShow: false,
+        editingEntity: null,
+        confirmShow: false,
+        confirmingEntity: null,
+        mode: 'select', // normal是用户中心的收货地址，select是下单时选择地址
       }
+    },
+    created() {
+      this.mode = this.$route.meta.mode || 'select'
+      fetchAddressList().then(addrList => {
+        this.SAVE_ADDRESS_LIST(addrList)
+      })
+    },
+    computed: {
+      ...mapState([
+        'addressList', 'selectedAddressId'
+      ]),
+      ...mapGetters([
+        'selectedAddress'
+      ]),
+    },
+    methods: {
+      ...mapMutations([
+        'SAVE_ADDRESS_LIST', 'ADD_ADDRESS', 'SAVE_ADDRESS', 'REMOVE_ADDRESS', 'SAVE_SELECTED_ADDRESS'
+      ]),
+      switchMode() {
+        this.mode = (this.mode === 'normal' ? 'select' : 'normal')
+      },
+      getUid: (function () {
+        let count = 0
+        return function () {
+          return count++
+        }
+      })(),
+      selectAddr(address) {
+        this.SAVE_SELECTED_ADDRESS(address)
+        this.$router.go(-1)
+      },
+      addAddr(address) {
+        const newAddr = {
+          id: this.getUid(),
+          location: address.location,
+          name: '家',
+          phone: '13812345678'
+        }
+        this.ADD_ADDRESS(newAddr)
+      },
+      saveAddr(address) {
+        this.SAVE_ADDRESS(address)
+      },
+      removeAddr(address) {
+        this.REMOVE_ADDRESS(address)
+      },
+      openEditor(entity) {
+        this.editingEntity = {...entity} || {}
+        this.editorShow = true
+      },
+      closeEditor() {
+        this.editingEntity = null
+        this.editorShow = false
+      },
+      saveEditor(entity) {
+        if (entity.id == null) {
+          this.addAddr(entity)
+        } else {
+          this.saveAddr(entity)
+        }
+        this.closeEditor()
+      },
+      openConfirm(entity) {
+        this.confirmingEntity = {...entity} || {}
+        this.confirmShow = true
+      },
+      closeConfirm() {
+        this.confirmingEntity = null
+        this.confirmShow = false
+      },
+      submitConfirm(entity) {
+        this.removeAddr(entity)
+        this.closeConfirm()
+      },
     },
   }
 </script>
 
 <style lang="scss" scoped>
-
+  .address__container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+  .address__main {
+    box-sizing: border-box;
+    flex: 1;
+    background-color: #efeff4;
+    padding-bottom: 104px;
+  }
+  .address__btn-add {
+    position: fixed;
+    z-index: 5;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 104px;
+    text-align: center;
+    line-height: 38.4px;
+    font-size: 32px;
+    border-top: 2px solid #ddd;
+    background: #fff;
+    color: #3190e8;
+    text-decoration: none;
+  }
+  .address__icon-add {
+    display: block;
+    width: 40px;
+    height: 40px;
+    margin-right: 12px;
+  }
+  .address__addr-item {
+    box-sizing: border-box;
+    display: flex;
+    min-height: 136px;
+    padding: 30px;
+    font-size: 24px;
+    border-bottom: 1px solid #ddd;
+    border-top: 2px solid #ddd;
+    background-color: #fff;
+  }
+  .address__select {
+    display: flex;
+    align-items: center;
+    flex-basis: 55px;
+    min-width: 55px;
+    img {
+      width: 40px;
+      height: 40px;
+    }
+  }
+  .address__body {
+    flex: 1;
+    margin-right: 6px;
+  }
+  .address__title {
+    display: flex;
+    margin-bottom: 8px;
+    font-size: 35px;
+    color: #666;
+  }
+  .address__name {
+    font-weight: 700;
+    color: #333;
+  }
+  .address__sex {
+    padding: 0 12px 0 6px;
+  }
+  .address__phone {}
+  .address__detail {
+    position: relative;
+    display: flex;
+    align-items: center;
+    font-size: 28px;
+  }
+  .address__tag {
+    // position: absolute;
+    // z-index: 1;
+    // left: 0;
+    // top: 0;
+    margin-right: 6px;
+    padding: 6px;
+    white-space: nowrap;
+    text-align: center;
+    line-height: 20px;
+    font-size: 20px;
+    border: 1px solid #ff5722; /* no */
+    border-radius: 1px;
+    color: #ff5722;
+  }
+  .address__btn-edit {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-basis: 98px;
+    svg {
+      width: 36px;
+      height: 38px;
+    }
+  }
 </style>

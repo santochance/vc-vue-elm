@@ -20,7 +20,11 @@
     },
     created() {
       this.mountSvgIcon()
+      // 初始化 user 和 address
       this.$store.dispatch('fetchCurrentUser')
+        .then(() => {
+          this.$store.dispatch('fetchAddressList')
+        })
     },
     methods: {
       mountSvgIcon() {
