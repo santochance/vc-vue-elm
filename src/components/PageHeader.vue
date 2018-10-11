@@ -3,7 +3,7 @@
     <span v-if="backBtn"
       class="page-header__left"
       @click.stop.prevent="onBack">
-      <img src="@/assets/arrow-left.svg" alt="">
+      <img src="./arrow-left.svg" alt="">
     </span>
     <h1 class="page-header__title ellipsis"
       >{{ title }}</h1>

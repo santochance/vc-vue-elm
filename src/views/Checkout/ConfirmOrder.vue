@@ -124,7 +124,7 @@
              <svg><use xlink:href="#arrow-right"></use></svg>
            </a>
            <div class="checkout-misc__slogan">
-             <img src="@/assets/environ.png" alt="">
+             <img src="./environ.png" alt="">
              <span>马上助力环保</span>
            </div>
          </div>
@@ -182,7 +182,7 @@
          <h2 class="tableware__head">餐具份数</h2>
          <ul class="tableware__list">
            <li class="tableware__item" :key="0" @click.stop.prevent="selectTableware('0')">
-             <img src="@/assets/environ.png" alt="">
+             <img src="./environ.png" alt="">
              <span>无需餐具</span>
            </li>
            <li v-for="n in 10" :key="n"
