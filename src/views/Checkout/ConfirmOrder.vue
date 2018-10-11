@@ -251,7 +251,7 @@
       },
     },
     created() {
-      if (!this.restaurantId) return this.$router.replace('/shop')
+      if (!this.restaurantId || !this.entities.length) return this.$router.replace('/shop')
 
       this.loading = true
       this.doCheckout().then(checkout => {
