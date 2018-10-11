@@ -145,7 +145,7 @@
 
      <footer class="action-bar">
        <span class="action-bar__total-price">&#xA5;{{ /* checkout.cart.original_total */ mockTotalPrice }}</span>
-       <span class="action-bar__verify-feedback">{{ verifyFailedMsg }}</span>
+       <!-- <span class="action-bar__verify-feedback">{{ verifyFailedMsg }}</span> -->
        <a href="javascript:" class="action-bar__submit-btn" @click.stop.prevent="submit">去支付</a>
      </footer>
 
@@ -199,7 +199,7 @@
 <script>
   import { mapGetters, mapState } from 'vuex'
   import { submitCart } from '@/service/api'
-  import { Tag, Modal } from '@/components/common'
+  import { Tag, Modal, Toast } from '@/components/common'
   import Page from '@/components/Page'
 
 
@@ -208,6 +208,7 @@
     components: {
       Tag,
       Modal,
+      Toast,
       Page,
     },
     props: {
@@ -285,9 +286,17 @@
       },
       verify() {
         if (!this.selectedAddress) {
+          Toast.open({
+            content: '请选择配送地址！',
+            mask: false,
+          })
           return (this.verifyFailedMsg = '请选择配送地址！')
         } else if (!this.selectedDeliverDateTime) {
-          return (this.verifyFailedMsg = '请选择配送时间！')
+          Toast.open({
+            content: '请选择送达时间！',
+            mask: false,
+          })
+          return (this.verifyFailedMsg = '请选择送达时间！')
         }
         return (this.verifyFailedMsg = '')
       },

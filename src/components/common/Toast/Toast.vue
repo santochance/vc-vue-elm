@@ -105,7 +105,7 @@
       }
     }
     .toast__wrap {
-      margin-bottom: 80px;
+      margin-bottom: 100px;
     }
     .toast__content {
       padding: 24px 30px;
