@@ -22,29 +22,25 @@ const tagMap = {
   '送货快': tagFastDelivery,
 }
 
-function resWith(res, status = 200, delay = 500) {
-  return function (payload) {
-    setTimeout(() => {
-      res.status(status).json(payload)
-    }, delay)
-  }
-}
-
 module.exports = function (app) {
+  app.use('/', (req, res, next) => {
+    setTimeout(next, 500)
+  })
+
   app.get('/hello', (req, res) => {
-    resWith(res)({ message: 'Hello, world!' })
+    res.json({ message: 'Hello, world!' })
   })
 
   app.get('/users/current', (req, res) => {
-    resWith(res)({ id: 123456, username: 'Vincent' })
+    res.json({ id: 123456, username: 'Vincent' })
   })
 
   app.get('/restaurants/:id', (req, res) => {
-    resWith(res)(shopDetails)
+    res.json(shopDetails)
   })
 
   app.get('/restaurants/:id/menu', (req, res) => {
-    resWith(res)(menu)
+    res.json(menu)
   })
 
   app.get('/restaurants/:id/ratings', (req, res) => {
@@ -56,7 +52,7 @@ module.exports = function (app) {
       }
     }, {})
 
-    resWith(res)(overview)
+    res.json(overview)
   })
 
   app.get('/restaurants/:id/comments', (req, res) => {
@@ -72,7 +68,7 @@ module.exports = function (app) {
     // offset大于或等于总数是返回 []
     result = offset < count ? source : []
 
-    resWith(res)(result)
+    res.json(result)
   })
 
   app.post('/checkout', (req, res) => {
