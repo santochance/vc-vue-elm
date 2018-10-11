@@ -1,5 +1,5 @@
 <template>
-  <page title="确认订单">
+  <page title="确认订单" :loading="loading">
      <div v-if="checkout"
       class="checkout-body">
        <section class="cart-address"
@@ -58,43 +58,41 @@
            <span class="cart-group__shop-name">{{ shopName.split(/[()（）]/)[0] }}</span>
            <span class="cart-group__branch-name">({{ shopName.split(/[()（）]/)[1] }})</span>
          </div>
-         <div class="cart-group__main">
-           <ul class="cart-group__list">
-             <li v-for="food in entities /* checkout.cart.group[0] */" :key="food.id + food.attrs" class="checkout-item food-item">
-               <div class="food-item__img">
-                 <img :src="$getImage(food.image_hash, foodImgParam)" alt="">
-               </div>
-               <div class="food-item__info">
-                 <div class="food-item__name ellipsis">{{ food.name }}</div>
-                 <div class="food-item__attr"><span v-for="(attr, idx) in food.attrs" :key="idx">{{ attr.value }}</span></div>
-               </div>
-               <div class="food-item__quantity">× {{ food.quantity }}</div>
-               <div class="food-item__price">{{ food.quantity * food.price }}</div>
-             </li>
-           </ul>
-           <div class="checkout-item cart-group__item">
-             <div>
-               <span class="cart-group__tag cart-group__packing-fee">{{ checkout.cart.extra.packing_fee.icon.name }}</span>
-               <span class="cart-group__item-title ellipsis">{{ checkout.cart.extra.packing_fee.name }}</span>
+         <ul class="cart-group__list">
+           <li v-for="food in entities /* checkout.cart.group[0] */" :key="food.id + food.attrs" class="checkout-item food-item">
+             <div class="food-item__img">
+               <img :src="$getImage(food.image_hash, foodImgParam)" alt="">
              </div>
-             <div class="cart-group__price">{{ checkout.cart.extra.packing_fee.price }}</div>
-           </div>
-           <div class="checkout-item cart-group__item">
-             <div>
-               <span class="cart-group__tag cart-group__agent-fee">{{ checkout.cart.extra.agent_fee.icon.name }}</span>
-               <span class="cart-group__item-title ellipsis">{{ checkout.cart.extra.agent_fee.name }}</span>
+             <div class="food-item__info">
+               <div class="food-item__name ellipsis">{{ food.name }}</div>
+               <div class="food-item__attr"><span v-for="(attr, idx) in food.attrs" :key="idx">{{ attr.value }}</span></div>
              </div>
-             <div class="cart-group__price">{{ checkout.cart.extra.agent_fee.price }}</div>
+             <div class="food-item__quantity">× {{ food.quantity }}</div>
+             <div class="food-item__price">{{ food.quantity * food.price }}</div>
+           </li>
+         </ul>
+         <div class="checkout-item cart-group__item">
+           <div>
+             <span class="cart-group__tag cart-group__packing-fee">{{ checkout.cart.extra.packing_fee.icon.name }}</span>
+             <span class="cart-group__item-title ellipsis">{{ checkout.cart.extra.packing_fee.name }}</span>
            </div>
-           <div class="checkout-item cart-group__discount">新用户立减与其他优惠不能同享</div>
-           <div class="checkout-item cart-group__item">
-             <div class="cart-group__item-title">红包</div>
-             <div class="cart-group__hongbao">
-               <svg><use xlink:href="#red-packet"></use></svg>
-               <span>{{ checkout.hongbao_info.status_text }}</span>
-             </div>
+           <div class="cart-group__price">{{ checkout.cart.extra.packing_fee.price }}</div>
+         </div>
+         <div class="checkout-item cart-group__item">
+           <div>
+             <span class="cart-group__tag cart-group__agent-fee">{{ checkout.cart.extra.agent_fee.icon.name }}</span>
+             <span class="cart-group__item-title ellipsis">{{ checkout.cart.extra.agent_fee.name }}</span>
            </div>
-          </div>
+           <div class="cart-group__price">{{ checkout.cart.extra.agent_fee.price }}</div>
+         </div>
+         <div class="checkout-item cart-group__discount">新用户立减与其他优惠不能同享</div>
+         <div class="checkout-item cart-group__item">
+           <div class="cart-group__item-title">红包</div>
+           <div class="cart-group__hongbao">
+             <svg><use xlink:href="#red-packet"></use></svg>
+             <span>{{ checkout.hongbao_info.status_text }}</span>
+           </div>
+         </div>
          <div class="checkout-item cart-group__footer">
            <a href="javascript:" class="cart-group__discount-intro">
              <span>优惠说明</span>
@@ -130,7 +128,7 @@
          </div>
          <div class="checkout-item" @click.stop.prevent="inputRemark">
            <span v-if="!remarkText">订单备注</span>
-           <span v-else>{{ remarkText }}</span>
+           <span v-else class="checkout-misc__remark">{{ remarkText }}</span>
            <a class="checkout-misc__content" href="javascript:">
              <span v-if="!remarkText">口味、偏好</span>
              <svg><use xlink:href="#arrow-right"></use></svg>
@@ -254,11 +252,7 @@
     created() {
       if (!this.restaurantId || !this.entities.length) return this.$router.replace('/shop')
 
-      this.loading = true
-      this.doCheckout().then(checkout => {
-        this.checkout = checkout
-        this.loading = false
-      })
+      this.doCheckout()
     },
     methods: {
       doCheckout() {
@@ -278,7 +272,11 @@
           remark: this.remarkText,
         }
 
-        return submitCart(payload)
+        this.loading = true
+        return submitCart(payload).then(checkout => {
+          this.checkout = checkout
+          this.loading = false
+        })
       },
       submit() {
         if (this.verify() !== '') return
@@ -351,6 +349,10 @@
   align-items: center;
   justify-content: space-between;
   padding: 32px 0;
+  border-bottom: 1px solid #e8e8e8; /*no*/
+  &:last-child {
+    border-bottom: none;
+  }
 }
 
 .cart-address {
@@ -452,6 +454,10 @@
   display: flex;
   align-items: center;
   padding: 32px 0;
+  border-bottom: 1px solid #d8d8d8; /*no*/
+}
+.cart-group__list {
+  border-bottom: 1px solid #e8e8e8; /*no*/
 }
 .cart-group__shop-name {
   font-size: 34px;
@@ -599,6 +605,10 @@
     margin-right: 8px;
   }
 }
+.checkout-misc__remark {
+  font-size: 28px;
+}
+
 .action-bar {
   position: fixed;
   z-index: 2;
