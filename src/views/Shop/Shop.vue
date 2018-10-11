@@ -8,12 +8,14 @@
         v-bind="propsMap[tab.key]"
         ></component>
     </tabs>
+    <ShopSkeleton v-if="loading"></ShopSkeleton>
   </div>
 </template>
 
 <script>
   import { fetchRestaurant, fetchFoodMenu } from '@/service/api'
   import { Tabs } from '@/components/common'
+  import ShopSkeleton from '@/components/ShopSkeleton'
 
   import ShopHeader from './ShopHeader/ShopHeader'
   import OrderFood from './OrderFood/OrderFood'
@@ -28,6 +30,7 @@
       OrderFood,
       Rating,
       Seller,
+      ShopSkeleton,
     },
     data() {
       return {
@@ -66,6 +69,7 @@
     },
     created() {
       this.shopId = this.$route.query.id || this.shopId
+
       this.loadData()
     },
     methods: {
@@ -79,7 +83,11 @@
         ]).then(([ shopDetails, menu ]) => {
           this.shopDetails = shopDetails
           this.menu = menu
-
+        }).then(() => {
+          return new Promise((resolve) => {
+            setTimeout(resolve, 4000)
+          })
+        }).then(() => {
           this.loading = false
         })
       },
