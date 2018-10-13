@@ -15,7 +15,8 @@ Vue.use(Vuex);
     currentRestaurantId: '', // 当前结算餐厅 id
 
     addressList: null, // ?Array, 地址列表
-    selectedAddressId: null, // 选择的地址
+    selectedAddressId: '', // 选择的地址
+    editingAddress: '', // 正在编辑的地址
 
     remarkList: null, // ?Array, 订单备注选择列表
     usedRemark: null, // ?Object, 使用的订单备注

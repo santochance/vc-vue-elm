@@ -1,6 +1,6 @@
 <template>
   <page class="address__container"
-    :title="mode === 'normal' ? '收货地址' : '选择收货地址'"
+    :title="mode === 'normal' ? '收货地址' : '选择地址'"
   >
     <div class="address__main">
       <a class="address__btn-add" href="javascript:" @click="openEditor()">
@@ -29,6 +29,7 @@
           <!-- <button class="" @click.stop.prevent="openConfirm(address)">删除</button> -->
         </li>
       </ul>
+      <!-- 
       <div v-if="editorShow && editingEntity" class="editor">
         <form action="">
           <input type="text" v-model="editingEntity.location">
@@ -36,6 +37,7 @@
           <button @click.stop.prevent="closeEditor">取消</button>
         </form>
       </div>
+       -->
       <div v-if="confirmShow && confirmingEntity" class="confirm">
         <h2>删除地址</h2>
         <p>确定删除该收货地址？</p>
@@ -76,15 +78,21 @@
     },
     computed: {
       ...mapState([
-        'addressList', 'selectedAddressId'
+        'addressList',
+        'selectedAddressId',
       ]),
       ...mapGetters([
-        'selectedAddress'
+        'selectedAddress',
       ]),
     },
     methods: {
       ...mapMutations([
-        'SAVE_ADDRESS_LIST', 'ADD_ADDRESS', 'SAVE_ADDRESS', 'REMOVE_ADDRESS', 'SAVE_SELECTED_ADDRESS'
+        'SAVE_ADDRESS_LIST', 
+        'ADD_ADDRESS', 
+        'SAVE_ADDRESS', 
+        'REMOVE_ADDRESS', 
+        'SAVE_SELECTED_ADDRESS', 
+        'SAVE_EDITING_ADDRESS',
       ]),
       switchMode() {
         this.mode = (this.mode === 'normal' ? 'select' : 'normal')
@@ -117,6 +125,9 @@
       openEditor(entity) {
         this.editingEntity = {...entity} || {}
         this.editorShow = true
+
+        this.SAVE_EDITING_ADDRESS(entity)
+        this.$router.push('/checkout/address/edit')
       },
       closeEditor() {
         this.editingEntity = null

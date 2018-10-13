@@ -33,6 +33,9 @@ export default new Router({
       }, {
         path: 'address',
         component: () => import(/* webpackChunkName: "address" */ '@/views/Checkout/Address'),
+      }, {        
+        path: 'address/edit',
+        component: () => import(/* webpackChunkName: "address" */ '@/views/Checkout/AddressEdit'),
       }, {
         path: 'remark',
         component: () => import(/* webpackChunkName: "remark" */ '@/views/Checkout/Remark'),

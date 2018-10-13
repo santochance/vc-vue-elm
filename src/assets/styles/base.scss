@@ -87,4 +87,18 @@ img, svg {
   max-width: 100%;
 }
 
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #bbb;
+}
+::-moz-placeholder { /* Firefox 19+ */
+  color: #bbb;
+}
+:-ms-input-placeholder { /* IE 10+ */
+  color: #bbb;
+}
+:-moz-placeholder { /* Firefox 18- */
+  color: #bbb;
+}
+
 /* file: base.scss */

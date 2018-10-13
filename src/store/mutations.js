@@ -17,6 +17,7 @@ import {
   SAVE_ADDRESS,
   REMOVE_ADDRESS,
   SAVE_SELECTED_ADDRESS,
+  SAVE_EDITING_ADDRESS,
 
   SAVE_REMARK_LIST,
   SAVE_USED_REMARK,
@@ -148,6 +149,9 @@ export default {
   },
   [SAVE_SELECTED_ADDRESS]: function (state, address) {
     state.selectedAddressId = address.id
+  },
+  [SAVE_EDITING_ADDRESS]: function (state, address) {
+    state.editingAddress = address
   },
 
   /* remark */

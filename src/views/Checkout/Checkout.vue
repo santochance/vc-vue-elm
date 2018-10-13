@@ -1,6 +1,6 @@
 <template>
   <div>
-    <keep-alive>
+    <keep-alive :exclude="['AddressEdit']">
       <router-view></router-view>
     </keep-alive>
   </div>
