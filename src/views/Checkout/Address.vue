@@ -99,6 +99,12 @@
         this.SAVE_ADDRESS_LIST(addrList)
       })
     },
+    beforeRouteEnter(to, from, next) {
+      if (!from.path.match('/checkout')) {
+        return next('/checkout')
+      }
+      next()
+    },
     computed: {
       ...mapState([
         'addressList',
@@ -149,8 +155,12 @@
         this.editingEntity = {...entity} || {}
         this.editorShow = true
 
-        this.SAVE_EDITING_ADDRESS(entity)
-        this.$router.push('/checkout/address/edit')
+        this.SAVE_EDITING_ADDRESS(this.editingEntity)
+        if (entity) {
+          this.$router.push('/checkout/address/edit')
+        } else {
+          this.$router.push('/checkout/address/create')
+        }
       },
       closeEditor() {
         this.editingEntity = null

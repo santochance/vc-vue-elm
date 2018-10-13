@@ -1,12 +1,14 @@
 <template>
-  <page v-if="address" title="编辑地址">
+  <page v-if="address" :title="mode === 'create' ? '添加地址' : '编辑地址'">
     <div class="address-form">
       <div class="address-form__content">        
         <div class="address-form__control">
           <div class="label-wrap">联系人</div>
           <div class="input-group-wrap">
             <div class="input-wrap">
-              <input type="text" v-model="address.name">
+              <input type="text" v-model="address.name"
+                placeholder="你的姓名"
+              >
             </div>
             <radio class="input-wrap"
               :options="['先生', '女士']"
@@ -18,7 +20,9 @@
         <div class="address-form__control">
           <div class="label-wrap">电话</div>
           <div class="input-wrap">
-            <input type="text" v-model="address.phone">
+            <input type="text" v-model="address.phone"
+              placeholder="你的手机号"
+            >
           </div>
         </div>
         <div class="address-form__control">
@@ -28,7 +32,9 @@
           </div>
           <div class="input-group-wrap">
             <div class="input-wrap">
-              <input type="text" v-model="address.address">
+              <input type="text" v-model="address.address"
+                placeholder="小区/写字楼/学校等" 
+              >
               <svg><use xlink:href="#arrow-right"></use></svg>
             </div>
             <div class="input-wrap">
@@ -76,14 +82,25 @@
     data() {
       return {
         address: null,
+        mode: '',
       }
     },
-    created() {
-      const address = this.$store.state.editingAddress
-      if (!address) {
-        return this.$router.back()
+    beforeRouteEnter(to, from, next) {
+      // 不是由 /checkout/address 进入，重定向回 /checkout
+      if (!from.path.match('/checkout/address')) {
+        return next('/checkout')
       }
-      this.address = { ...address }
+
+      const mode = to.path.split('/').slice(-1)[0];
+      next((vm) => (function (){
+        const address = this.$store.state.editingAddress
+        // 如果没有正在编辑的 address，重定向回 /checkout
+        if (!address) {
+          return next('/checkout')
+        }
+        this.mode = mode
+        this.address = address
+      }).call(vm))
     },
     computed: {
       // ...mapState({
