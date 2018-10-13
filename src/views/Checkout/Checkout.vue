@@ -1,9 +1,7 @@
 <template>
-  <div>
-    <keep-alive :exclude="['AddressEdit']">
-      <router-view></router-view>
-    </keep-alive>
-  </div>
+  <keep-alive :exclude="['AddressEdit']">
+    <router-view></router-view>
+  </keep-alive>
 </template>
 
 <script>

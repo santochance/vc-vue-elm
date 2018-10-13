@@ -123,7 +123,6 @@
     position: relative;
     z-index: 1;
     &_center {
-      max-width: 80%;
       max-height: 80%;
     }
     &_bottom {

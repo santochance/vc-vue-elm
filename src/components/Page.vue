@@ -42,11 +42,13 @@
 
 <style lang="scss" scoped>
   .page__container {
+    flex: 1 auto;
     display: flex;
     flex-direction: column;
-    flex: 1;
   }
   .page__main {
     flex: 1 auto;
+    display: flex;
+    flex-direction: column;
   }
 </style>

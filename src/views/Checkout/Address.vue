@@ -26,6 +26,9 @@
           <div class="address__btn-edit" @click.stop.prevent="openEditor(address)">
             <svg><use xlink:href="#edit"></use></svg>
           </div>
+          <div class="address__btn-delete" @click.stop.prevent="openConfirm(address)">
+            <svg><use xlink:href="#delete"></use></svg>
+          </div>
           <!-- <button class="" @click.stop.prevent="openConfirm(address)">删除</button> -->
         </li>
       </ul>
@@ -38,12 +41,30 @@
         </form>
       </div>
        -->
+      <!-- 
       <div v-if="confirmShow && confirmingEntity" class="confirm">
         <h2>删除地址</h2>
         <p>确定删除该收货地址？</p>
         <button @click.stop.prevent="submitConfirm(confirmingEntity)">确认</button>
         <button @click.stop.prevent="closeConfirm">取消</button>
       </div>
+      -->
+      <modal :visible="confirmShow" :closable="false"
+        @close="closeConfirm"
+      >
+        <div class="confirm-delete">
+          <h2 class="confirm-delete__title">删除地址</h2>
+          <p class="confirm-delete__content">确定删除该地址</p>
+          <div class="confirm-delete__btns">
+            <button class="confirm-delete__btn confirm-delete__btn-cancel"
+              @click="closeConfirm"
+            >取消</button>
+            <button class="confirm-delete__btn confirm-delete__btn-ok"
+              @click="submitConfirm"
+            >确认</button>
+          </div>
+        </div>
+      </modal>
     </div>
   </page>
 </template>
@@ -52,11 +73,13 @@
   import { mapState, mapGetters, mapMutations } from 'vuex'
   import { fetchAddressList } from '@/service/api'
   import Page from '@/components/Page'
+  import { Modal } from '@/components/common'
 
   export default {
     name: 'Address',
     components: {
       Page,
+      Modal,
     },
     props: {
 
@@ -142,6 +165,7 @@
         this.closeEditor()
       },
       openConfirm(entity) {
+        console.log('debug - openConfirm')
         this.confirmingEntity = {...entity} || {}
         this.confirmShow = true
       },
@@ -149,8 +173,8 @@
         this.confirmingEntity = null
         this.confirmShow = false
       },
-      submitConfirm(entity) {
-        this.removeAddr(entity)
+      submitConfirm() {
+        this.removeAddr(this.confirmingEntity)
         this.closeConfirm()
       },
     },
@@ -255,11 +279,67 @@
   .address__btn-edit {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    flex-basis: 98px;
+    flex-basis: 62px;
     svg {
       width: 36px;
       height: 38px;
     }
+  }
+
+  .address__btn-delete {
+    display: flex;
+    align-items: center;
+    flex-basis: 30px;
+    svg {
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  .confirm-delete {
+    text-align: center;
+    padding: 40px 30px;
+    width: 640px;
+    border-radius: 8px;
+    background: #fff;
+  }
+  .confirm-delete__title {
+    font-size: 36px;
+    font-weight: 700;
+    margin: 18px 32px;
+    color: #333;
+  }
+  .confirm-delete__content {
+    font-size: 26px;
+    line-height: 1.5;
+    color: #666;
+  }
+  .confirm-delete__btns {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 26px;
+  }
+  .confirm-delete__btn {
+    flex: 1;
+    font-size: 32px;
+    font-weight: 500;
+    height: 86px;
+    padding: 0;
+    border: 1px solid rgba(0, 0, 0, .15); /*no*/
+    border-radius: 4px;
+    background: none;
+    color: rgba(0, 0, 0, .87);
+    &:active {
+      opacity: .7;
+    }
+  }
+  .confirm-delete__btn-cancel {
+
+  }
+  .confirm-delete__btn-ok {
+    border: none;
+    margin-left: 20px;
+    background: #3190e8;
+    color: #fff;
   }
 </style>
