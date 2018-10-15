@@ -2,6 +2,7 @@ const path = require('path')
 const useMock = require('./src/service/mock/useMock')
 
 module.exports = {
+  baseUrl: process.env.BASE_URL || '',
   devServer: {
     before: useMock,
   },

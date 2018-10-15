@@ -5,7 +5,9 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "prod": "start /D dist cmd /K \"browser-sync start -s -f .\"",
+    "gh-pages": "cp -r dist/* gh-pages && git -C ./gh-pages add -A && git -C ./gh-pages commit -m 'publish' && git -C ./gh-pages push || echo nothing to push"
   },
   "dependencies": {
     "es6-promise": "^4.2.4",
