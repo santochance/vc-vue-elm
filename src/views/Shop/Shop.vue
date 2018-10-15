@@ -40,7 +40,7 @@
         shopDetails: null,
         menu: null,
 
-        shopId: 157158603, // 餐厅 id
+        restaurantId: 157158603, // 餐厅 id
         tabs: [{
           key: 'order-food',
           title: '点餐',
@@ -48,6 +48,7 @@
         }, {
           key: 'rating',
           title: '评价',
+          props: ['restaurantId'],
         }, {
           key: 'seller',
           title: '商家',
@@ -68,7 +69,7 @@
       },
     },
     created() {
-      this.shopId = this.$route.query.id || this.shopId
+      this.restaurantId = this.$route.query.id || this.restaurantId
 
       this.loadData()
     },
@@ -78,8 +79,8 @@
 
         // 查询餐厅信息和餐厅菜单
         return Promise.all([
-          fetchRestaurant(this.shopId),
-          fetchFoodMenu(this.shopId),
+          fetchRestaurant(this.restaurantId),
+          fetchFoodMenu(this.restaurantId),
         ]).then(([ shopDetails, menu ]) => {
           this.shopDetails = shopDetails
           this.menu = menu

@@ -106,6 +106,11 @@
   import InfiniteLoading from 'vue-infinite-loading'
 
   export default {
+    props: {
+      restaurantId: {
+        type: Number,
+      }
+    },
     components: {
       InfiniteLoading,
       LoadingImage,
@@ -143,7 +148,7 @@
     methods: {
       loadOverview() {
         this.loading = true
-        fetchRatingOverview().then(overview => {
+        fetchRatingOverview(this.restaurantId).then(overview => {
           this.comments = overview.comments
           this.rating = overview.rating
           this.tags = overview.tags
@@ -171,9 +176,10 @@
           })
       },
       loadComments() {
-        const { tagNameCurrent: tagName, limit, offset } = this
+        const { restaurantId, tagNameCurrent: tagName, limit, offset } = this
         // 返回 promise 供 infiniteLoading决定状态
         return fetchComments({
+          restaurantId,
           tagName,
           limit,
           offset
