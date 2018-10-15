@@ -4,6 +4,7 @@ import mockApis from './index'
 
 // 响应延迟
 const delay = 500
+const debug = false
 
 export default function (url, options) {
 
@@ -12,7 +13,7 @@ export default function (url, options) {
     const [ pathStr, queryStr ] = url.split('?')
     const reqStr = `${method} ${pathStr}`
     
-    console.group('% mock Request %: %s %s', method, url)
+    debug && console.group('% mock Request %: %s %s', method, url)
 
     let req = { ...options, url, method }
     let foundPath
@@ -34,8 +35,8 @@ export default function (url, options) {
       const api = mockApis[foundPath]
       const apiRes = typeof api === 'function' ? api(req) : api
 
-      console.log('response:', apiRes)
-      console.groupEnd()
+      debug && console.log('response:', apiRes)
+      debug && console.groupEnd()
 
       setTimeout(() => resolve(apiRes), delay)
     } else {
