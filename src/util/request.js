@@ -1,5 +1,7 @@
 import ('es6-promise/auto')
 import fetch from 'isomorphic-fetch'
+import mockRequest from '../service/mock-es/mockRequest'
+
 
 const request = function (url, options) {
   // fetch 默认不发送 cookie
@@ -52,4 +54,11 @@ const request = function (url, options) {
     })
 }
 
-export default request
+// 是否使用代理
+const noProxy = process.env.NO_PROXY === 'true'
+
+const mockRequestWrapper = (url, options) =>
+  mockRequest(url, options)
+    .catch(() => request(url, options))
+
+export default noProxy ? request : mockRequestWrapper
