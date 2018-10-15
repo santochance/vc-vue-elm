@@ -90,6 +90,7 @@
           })
         }).then(() => {
           this.loading = false
+          this.$emit('loaded')
         })
       },
     },

@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import Home from './views/Home.vue';
+import ShopContainer from './views/ShopContainer.vue'
 
 Vue.use(Router);
 
@@ -22,7 +23,8 @@ export default new Router({
     },
     {
       path: '/shop',
-      component: () => import(/* webpackChunkName: "shop" */ '@/views/Shop/Shop'),
+      // component: () => import(/* webpackChunkName: "shop" */ '@/views/Shop/Shop'),
+      component: ShopContainer,
     },
     {
       path: '/checkout',
