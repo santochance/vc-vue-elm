@@ -294,7 +294,7 @@
         content: '';
         display: block;
         padding-top: 100%;
-        background: url('/picsum.jpeg') no-repeat center / cover;
+        background: url('./picsum.jpeg') no-repeat center / cover;
       }
       & > img {
         position: absolute;
