@@ -84,15 +84,16 @@ export default {
 
     const newQuantity = (entity.quantity || 0) + deltaQuantity
     if (newQuantity > stock) {
-      Toast.open({
+      return Toast.open({
         content: '超过库存，无法添加!',
         mark: false,
       })
     } else {
       entities.splice(entityIndex, 1, { ...entity, quantity: newQuantity })
+      // 确保数据变动后视图更新
+      state.cartMap = {...cartMap}
     }
 
-    // state.cartMap = {...cartMap}
   },
   [REDUCE_CART]: function (state, payload) {
     const  {
