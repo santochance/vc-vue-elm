@@ -86,7 +86,7 @@
           this.menu = menu
         }).then(() => {
           return new Promise((resolve) => {
-            setTimeout(resolve, 4000)
+            setTimeout(resolve, 3000)
           })
         }).then(() => {
           this.loading = false

@@ -5,7 +5,9 @@
       v-hold-up-scroll>
       <div class="modal__overlay" @click.stop.prevent="onClose"></div>
       <div class="modal__panel food-detail__container">
-        <img :src="$getImage(food.image_path, foodDetailImgParam)" alt="">
+        <div class="food-detail__img-wrap">
+          <img :src="$getImage(food.image_path, foodDetailImgParam)" alt="">
+        </div>
         <div class="food-detail__info">
           <h2 class="food-detail__name ellipsis">{{ food.name }}</h2>
           <div class="food-detail__service">
@@ -70,10 +72,17 @@
     background: #fff;
     height: 100%;
     width: 100%;
-    & > img {
-      width: 100%;
-    }
   }
+    .food-detail__img-wrap {
+      height: 750px;
+      width: 100%;
+      background: url('./picsum-large.jpeg') no-repeat;
+      background-size: 100% 100%;
+      & > img {
+        width: 100%;
+      }
+    }
+
     .food-detail__info {
       padding: 30px 30px 0 30px
 
