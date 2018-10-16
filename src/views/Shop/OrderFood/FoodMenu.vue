@@ -48,7 +48,8 @@
                     class="food__attr-tag"
                     :style="{backgroundColor: '#' + item.attributes[0].icon_color }"
                     >{{ item.attributes[0].icon_name }}</tag>
-                  <img :src="$getImage(item.image_path, foodImgParam)" alt="">
+                  <img class="lazy-img-fadein"
+                    v-lazy="$getImage(item.image_path, foodImgParam)" alt="">
                 </div>
                 <div class="food__info">
                   <div class="food__name ellipsis"
@@ -371,5 +372,18 @@
       bottom: 0;
     }
   }}
+  
+  .lazy-img-fadein[lazy=loaded] {
+    animation: fadeIn 1s;
+    animtaion-fill-mode: both;
+  }
 
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
 </style>
