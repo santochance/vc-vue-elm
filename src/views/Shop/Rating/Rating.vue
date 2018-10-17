@@ -92,14 +92,10 @@
           </div>
           </li>
         </ul>
-
       </div>
-      <infinite-loading @infinite="infiniteHandler"
-        :distance="200"
-        ref="infiniteLoading">
-        <span class="infinite__feedback" slot="no-results">没有更多了哦~</span>
-        <span class="infinite__feedback" slot="no-more">没有更多了哦~</span>
-      </infinite-loading>
+      <InfiniteScroll :handler="infiniteScrollHandler"
+        ref="infiniteScroll"
+      ></InfiniteScroll>
     </template>
     <loading-image :visible="loading"></loading-image>
   </div>
@@ -109,7 +105,9 @@
   import { fetchRatingOverview, fetchComments } from '@/service/api'
   import LoadingImage from '@/components/LoadingImage'
   import Viewer from '@/components/Viewer'
-  import InfiniteLoading from 'vue-infinite-loading'
+  import InfiniteScroll from '@/components/common/InfiniteScroll'
+  
+  const debug = false
 
   export default {
     props: {
@@ -118,9 +116,9 @@
       }
     },
     components: {
-      InfiniteLoading,
       LoadingImage,
       Viewer,
+      InfiniteScroll,
     },
     data () {
       return {
@@ -169,19 +167,21 @@
         this.offset = 0
         this.comments = []
 
-        // 在过滤器 tab 改变时主动触发 inifinteLoading 的 reset 事件
-        this.$refs.infiniteLoading.$emit('$InfiniteLoading:reset')
+        this.$nextTick(() => {
+          // 在过滤器 tab 改变时主动调用 infiniteScroll 的 reset 接口
+          this.$refs.infiniteScroll.reset()
+        })
       },
-      infiniteHandler($state) {
-        this.loadComments(/*this.tagNameCurrent*/)
+      infiniteScrollHandler($state) {
+        debug && console.log('debug - exec infiniteScrollHandler')
+        this.loadComments() 
           .then(method => {
-            method
-            console.log('debug - before infinite')
-
+            console.log('debug - infinite scroll loaded')
             $state[method]()
           })
       },
       loadComments() {
+        debug && console.log('debug - exec loadComments')
         const { restaurantId, tagNameCurrent: tagName, limit, offset } = this
         // 返回 promise 供 infiniteLoading决定状态
         return fetchComments({
@@ -190,6 +190,7 @@
           limit,
           offset
         }).then(comments => {
+          debug && console.log('debug - get response of comments')
           if (offset === 0) {
             this.comments = comments
           } else {
@@ -215,12 +216,13 @@
       percentNum(value) {
         return (value * 100).toFixed(1) + '%'
       },
-    }
+    },
   }
 </script>
 
 <style lang="scss" scoped>
   .rating__container {
+    position: relative;
     background-color: #f5f5f5;
     -webkit-overflow-scrolling: touch;
   }
@@ -445,16 +447,6 @@
 </style>
 
 <style lang="scss">
-  // 覆写 vue-infinite-loading 的 spinner 样式
-  .rating-infinite-scroll {
-    background-color: #fff !important;
-    // .loading-default {
-    //   font-size: 48px !important;
-    //   line-height: 1 !important;
-    //   width: 1em !important;
-    //   height: 1em !important;
-    // }
-  }
   .re-rating-comment__food-images {
     .viewer-thumbnail__item {
       width: 300px;
