@@ -64,7 +64,8 @@
                     <span class="comment__rating-start-text" :style="{ color: ratingGradeMap[comment.rating][1] }">{{ ratingGradeMap[comment.rating][0] }}</span>
                   </div>
                   <div class="comment__rating-text">{{ comment.rating_text }}</div>
-                  <div class="comment__reply-content">{{ comment.reply && comment.reply.content }}</div>
+                  <div v-if="comment.reply"
+                    class="comment__reply-content">{{ comment.reply && comment.reply.content }}</div>
                   <!--
                   <ul class="comment__food-images">
                     <li v-for="(image, index) in comment.order_images" :key="index"
