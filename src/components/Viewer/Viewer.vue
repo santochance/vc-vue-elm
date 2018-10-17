@@ -1,7 +1,7 @@
 <template>
   <div class="viewer-thumbnail__container">
     <div v-for="(item, idx) in usedItems" :key="idx"
-      class="viewer-thumbnail__item" >
+      class="viewer-thumbnail__item">
       <img :src="item.thumbnail" alt=""
         @click="onThumbnailClick($event, idx)"
         ref="thumbnails"
@@ -86,17 +86,19 @@
   }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .viewer-thumbnail {@at-root {
     .viewer-thumbnail__container {
       display: flex;
     }
     .viewer-thumbnail__item {
       position: relative;
-      flex: 1 1 auto;
       margin: 10px 10px 10px 0;
       &:last-child {
         margin-right: 0;
+      }
+      img {
+        width: 100%;
       }
     }
   }}

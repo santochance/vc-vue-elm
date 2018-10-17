@@ -35,7 +35,9 @@
           </li>
         </ul>
 
-        <ul class="rating__comments" v-if="comments.length">
+        <ul v-if="comments.length"
+          class="rating__comments" 
+        >
           <li v-for="(comment, index) in comments" :key="String(comment.food_id) + index"
             class="comment"
           >
@@ -71,7 +73,10 @@
                     </li>
                   </ul>
                    -->
-                  <viewer :items="transformForViewer(comment.order_images)"></viewer>
+                  <viewer
+                   class="re-rating-comment__food-images"
+                   :items="transformForViewer(comment.order_images)"
+                  ></viewer>
                   <div class="comment__food-list">
                     <svg><use xlink:href="#like"></use></svg>
                     <template>
@@ -440,13 +445,19 @@
 
 <style lang="scss">
   // 覆写 vue-infinite-loading 的 spinner 样式
-  .infinite-loading-container {
+  .rating-infinite-scroll {
     background-color: #fff !important;
-    .loading-default {
-      font-size: 48px !important;
-      line-height: 1 !important;
-      width: 1em !important;
-      height: 1em !important;
+    // .loading-default {
+    //   font-size: 48px !important;
+    //   line-height: 1 !important;
+    //   width: 1em !important;
+    //   height: 1em !important;
+    // }
+  }
+  .re-rating-comment__food-images {
+    .viewer-thumbnail__item {
+      width: 300px;
+      height: 300px;
     }
   }
 </style>
