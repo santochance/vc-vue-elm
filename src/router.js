@@ -4,7 +4,16 @@ import Router from 'vue-router';
 // import Home from './views/Home.vue';
 import ShopContainer from './views/ShopContainer.vue'
 
+
 Vue.use(Router);
+
+import TabPage from '@/components/TabPage'
+const tabPageWrapper = (tabKey, component) =>
+  ({
+    ...TabPage,
+    injectedTabKey: tabKey,
+    injectedComponent: component,
+  })
 
 export default new Router({
   routes: [
@@ -38,6 +47,23 @@ export default new Router({
         path: 'remark',
         component: () => import(/* webpackChunkName: "remark" */ '@/views/Checkout/Remark'),
       }]
+    },
+    /* tabbar */
+    {
+      path: '/index',
+      component: tabPageWrapper('index', () => import(/* webpackChunkName: "index" */ '@/views/Index')),
+    },
+    {
+      path: '/discover',
+      component: tabPageWrapper('discover', () => import(/* webpackChunkName: "discover" */ '@/views/Discover')),
+    },
+    {
+      path: '/order',
+      component: tabPageWrapper('order', () => import(/* webpackChunkName: "order" */ '@/views/Order')),
+    },
+    {
+      path: '/profile',
+      component: tabPageWrapper('profile', () => import(/* webpackChunkName: "profile" */ '@/views/Profile')),
     },
   ],
 });

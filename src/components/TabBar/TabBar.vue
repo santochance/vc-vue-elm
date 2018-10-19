@@ -1,7 +1,7 @@
 <template>
   <div class="tabbar">
-    <a href="javascript:" 
-     v-for="(tab, idx) in tabs" :key="tab.key"
+    <router-link v-for="(tab, idx) in tabs" :key="tab.key"
+     :to="tab.path"
      class="tabbar__tab"
      :class="{ tabbar__tab_active: currentTabKey === idx }"
      @click="currentTabKey = idx">
@@ -11,7 +11,7 @@
        <div >
        </div>
        <span class="tabbar__text">{{ tab.text }}</span>
-     </a>
+     </router-link>
   </div>
 </template>
 
@@ -35,21 +35,25 @@
           text: '首页',
           iconId: '#indexRegular',
           activeIconId: '#index',
+          path: '/index'
         }, {
           key: 'discover',
           text: '发现',
           iconId: '#discoverRegular',
           activeIconId: '#discover',
+          path: '/discover',
         }, {
           key: 'order',
           text: '订单',
           iconId: '#orderRegular',
           activeIconId: '#order',
+          path: '/order',
         }, {
           key: 'profile',
           text: '我的',
           iconId: '#profileRegular',
           activeIconId: '#profile',
+          path: '/profile',
         }],
         currentTabKey: '', 
       }
