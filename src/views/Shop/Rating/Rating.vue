@@ -333,7 +333,7 @@
         width: 100%;
         height: 100%;
         border-radius: 50%;
-        background: url('./sprite-avatar.png');
+        background: url('/sprite-avatar.png');
         background-size: 60px;
       }
       & > img {
