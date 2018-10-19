@@ -65,5 +65,9 @@ export default new Router({
       path: '/profile',
       component: tabPageWrapper('profile', () => import(/* webpackChunkName: "profile" */ '@/views/Profile')),
     },
+    {
+      path: '/profile/info',
+      component: () => import(/* webpackChunkName: "profile-info" */ '@/views/Profile/ProfileInfo'),
+    }
   ],
 });

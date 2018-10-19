@@ -1,6 +1,7 @@
 <template>
   <page :title="'我的'" class="profile__block">
-    <div class="profile__user">
+    <router-link to="/profile/info"
+      class="profile__user">
       <div class="profile__avatar"
         :style="{ backgroundPosition: `0 ${120 * random(0, 6)}px` }"
       ></div>
@@ -14,7 +15,7 @@
       <div class="profile__user-right">
         <svg><use xlink:href="#item-arrow-right"></use></svg>
       </div>
-    </div>
+    </router-link>
     <div class="profile__item-col-group profile__assets">
       <router-link to=""
         class="profile__item-col profile__wallet">
