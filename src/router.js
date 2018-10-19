@@ -68,6 +68,16 @@ export default new Router({
     {
       path: '/profile/info',
       component: () => import(/* webpackChunkName: "profile-info" */ '@/views/Profile/ProfileInfo'),
+      children: [{
+        path: '',
+        component: () => import(/* webpackChunkName: "profile-info-main" */ '@/views/Profile/ProfileInfoMain'),
+      }, {
+        path: 'username',
+        component: () => import(/* webpackChunkName: "profile-info-username" */ '@/views/Profile/ProfileInfoUsername')
+      }, {
+        path: 'password',
+        component: () => import(/* webpackChunkName: "profile-info-password" */ '@/views/Profile/ProfileInfoPassword')
+      }],
     }
   ],
 });
