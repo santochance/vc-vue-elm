@@ -191,7 +191,6 @@
       width: 120px;
       height: 120px;
       border-radius: 50%;
-      background-color: #bbb;
       background-image: url('/sprite-avatar.png');
       background-size: 120px;
     }
@@ -276,10 +275,10 @@
     .profile__item {
       display: flex;
       justify-content: space-between;
-      &[disabled] {
-        opacity: .6;
-        color: #aaa;
-      }
+      // &[disabled] {
+      //   opacity: .6;
+      //   color: #aaa;
+      // }
     }
     .profile__item-left {
       flex-shrink: 0;
