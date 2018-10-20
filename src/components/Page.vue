@@ -1,7 +1,10 @@
 <template>
   <div class="page__container">
-    <page-header :title="title"
-      :back-btn="backBtn" />
+    <page-header
+      :title="title"
+      :back-btn="backBtn"
+      v-stick
+    />
     <div class="page__main">
       <slot></slot>
     </div>
