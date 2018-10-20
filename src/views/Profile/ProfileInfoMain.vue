@@ -8,7 +8,7 @@
             class="info__avatar-file"
           >
           <span class="info__avatar-value"
-            :style="{ backgroundPosition: `0 ${120 * random(0, 6)}px` }"
+            :style="{ backgroundPosition: `0 ${$toRem(120 * random(0, 6))}` }"
           ></span>
           <span>
             <svg><use xlink:href="#arrow"></use></svg>
@@ -19,7 +19,7 @@
         class="info__item">
         <b>用户名</b>
         <span>
-          <span>757f8734cc8</span>
+          <span>{{ user.username }}</span>
           <span class="info__item-right">
             <svg ><use xlink:href="#arrow"></use></svg>
           </span>
@@ -37,7 +37,7 @@
           <b>手机</b>
         </span>
         <span class="info__item-right">
-          <span>{{ '13822222' }}</span>
+          <span>{{ user.mobile }}</span>
           <span>
             <svg><use xlink:href="#arrow"></use></svg>
           </span>
