@@ -11,7 +11,7 @@
           >{{ user.username }}</p>
           <p class="profile__user-phone ellipsis">
             <svg><use xlink:href="#mobile"></use></svg>
-            <span>{{ user.mobile }}</span>
+            <span>{{ user.mobile | mobileMask }}</span>
           </p>
         </div>
         <div class="profile__user-right">

@@ -1,5 +1,6 @@
 <template>
-  <div class="info__block">
+  <div v-if="user"
+    class="info__block">
     <div class="info__group">
       <div class="info__item info__avatar">
         <b>头像</b>
@@ -29,7 +30,8 @@
 
     <div class="info__group-title">账号绑定</div>
     <div class="info__group">
-      <div class="info__item">
+      <router-link to="/profile/rebind"
+        class="info__item">
         <span>
           <i class="info__phone-icon">
             <svg><use xlink:href="#info-mobile"></use></svg>
@@ -37,12 +39,12 @@
           <b>手机</b>
         </span>
         <span class="info__item-right">
-          <span>{{ user.mobile }}</span>
+          <span>{{ user.mobile | mobileMask }}</span>
           <span>
             <svg><use xlink:href="#arrow"></use></svg>
           </span>
         </span>
-      </div>
+      </router-link>
     </div>
 
     <div class="info__group-title">安全设置</div>

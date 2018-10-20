@@ -45,6 +45,10 @@ Vue.directive('stick', {
   },
 })
 
+Vue.filter('mobileMask', function (value) {
+  return String(value).split('').map((v, i) => i >= 3 && i < 7 ? '*' : v).join('')
+})
+
 
 window.Vue = Vue
 
