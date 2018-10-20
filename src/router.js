@@ -73,11 +73,15 @@ export default new Router({
         component: () => import(/* webpackChunkName: "profile-info-main" */ '@/views/Profile/ProfileInfoMain'),
       }, {
         path: 'username',
-        component: () => import(/* webpackChunkName: "profile-info-username" */ '@/views/Profile/ProfileInfoUsername')
+        component: () => import(/* webpackChunkName: "profile-info-username" */ '@/views/Profile/ProfileInfoUsername'),
       }, {
         path: 'password',
-        component: () => import(/* webpackChunkName: "profile-info-password" */ '@/views/Profile/ProfileInfoPassword')
+        component: () => import(/* webpackChunkName: "profile-info-password" */ '@/views/Profile/ProfileInfoPassword'),
       }],
+    },
+    {
+      path: '/profile/rebind',
+      component: () => import(/* webpackChunkName: "profile-rebind-mobile" */ '@/views/Profile/ProfileRebindMobile'),
     }
   ],
 });
