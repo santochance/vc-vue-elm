@@ -15,6 +15,7 @@ export default class Sticker {
     this.offset = offset
     this.sticking = false
     this.onScroll = this.onScroll.bind(this)
+    this.onResize = this.onResize.bind(this)
 
     // 创建和插入holder
     this.holder = document.createElement('div')
@@ -22,6 +23,7 @@ export default class Sticker {
     this.el.parentNode.insertBefore(this.holder, this.el)
 
     window.addEventListener('scroll', this.onScroll)
+    window.addEventListener('resize', this.onResize)
   }
 
   onScroll() {
@@ -30,6 +32,11 @@ export default class Sticker {
     } else {
       this.unstick()
     }
+  }
+
+  onResize() {
+    this.unstick()
+    this.onScroll()
   }
 
   /* 转为 sticky 状态 */
@@ -92,6 +99,7 @@ export default class Sticker {
     this.el = null
 
     window.removeEventListener('scroll', this.onScroll)
+    window.removeEventListener('resize', this.onResize)
   }
 }
 
