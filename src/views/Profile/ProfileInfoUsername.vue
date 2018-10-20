@@ -17,6 +17,7 @@
 </template>
 
 <script>
+  import { saveUsername } from '@/service/api'
 
   export default {
     name: 'ProfileInfoUsername',
@@ -35,10 +36,17 @@
     methods: {
       onSubmit() {
         this.$emit('submit')
-        this.processing = true
-        setTimeout(() => {
-          this.processing = false
-        }, 3000)
+
+        const state = this.$store.state
+
+        saveUsername({
+          userId: state.userId,
+          username: this.username,
+        })
+          .then(() => {
+            this.processing = false
+            // this.$router.replace('/profile/info')
+          })
       },
     },
   }

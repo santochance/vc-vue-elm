@@ -118,6 +118,8 @@
 </template>
 
 <script>
+  import { mapState, mapActions } from 'vuex'
+
   import Page from '@/components/Page'
 
   export default {
@@ -133,7 +135,33 @@
         
       }
     },
+    computed: {
+      ...mapState([
+        'user'
+      ]),
+    },
+    created() {
+      this.loadData()
+    },
+    activated() {
+      this.loadData()
+    },
+    filters: {
+      toFixed(value, num = 2) {
+        return Number(value).toFixed(num)
+      }
+    },
     methods: {
+      loadData() {
+        this.fetchCurrentUser()
+          .then(({ id }) => {
+            this.fetchUser({ user_id: id })
+          })
+      },
+      ...mapActions([
+        'fetchCurrentUser',
+        'fetchUser',
+      ]),
       random(min, max) {
         return Math.floor(min + Math.random() * (max - min))
       },

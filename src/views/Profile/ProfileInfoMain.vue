@@ -66,7 +66,9 @@
 </template>
 
 <script>
-
+  import { mapState, mapActions } from 'vuex'
+  import { fetchExtraProfile } from '@/service/api'
+  
   export default {
     name: 'ProfileInfoMain',
     components: {
@@ -77,10 +79,36 @@
     },
     data() {
       return {
-        
+        extraProfile: null,
       }
     },
+    created() {
+      this.loadData()
+    },
+    activated() {
+      this.loadData()
+    },
+    computed: {
+      ...mapState([
+        'user',
+      ]),
+    },
     methods: {
+      loadData() {
+        this.fetchCurrentUser()
+          .then(({ id }) => {
+            this.fetchUser({ user_id: id })
+
+            fetchExtraProfile(id)
+              .then((extraProfile) => {
+                this.extraProfile = extraProfile
+              })
+          })
+      },
+      ...mapActions([
+        'fetchCurrentUser',
+        'fetchUser',
+      ]),
       random(min, max) {
         return Math.floor(min + Math.random() * (max - min))
       },
