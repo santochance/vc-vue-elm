@@ -11,8 +11,6 @@ import Sticker from '@/util/Sticker'
 import { HoldUpScroll, LazyLocalScroll } from '@/util/VuePlugins'
 import persistence from '@/util/persistence'
 
-import Page from '@/components/Page'
-
 import '@/util/flexible';
 import '@/assets/styles/base.scss';
 import '@/assets/styles/util.scss';
@@ -37,8 +35,6 @@ Vue.prototype.$toRem = function (px) {
   if (!px) return 0
   return px / 750 * 10  + 'rem'
 }
-
-Vue.component('page', Page)
 
 Vue.directive('stick', {
   inserted(el, binding, vnode) {

@@ -35,7 +35,7 @@
           text: '首页',
           iconId: '#indexRegular',
           activeIconId: '#index',
-          path: '/index'
+          path: '/'
         }, {
           key: 'discover',
           text: '发现',

@@ -1,5 +1,6 @@
 <template>
-  <page :title="'我的'" class="profile__block">
+  <page title="我的" :back-btn="false"
+    class="profile__block">
     <template v-if="user">
       <router-link to="/profile/info"
         class="profile__user">

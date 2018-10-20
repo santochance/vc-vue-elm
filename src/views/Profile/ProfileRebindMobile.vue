@@ -31,11 +31,12 @@
 
 <script>
   import { mapState } from 'vuex'
+  import Page from '@/components/Page'
   
   export default {
     name: 'ProfileRebindMobile',
     components: {
-
+      Page,
     },
     props: {
       
