@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-// import Home from './views/Home.vue';
 import ShopContainer from './views/ShopContainer.vue'
 
 
@@ -17,40 +16,9 @@ const tabPageWrapper = (tabKey, component) =>
 
 export default new Router({
   routes: [
-    {
-      path: '/',
-      // name: 'home',
-      // component: Home,
-      redirect: '/shop',
-    },
-    {
-      path: '/shop',
-      // component: () => import(/* webpackChunkName: "shop" */ '@/views/Shop/Shop'),
-      component: ShopContainer,
-    },
-    {
-      path: '/checkout',
-      component: () => import(/* webpackChunkName: "checkout" */ '@/views/Checkout'),
-      children: [{
-        path: '',
-        component: () => import(/* webpackChunkName: "confirm-order" */ '@/views/Checkout/ConfirmOrder'),
-      }, {
-        path: 'address',
-        component: () => import(/* webpackChunkName: "address" */ '@/views/Checkout/Address'),
-      }, {        
-        path: 'address/edit',
-        component: () => import(/* webpackChunkName: "address" */ '@/views/Checkout/AddressEdit'),
-      }, {        
-        path: 'address/create',
-        component: () => import(/* webpackChunkName: "address" */ '@/views/Checkout/AddressEdit'),
-      }, {
-        path: 'remark',
-        component: () => import(/* webpackChunkName: "remark" */ '@/views/Checkout/Remark'),
-      }]
-    },
     /* tabbar */
     {
-      path: '/index',
+      path: '/',
       component: tabPageWrapper('index', () => import(/* webpackChunkName: "index" */ '@/views/Index')),
     },
     {
@@ -61,6 +29,34 @@ export default new Router({
       path: '/order',
       component: tabPageWrapper('order', () => import(/* webpackChunkName: "order" */ '@/views/Order')),
     },
+
+    /* shop */
+    {
+      path: '/shop',
+      // component: () => import(/* webpackChunkName: "shop" */ '@/views/Shop/Shop'),
+      component: ShopContainer,
+    },
+
+    /* checkout */
+    {
+      path: '/checkout',
+      component: () => import(/* webpackChunkName: "checkout" */ '@/views/Checkout'),
+      children: [{
+        path: '',
+        component: () => import(/* webpackChunkName: "confirm-order" */ '@/views/Checkout/ConfirmOrder'),
+      }, {
+        path: 'address',
+        component: () => import(/* webpackChunkName: "checkout-address" */ '@/views/Checkout/CheckoutAddress'),
+      }, {        
+        path: 'address/(edit|create)',
+        component: () => import(/* webpackChunkName: "checkout-address-edit" */ '@/views/Checkout/CheckoutAddressEdit'),
+      }, {        
+        path: 'remark',
+        component: () => import(/* webpackChunkName: "remark" */ '@/views/Checkout/Remark'),
+      }]
+    },
+
+    /* profile */
     {
       path: '/profile',
       component: tabPageWrapper('profile', () => import(/* webpackChunkName: "profile" */ '@/views/Profile')),
@@ -82,6 +78,14 @@ export default new Router({
     {
       path: '/profile/rebind',
       component: () => import(/* webpackChunkName: "profile-rebind-mobile" */ '@/views/Profile/ProfileRebindMobile'),
-    }
+    },
+    {
+      path: '/profile/address',
+      component: () => import(/* webpackChunkName: "profile-address" */ '@/views/Profile/ProfileAddress'),
+    },
+    {
+      path: '/profile/address/(edit|create)',
+      component: () => import(/* webpackChunkName: "profile-address-edit" */ '@/views/Profile/ProfileAddressEdit'),
+    },
   ],
 });

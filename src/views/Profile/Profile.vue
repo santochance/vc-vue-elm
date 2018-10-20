@@ -46,7 +46,7 @@
 
       </div>
       <section class="profile__item-group">
-        <router-link to=""
+        <router-link to="/profile/address"
           class="profile__item"
         >
           <div class="profile__item-left">

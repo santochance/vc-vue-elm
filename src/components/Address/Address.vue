@@ -1,6 +1,6 @@
 <template>
-  <page class="address__container"
-    :title="mode === 'normal' ? '收货地址' : '选择地址'"
+  <page :title="title"
+    class="address__container"
   >
     <div class="address__main">
       <a class="address__btn-add" href="javascript:" @click="openEditor()">
@@ -10,8 +10,9 @@
       <ul>
         <li v-for="address in addressList" :key="address.id"
           class="address__addr-item"
-          @click.stop.prevent="mode === 'normal' ? openEditor(address) : selectAddr(address)">
-          <div class="address__select">
+          @click.stop.prevent="mode === 'select' ? selectAddr(address) : null">
+          <div  v-if="mode === 'select'"
+            class="address__select">
             <img v-if="selectedAddress && address.id === selectedAddress.id" src="./checked.png" alt="">
           </div>
           <div class="address__body">
@@ -82,7 +83,14 @@
       Modal,
     },
     props: {
-
+      title: {
+        type: String,
+      },
+      // normal是用户中心的收货地址，select是下单时选择地址
+      mode: {
+        type: String,
+        default: 'normal',
+      }
     },
     data () {
       return {
@@ -90,21 +98,19 @@
         editingEntity: null,
         confirmShow: false,
         confirmingEntity: null,
-        mode: 'select', // normal是用户中心的收货地址，select是下单时选择地址
       }
     },
     created() {
-      this.mode = this.$route.meta.mode || 'select'
       fetchAddressList().then(addrList => {
         this.SAVE_ADDRESS_LIST(addrList)
       })
     },
-    beforeRouteEnter(to, from, next) {
-      if (!from.path.match('/checkout')) {
-        return next('/checkout')
-      }
-      next()
-    },
+    // beforeRouteEnter(to, from, next) {
+    //   if (!from.path.match('/checkout')) {
+    //     return next('/checkout')
+    //   }
+    //   next()
+    // },
     computed: {
       ...mapState([
         'addressList',
@@ -123,9 +129,6 @@
         'SAVE_SELECTED_ADDRESS', 
         'SAVE_EDITING_ADDRESS',
       ]),
-      switchMode() {
-        this.mode = (this.mode === 'normal' ? 'select' : 'normal')
-      },
       getUid: (function () {
         let count = 0
         return function () {
@@ -157,9 +160,9 @@
 
         this.SAVE_EDITING_ADDRESS(this.editingEntity)
         if (entity) {
-          this.$router.push('/checkout/address/edit')
+          this.$router.push(`${this.$route.path}/edit`)
         } else {
-          this.$router.push('/checkout/address/create')
+          this.$router.push(`${this.$route.path}/create`)
         }
       },
       closeEditor() {
