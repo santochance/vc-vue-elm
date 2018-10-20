@@ -6,7 +6,31 @@ export const fetchHello = () => request(`/hello`)
 /**
  * 查询当前登录用户
  */
-export const fetchCurrentUser = () => request(`/users/current`)
+export const fetchCurrentUser = () =>
+  request(`/users/current`)
+
+/**
+ * 查询用户信息
+ */
+export const fetchUser = (userId) =>
+  request(`/users/${userId}`)
+
+ /**
+  * 查询额外的用户信息
+  */
+export const fetchExtraProfile = (userId) =>
+  request(`/users/${userId}/extra_profile`) 
+
+/**
+ * 修改用户名
+ */
+export const saveUsername = ({ userId, username }) => 
+  request(`/users/${userId}/username`, {
+    method: 'POST',
+    body: {
+      username,
+    }
+  })
 
 /**
  * 查询餐厅信息
