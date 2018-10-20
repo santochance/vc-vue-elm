@@ -1,119 +1,126 @@
 <template>
   <page :title="'我的'" class="profile__block">
-    <router-link to="/profile/info"
-      class="profile__user">
-      <div class="profile__avatar"
-        :style="{ backgroundPosition: `0 ${120 * random(0, 6)}px` }"
-      ></div>
-      <div class="profile__user-info">
-        <p class="profile__user-name ellipsis">757f8734cc8</p>
-        <p class="profile__user-phone ellipsis">
-          <svg><use xlink:href="#mobile"></use></svg>
-          <span>{{ '13822222222' }}</span>
-        </p>
-      </div>
-      <div class="profile__user-right">
-        <svg><use xlink:href="#item-arrow-right"></use></svg>
-      </div>
-    </router-link>
-    <div class="profile__item-col-group profile__assets">
-      <router-link to=""
-        class="profile__item-col profile__wallet">
-        <div class="profile__item-col-value">
-          <span>{{ '0' }}</span>
-          <span class="profile__item-col-unit">元</span>
+    <template v-if="user">
+      <router-link to="/profile/info"
+        class="profile__user">
+        <div class="profile__avatar"
+          :style="{ backgroundPosition: `0 ${$toRem(120 * random(0, 6))}` }"
+        ></div>
+        <div class="profile__user-info">
+          <p class="profile__user-name ellipsis"
+          >{{ user.username }}</p>
+          <p class="profile__user-phone ellipsis">
+            <svg><use xlink:href="#mobile"></use></svg>
+            <span>{{ user.mobile }}</span>
+          </p>
         </div>
-        <span class="profile__item-col-text">钱包</span>
-      </router-link>
-      <router-link to=""
-        class="profile__item-col profile__hongbao">
-        <div class="profile__item-col-value">
-          <span>{{ '2' }}</span>
-          <span class="profile__item-col-unit">个</span>
+        <div class="profile__user-right">
+          <svg><use xlink:href="#item-arrow-right"></use></svg>
         </div>
-        <span class="profile__item-col-text">红包</span>
       </router-link>
-      <router-link to=""
-        class="profile__item-col profile__gold">
-        <div class="profile__item-col-value">
-          <span>{{ '0' }}</span>
-          <span class="profile__item-col-unit">个</span>
-        </div>
-        <span class="profile__item-col-text">金币</span>
-      </router-link>
+      <div class="profile__item-col-group profile__assets">
+        <router-link to=""
+          class="profile__item-col profile__wallet">
+          <div class="profile__item-col-value">
+            <span>{{ user.balance | toFixed(2) }}</span>
+            <span class="profile__item-col-unit">元</span>
+          </div>
+          <span class="profile__item-col-text">钱包</span>
+        </router-link>
+        <router-link to=""
+          class="profile__item-col profile__hongbao">
+          <div class="profile__item-col-value">
+            <span>{{ user.gift_amount }}</span>
+            <span class="profile__item-col-unit">个</span>
+          </div>
+          <span class="profile__item-col-text">红包</span>
+        </router-link>
+        <router-link to=""
+          class="profile__item-col profile__gold">
+          <div class="profile__item-col-value">
+            <span>{{ user.point }}</span>
+            <span class="profile__item-col-unit">个</span>
+          </div>
+          <span class="profile__item-col-text">金币</span>
+        </router-link>
 
-    </div>
-    <section class="profile__item-group">
-      <router-link to=""
-        class="profile__item"
-      >
-        <div class="profile__item-left">
-          <svg><use xlink:href="#address"></use></svg>
-        </div>
-        <div class="profile__item-body">
-          <span>我的地址</span>
-          <div class="profile__item-right">
-            <svg><use xlink:href="#item-arrow-right"></use></svg>
+      </div>
+      <section class="profile__item-group">
+        <router-link to=""
+          class="profile__item"
+        >
+          <div class="profile__item-left">
+            <svg><use xlink:href="#address"></use></svg>
           </div>
-        </div>
-      </router-link>
-    </section>
-    <section class="profile__item-group">
-      <router-link to=""
-        class="profile__item"
-      >
-        <div class="profile__item-left">
-          <svg><use xlink:href="#point"></use></svg>
-        </div>
-        <div class="profile__item-body">
-          <span>金币商城</span>
-          <div class="profile__item-right">
-            <svg><use xlink:href="#item-arrow-right"></use></svg>
+          <div class="profile__item-body">
+            <span>我的地址</span>
+            <div class="profile__item-right">
+              <svg><use xlink:href="#item-arrow-right"></use></svg>
+            </div>
           </div>
-        </div>
-      </router-link>
-      <router-link to=""
-        class="profile__item"
-      >
-        <div class="profile__item-left">
-          <svg><use xlink:href="#commend"></use></svg>
-        </div>
-        <div class="profile__item-body">
-          <span>分享拿10元现金</span>
-          <div class="profile__item-right">
-            <svg><use xlink:href="#item-arrow-right"></use></svg>
+        </router-link>
+      </section>
+      <section class="profile__item-group">
+        <router-link to=""
+          class="profile__item"
+          disabled
+        >
+          <div class="profile__item-left">
+            <svg><use xlink:href="#point"></use></svg>
           </div>
-        </div>
-      </router-link>
-    </section>
-    <section class="profile__item-group">
-      <router-link to=""
-        class="profile__item"
-      >
-        <div class="profile__item-left">
-          <svg><use xlink:href="#service"></use></svg>
-        </div>
-        <div class="profile__item-body">
-          <span>我的客服</span>
-          <div class="profile__item-right">
-            <svg><use xlink:href="#item-arrow-right"></use></svg>
+          <div class="profile__item-body">
+            <span>金币商城</span>
+            <div class="profile__item-right">
+              <svg><use xlink:href="#item-arrow-right"></use></svg>
+            </div>
           </div>
-        </div>
-      </router-link>
-      <router-link to=""
-        class="profile__item"
-      >
-        <div class="profile__item-left profile__download-icon">
-          <svg><use xlink:href="#download"></use></svg>
-        </div>
-        <div class="profile__item-body">
-          <span>下载饿了么APP</span>
-          <div class="profile__item-right">
-            <svg><use xlink:href="#item-arrow-right"></use></svg>
+        </router-link>
+        <router-link to=""
+          class="profile__item"
+          disabled
+        >
+          <div class="profile__item-left">
+            <svg><use xlink:href="#commend"></use></svg>
           </div>
-        </div>
-      </router-link>
-    </section>
+          <div class="profile__item-body">
+            <span>分享拿10元现金</span>
+            <div class="profile__item-right">
+              <svg><use xlink:href="#item-arrow-right"></use></svg>
+            </div>
+          </div>
+        </router-link>
+      </section>
+      <section class="profile__item-group">
+        <router-link to=""
+          class="profile__item"
+          disabled
+        >
+          <div class="profile__item-left">
+            <svg><use xlink:href="#service"></use></svg>
+          </div>
+          <div class="profile__item-body">
+            <span>我的客服</span>
+            <div class="profile__item-right">
+              <svg><use xlink:href="#item-arrow-right"></use></svg>
+            </div>
+          </div>
+        </router-link>
+        <router-link to=""
+          class="profile__item"
+          disabled
+        >
+          <div class="profile__item-left profile__download-icon">
+            <svg><use xlink:href="#download"></use></svg>
+          </div>
+          <div class="profile__item-body">
+            <span>下载饿了么APP</span>
+            <div class="profile__item-right">
+              <svg><use xlink:href="#item-arrow-right"></use></svg>
+            </div>
+          </div>
+        </router-link>
+      </section>
+    </template>
   </page>
 </template>
 
@@ -269,6 +276,10 @@
     .profile__item {
       display: flex;
       justify-content: space-between;
+      &[disabled] {
+        opacity: .6;
+        color: #aaa;
+      }
     }
     .profile__item-left {
       flex-shrink: 0;
