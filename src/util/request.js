@@ -2,13 +2,16 @@ import ('es6-promise/auto')
 import fetch from 'isomorphic-fetch'
 import mockRequest from '../service/mock-es/mockRequest'
 
+const debug = true
+const proxyServer = 'http://localhost:5000'
 
 const request = function (url, options) {
   // fetch 默认不发送 cookie
   const defaultOptions = {
-    credientials: 'include',
+    credentials: 'include',
   }
   const newOptions = { ...defaultOptions, ...options }
+
   if (
     newOptions.method === 'POST' ||
     newOptions.method === 'PUT' ||
@@ -19,10 +22,14 @@ const request = function (url, options) {
     if (!(newOptions.body instanceof FormData)) {
       newOptions.headers = {
         Accept: 'application/json',
-        'Content-Type': 'application/json; charset=utf-8',
+        // 由于不明原因，设置 Content-Type 导致 CORS prefight 请求异常
+        // 下面在使用 CORS 时移除 fetch options 中的 headers
+        'Content-Type': 'application/json;charset=utf-8',
         ...newOptions.headers,
       }
-      newOptions.body = JSON.stringify(newOptions.body)
+      if (typeof newOptions.body === 'object') {
+        newOptions.body = JSON.stringify(newOptions.body)
+      }
     } else {
       // newOptions.body is FormData
       newOptions.headers = {
@@ -32,7 +39,50 @@ const request = function (url, options) {
     }
   }
 
-  return fetch(url, newOptions)
+  // 解析 url
+  let reqUrl = url
+  const urlObj = new URL(url, location.origin)
+  if (
+    urlObj.origin !== location.origin &&
+    newOptions.proxy !== false
+  ) {
+    // 使用 cors proxy
+    
+    // 不在 fetch 设置 headers，而是发送给代理设置，避免 CORS prefight 请求失败
+    const proxyHeaders = newOptions.headers
+    newOptions.headers = {}
+
+    const proxyConfig = {
+      origin: urlObj.origin,
+      scheme: urlObj.protocol.match(/[^:]+/)[0],
+      host: urlObj.host,
+      referrer: newOptions.referrer ? newOptions.referrer : urlObj.origin,
+      ...{ ...newOptions.proxy },
+      headers: {
+        ...proxyHeaders,
+        ...(newOptions.proxy && newOptions.proxy.headers),
+      },
+    }
+    debug && console.log('proxyConfig:', proxyConfig)
+
+    // 添加 proxy target host 到路径开头作为标识以方便和调试
+    urlObj.pathname = `/proxy/${urlObj.host}` + urlObj.pathname
+    debug && console.log('proxy used path:', urlObj.pathname)
+    
+    // 添加 proxy 参数到 queryString
+    urlObj.search = [
+      urlObj.search || '',
+      urlObj.search ? '&' : '?',
+      `x-proxy=${JSON.stringify(proxyConfig)}`
+    ].join('')
+
+    debug && console.log('proxy used quersy string:', urlObj.search)
+    
+    // 组装请求 url
+    reqUrl = proxyServer + urlObj.pathname + urlObj.search
+  }
+
+  return fetch(reqUrl, newOptions)
     // fetch 不会根据响应状态码判断请求是否成功
     // 这里状态码表示请求失败时主动 reject
     .then(res => {
@@ -60,5 +110,7 @@ const noProxy = process.env.NO_PROXY === 'true'
 const mockRequestWrapper = (url, options) =>
   mockRequest(url, options)
     .catch(() => request(url, options))
+
+debug && (window['request'] = request)
 
 export default noProxy ? request : mockRequestWrapper
