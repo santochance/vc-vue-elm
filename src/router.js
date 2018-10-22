@@ -87,5 +87,11 @@ export default new Router({
       path: '/profile/address/(edit|create)',
       component: () => import(/* webpackChunkName: "profile-address-edit" */ '@/views/Profile/ProfileAddressEdit'),
     },
+
+    /* login */
+    {
+      path: '/login',
+      component: () => import(/* webpackChunkName: "login" */ '@/views/Login'),
+    }
   ],
 });
