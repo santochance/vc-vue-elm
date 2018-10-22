@@ -89,10 +89,10 @@ const request = function (url, options) {
       if (res.status >= 200 && res.status < 300 || res.status === 304) {
         return res
       }
-      const error = new Error(res.status + ' ' + res.statusText)
-      error.name = res.status
-      error.response = res
-      throw error
+      // const error = new Error(res.status + ' ' + res.statusText)
+      // error.name = res.status
+      // error.response = res
+      throw res
     })
     .then(res => {
       // DELETE 请求按惯例是返回 204 请求
@@ -101,6 +101,10 @@ const request = function (url, options) {
         return res.text()
       }
       return res.json()
+    })
+    .catch(res => {
+      // 注意从失败请求中取出 json, 需要调用一次 then()
+      return res.json().then(err => { throw err })
     })
 }
 
