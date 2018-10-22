@@ -46,8 +46,54 @@
         </router-link>
 
       </div>
+    </template>
+
+    <template v-else>
+      <router-link to="/login"
+        class="profile__user">
+        <div class="profile__avatar"
+          :style="{ backgroundPosition: `0 ${$toRem(120 * random(0, 6))}` }"
+        ></div>
+        <div class="profile__user-info">
+          <p class="profile__user-name ellipsis"
+          >登录/注册</p>
+          <p class="profile__user-phone ellipsis">
+            <svg><use xlink:href="#mobile"></use></svg>
+            <span>登录后享受更多特权</span>
+          </p>
+        </div>
+        <div class="profile__user-right">
+          <svg><use xlink:href="#item-arrow-right"></use></svg>
+        </div>
+      </router-link>
+      <div class="profile__item-col-group profile__assets">
+        <router-link to="/login"
+          class="profile__item-col profile__wallet">
+          <div class="profile__item-col-value">
+            <svg fill="#0098fb"><use xlink:href="#profile-balance"></use></svg>
+          </div>
+          <span class="profile__item-col-text">钱包</span>
+        </router-link>
+        <router-link to="/login"
+          class="profile__item-col profile__hongbao">
+          <div class="profile__item-col-value">
+            <svg fill="#ff5f3e"><use xlink:href="#luckybag"></use></svg>
+          </div>
+          <span class="profile__item-col-text">红包</span>
+        </router-link>
+        <router-link to="/login"
+          class="profile__item-col profile__gold">
+          <div class="profile__item-col-value">
+            <svg fill="#6ac20b"><use xlink:href="#profile-coins"></use></svg>
+          </div>
+          <span class="profile__item-col-text">金币</span>
+        </router-link>
+      </div>
+    </template>
+
+    <template>
       <section class="profile__item-group">
-        <router-link to="/profile/address"
+        <router-link :to="user ? '/profile/address' : '/login'"
           class="profile__item"
         >
           <div class="profile__item-left">
@@ -145,7 +191,7 @@
     },
     computed: {
       ...mapState([
-        'user'
+        'user',
       ]),
     },
     created() {
@@ -202,6 +248,7 @@
     }
     .profile__user-name {
       font-size: 42px;
+      font-weight: 700;
       margin-bottom: 16px;
     }
     .profile__user-phone {
@@ -238,6 +285,10 @@
       border-right: 1px solid #ddd;
       &:last-child {
         border-right: none;
+      }
+      svg {
+        width: 52px;
+        height: 52px;
       }
     }
     .profile__wallet {
