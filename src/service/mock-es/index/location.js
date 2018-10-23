@@ -1,0 +1,63 @@
+export default {
+  "addresses": [
+    {
+      "address": "民治大道",
+      "address_detail": "广东省深圳市龙华区民治大道",
+      "city_id": 11,
+      "city_name": "",
+      "created_at": 1530442008,
+      "district_id": 5906,
+      "entry_id": 0,
+      "geohash": 0,
+      "id": 209283952515,
+      "is_valid": 1,
+      "name": "黄华升",
+      "phone": "13826047697",
+      "phone_bk": "",
+      "poi_type": 0,
+      "sex": 1,
+      "st_geohash": "ws10ejcmx3vq",
+      "tag": "",
+      "tag_type": 0,
+      "user_id": 1731112177
+    },
+    {
+      "address": "展滔科技大厦A座",
+      "address_detail": "广东省深圳市龙华区民治大道1079号",
+      "city_id": 11,
+      "city_name": "",
+      "created_at": 1530420957,
+      "district_id": 5906,
+      "entry_id": 1,
+      "geohash": 0,
+      "id": 209066089347,
+      "is_valid": 1,
+      "name": "黄华升",
+      "phone": "13826047697",
+      "phone_bk": "",
+      "poi_type": 0,
+      "sex": 1,
+      "st_geohash": "ws10fcrvrwvx",
+      "tag": "家",
+      "tag_type": 1,
+      "user_id": 1731112177
+    }
+  ],
+  "has_address": true,
+  "other_address": {
+    "address": "其他地址",
+    "city_id": -1,
+    "city_name": "",
+    "geohash": 0,
+    "id": -1,
+    "is_valid": 1,
+    "name": "",
+    "phone": "",
+    "phone_bk": "",
+    "poi_type": 1,
+    "sex": -1,
+    "st_geohash": "",
+    "user_id": -1
+  },
+  "type": 3
+}

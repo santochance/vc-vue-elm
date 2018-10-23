@@ -18,6 +18,14 @@ import extraProfile from './extra_profile.js'
 
 import persistence from '@/util/persistence'
 
+import newUserCheck from './index/new_user_check'
+import restaurants from './index/restaurants'
+import location from './index/location'
+import batchFilter from './index/batch_filter.js'
+import reverseGeoCoding from './index/reverse_geo_coding'
+import entries from './index/entries'
+import banners from './index/banners'
+
 const tagMap = {
   '全部': tagAll,
   '满意': tagSatisfied,
@@ -86,6 +94,15 @@ export default {
   'GET /restaurants/:id/remarks': remarkList,
   'GET /addresses': addressList,
   'POST /checkout': checkout,
+
+  /* index */
+  'GET https://h5.ele.me/restapi/eus/v2/new_user_check': newUserCheck,
+  'GET https://h5.ele.me/restapi/shopping/v3/restaurants': restaurants ,
+  'GET https://h5.ele.me/restapi/member/v2/users/:id/location': location,
+  'GET https://h5.ele.me/pizza/shopping/restaurants/batch_filter': batchFilter,
+  'GET https://h5.ele.me/restapi/bgs/poi/reverse_geo_coding': reverseGeoCoding,
+  'GET https://h5.ele.me/restapi/shopping/openapi/entries': entries,
+  'GET https://h5.ele.me/restapi/shopping/v2/banners': banners,
 }
 
 
