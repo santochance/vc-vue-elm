@@ -83,29 +83,39 @@ const request = function (url, options) {
   }
 
   return fetch(reqUrl, newOptions)
-    // fetch 不会根据响应状态码判断请求是否成功
-    // 这里状态码表示请求失败时主动 reject
     .then(res => {
       if (res.status >= 200 && res.status < 300 || res.status === 304) {
-        return res
+        if (newOptions.method === 'DELETE' || res.status === 204) {
+          return res.text()
+        }
+        return res.json()
+      } else {
+        return res.json().then(err => { throw err })
       }
-      // const error = new Error(res.status + ' ' + res.statusText)
-      // error.name = res.status
-      // error.response = res
-      throw res
     })
-    .then(res => {
-      // DELETE 请求按惯例是返回 204 请求
-      // 204 请求的响应为空，如果调用 json() 会报
-      if (newOptions.method === 'DELETE' || res.status === 204) {
-        return res.text()
-      }
-      return res.json()
-    })
-    .catch(res => {
-      // 注意从失败请求中取出 json, 需要调用一次 then()
-      return res.json().then(err => { throw err })
-    })
+    // fetch 不会根据响应状态码判断请求是否成功
+    // 这里状态码表示请求失败时主动 reject
+    // .then(res => {
+    //   if (res.status >= 200 && res.status < 300 || res.status === 304) {
+    //     return res
+    //   }
+    //   // const error = new Error(res.status + ' ' + res.statusText)
+    //   // error.name = res.status
+    //   // error.response = res
+    //   throw res
+    // })
+    // .then(res => {
+    //   // DELETE 请求按惯例是返回 204 请求
+    //   // 204 请求的响应为空，如果调用 json() 会报
+    //   if (newOptions.method === 'DELETE' || res.status === 204) {
+    //     return res.text()
+    //   }
+    //   return res.json()
+    // })
+    // .catch(res => {
+    //   // 注意从失败请求中取出 json, 需要调用一次 then()
+    //   return res.json().then(err => { throw err })
+    // })
 }
 
 // 是否使用代理

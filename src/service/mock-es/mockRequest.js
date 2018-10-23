@@ -4,7 +4,7 @@ import mockApis from './index'
 
 // 响应延迟
 const delay = 500
-const debug = false
+const debug = true
 
 export default function (url, options) {
 
@@ -35,13 +35,14 @@ export default function (url, options) {
       const api = mockApis[foundPath]
       const apiRes = typeof api === 'function' ? api(req) : api
 
-      debug && console.log('response:', apiRes)
-      debug && console.groupEnd()
+      debug && console.log('request succeed:', apiRes)
 
       setTimeout(() => resolve(apiRes), delay)
     } else {
-      // setTimeout(() => reject({ name: 404, message: 'Not Found' }), delay)
+      debug && console.warn('reqeust fail, it may try to request from network')
       reject()
     }
+    
+    debug && console.groupEnd()
   })
 }
