@@ -208,8 +208,10 @@
     methods: {
       loadData() {
         this.fetchCurrentUser()
-          .then(({ id }) => {
-            this.fetchUser({ user_id: id })
+          .then((id) => {
+            if (id) {
+              this.fetchUser({ user_id: id })
+            }
           })
       },
       ...mapActions([

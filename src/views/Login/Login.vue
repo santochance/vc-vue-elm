@@ -92,7 +92,7 @@
   import { Modal, Toast } from '@/components/common'
   import { fetchMobileCode, fetchCaptcha, loginByMobile } from '@/service/api'
   
-  const debug = true
+  const debug = false
   debug && console.warn('[Debug] Login debug is activating')
 
   export default {

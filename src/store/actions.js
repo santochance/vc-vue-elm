@@ -4,18 +4,17 @@ export default {
   fetchCurrentUser({ commit }) {
 
     return fetchCurrentUser()
-      .then((user) => {
-        commit('SAVE_USER_ID', user.id)
+      .then((id) => {
+        commit('SAVE_USER_ID', id)
         // 如果保存这个简略的 user 对象
         // 因为数据缺失 Profile 页会出现数据闪烁现象
-        // commit('SAVE_USER', user)
-
-        return user
+        
+        return id
       })
   },
   fetchUser({ commit }, { user_id }) {
 
-    return fetchUser(user_id)
+    return fetchUser({ user_id })
       .then((user) => {
         commit('SAVE_USER', user)
 

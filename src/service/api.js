@@ -4,22 +4,74 @@ import request from '@/util/request'
 export const fetchHello = () => request(`/hello`)
 
 /**
+ * 获取短信验证码
+ */
+export const fetchMobileCode = ({ mobile, captcha_value, captcha_hash }) => 
+  request(`https://h5.ele.me/restapi/eus/login/mobile_send_code`, {
+    method: 'POST',
+    body: {
+      mobile,
+      captcha_value,
+      captcha_hash,
+    },
+  })
+
+/**
+ * 获取图形验证码
+ */
+export const fetchCaptcha = ({ captcha_str }) => 
+  request(`https://h5.ele.me/restapi/eus/v3/captchas`, {
+    method: 'POST',
+    body: {
+      captcha_str,
+    },
+  })
+
+/**
+ * 短语登录
+ */
+export const loginByMobile = ({ mobile, validate_code, validate_token }) => 
+  request(`https://h5.ele.me/restapi/eus/login/login_by_mobile`, {
+    method: 'POST',
+    body: {
+      mobile,
+      validate_code,
+      validate_token,
+    },
+  })
+
+/**
+ * 退出登录
+ */
+export const logout = ({ user_id }) => 
+  request(`https://h5.ele.me/restapi/eus/login/logout`, {
+    method: 'POST',
+    body: {
+      user_id,
+    },
+  })
+
+/**
  * 查询当前登录用户
  */
 export const fetchCurrentUser = () =>
-  request(`/users/current`)
+  request(`https://h5.ele.me/restapi/eus/v1/current_user?${
+    stringify({
+      info_raw: {},
+    })
+  }`)
 
 /**
  * 查询用户信息
  */
-export const fetchUser = (userId) =>
-  request(`/users/${userId}`)
+export const fetchUser = ({ user_id }) =>
+  request(`https://h5.ele.me/restapi/eus/v3/users/${user_id}`)
 
  /**
   * 查询额外的用户信息
   */
-export const fetchExtraProfile = (userId) =>
-  request(`/users/${userId}/extra_profile`) 
+export const fetchExtraProfile = ({ user_id }) =>
+  request(`https://h5.ele.me/restapi/eus/v1/users/${user_id}/extra_profile`)
 
 /**
  * 修改用户名
@@ -100,53 +152,3 @@ export const fetchAddressList = (userId) =>
  */
 export const fetchRemarkList = (restaurantId) =>
   request(`/restaurant/${restaurantId}/remarks`)
-
-
-/**
- * 获取短信验证码
- */
-export const fetchMobileCode = ({ mobile, captcha_value, captcha_hash }) => 
-  request(`https://h5.ele.me/restapi/eus/login/mobile_send_code`, {
-    method: 'POST',
-    body: {
-      mobile,
-      captcha_value,
-      captcha_hash,
-    },
-  })
-
-/**
- * 获取图形验证码
- */
-export const fetchCaptcha = ({ captcha_str }) => 
-  request(`https://h5.ele.me/restapi/eus/v3/captchas`, {
-    method: 'POST',
-    body: {
-      captcha_str,
-    },
-  })
-
-/**
- * 短语登录
- */
-export const loginByMobile = ({ mobile, validate_code, validate_token }) => 
-  request(`https://h5.ele.me/restapi/eus/login/login_by_mobile`, {
-    method: 'POST',
-    body: {
-      mobile,
-      validate_code,
-      validate_token,
-    },
-  })
-
-/**
- * 退出登录
- */
-export const logout = ({ user_id }) => {
-  request(`https://h5.ele.me/restapi/eus/login/logout`, {
-    method: 'POST',
-    body: {
-      user_id,
-    },
-  })
-}
