@@ -3,6 +3,12 @@ export default {
     window[type].setItem(key, JSON.stringify(value))
   },
   getItem(key, type = 'localStorage') {
-    return JSON.parse(window[type].getItem(key))
+    let value
+    try {
+      value = JSON.parse(window[type].getItem(key))
+    } catch(e) {
+      value = null
+    }
+    return value
   }
 }
