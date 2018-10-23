@@ -207,12 +207,12 @@
     },
     methods: {
       loadData() {
-        this.fetchCurrentUser()
-          .then((id) => {
-            if (id) {
-              this.fetchUser({ user_id: id })
-            }
-          })
+        return this.fetchCurrentUser()
+          // .then((id) => {
+          //   if (id) {
+          //     this.fetchUser({ user_id: id })
+          //   }
+          // })
       },
       ...mapActions([
         'fetchCurrentUser',

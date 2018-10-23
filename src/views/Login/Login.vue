@@ -89,8 +89,9 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex'
   import { Modal, Toast } from '@/components/common'
-  import { fetchMobileCode, fetchCaptcha, loginByMobile } from '@/service/api'
+  import { fetchMobileCode, fetchCaptcha } from '@/service/api'
   
   const debug = false
   debug && console.warn('[Debug] Login debug is activating')
@@ -158,15 +159,18 @@
         return fetchCaptcha(payload)
           .then(this.fetchCaptchaFulfilled)
       },
-      loginByMobile() {
-        const payload = {
-          mobile: this.phoneItem.value,
-          validate_code: this.codeItem.value,
-          validate_token: this.validateToken,
-        }
-        return loginByMobile(payload)
-          .then(this.loginByMobileFulfilled)
-      },
+      // loginByMobile() {
+      //   const payload = {
+      //     mobile: this.phoneItem.value,
+      //     validate_code: this.codeItem.value,
+      //     validate_token: this.validateToken,
+      //   }
+      //   return loginByMobile(payload)
+      //     .then(this.loginByMobileFulfilled)
+      // },
+      ...mapActions([
+        'loginByMobile',
+      ]),
 
       /* event handlers */
       onCountClick() {
@@ -180,7 +184,13 @@
         this.fetchMobileCode()
       },
       onLogin() {
-        this.loginByMobile()
+        const payload = {
+          mobile: this.phoneItem.value,
+          validate_code: this.codeItem.value,
+          validate_token: this.validateToken,
+        }
+        return this.loginByMobile(payload)
+          .then(this.loginByMobileFulfilled)
       },
 
       fetchMobileCodeFulfilled({ validate_token }) {
