@@ -49,7 +49,7 @@
     </template>
 
     <template v-else>
-      <router-link to="/login"
+      <router-link :to="{ path: '/login', query: { redirect: '/profile' } }"
         class="profile__user">
         <div class="profile__avatar"
           :style="{ backgroundPosition: `0 ${$toRem(120 * random(0, 6))}` }"
@@ -67,21 +67,21 @@
         </div>
       </router-link>
       <div class="profile__item-col-group profile__assets">
-        <router-link to="/login"
+        <router-link :to="{ path: '/login', query: { redirect: '/profile' } }"
           class="profile__item-col profile__wallet">
           <div class="profile__item-col-value">
             <svg fill="#0098fb"><use xlink:href="#profile-balance"></use></svg>
           </div>
           <span class="profile__item-col-text">钱包</span>
         </router-link>
-        <router-link to="/login"
+        <router-link :to="{ path: '/login', query: { redirect: '/profile' } }"
           class="profile__item-col profile__hongbao">
           <div class="profile__item-col-value">
             <svg fill="#ff5f3e"><use xlink:href="#luckybag"></use></svg>
           </div>
           <span class="profile__item-col-text">红包</span>
         </router-link>
-        <router-link to="/login"
+        <router-link :to="{ path: '/login', query: { redirect: '/profile' } }"
           class="profile__item-col profile__gold">
           <div class="profile__item-col-value">
             <svg fill="#6ac20b"><use xlink:href="#profile-coins"></use></svg>
@@ -93,7 +93,8 @@
 
     <template>
       <section class="profile__item-group">
-        <router-link :to="user ? '/profile/address' : '/login'"
+        <router-link :to="user ? '/profile/address'
+          : { path: '/login', query: { redirect: '/profile/address' } }"
           class="profile__item"
         >
           <div class="profile__item-left">

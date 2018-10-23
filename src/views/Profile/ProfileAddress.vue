@@ -19,7 +19,7 @@
       }
     },
     beforeRouteEnter(to, from, next) {
-      if (!from.path.match('/profile')) {
+      if (!from.path.match(/\/(profile|login)/)) {
         return next('/profile')
       }
       next()
