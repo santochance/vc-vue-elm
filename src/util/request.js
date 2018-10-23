@@ -120,11 +120,13 @@ const request = function (url, options) {
 
 // 是否使用代理
 const noProxy = process.env.NO_PROXY === 'true'
+console.warn('[mock service] 当前正在使用 mock service')
 
-const mockRequestWrapper = (url, options) =>
-  mockRequest(url, options)
-    .catch(() => request(url, options))
+// const mockRequestWrapper = (url, options) =>
+//   mockRequest(url, options)
+//     .catch(() => request(url, options))
 
-debug && (window['request'] = request)
+const usedRequest = noProxy ? request : mockRequest
+debug && (window['request'] = usedRequest)
 
-export default noProxy ? request : mockRequestWrapper
+export default usedRequest

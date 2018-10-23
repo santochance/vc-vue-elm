@@ -6,7 +6,7 @@ import mockApis from './index'
 const delay = 500
 const debug = true
 
-export default function (url, options) {
+export default function mockRequest(url, options) {
 
   return new Promise((resolve, reject) => {
     const { method = 'GET' } = options || {}
@@ -39,7 +39,7 @@ export default function (url, options) {
 
       setTimeout(() => resolve(apiRes), delay)
     } else {
-      debug && console.warn('reqeust fail, it may try to request from network')
+      debug && console.warn('reqeust fail')
       reject()
     }
     
