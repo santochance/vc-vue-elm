@@ -16,6 +16,8 @@ import remarkList from './remarkList'
 import user from './user'
 import extraProfile from './extra_profile.js'
 
+import persistence from '@/util/persistence'
+
 const tagMap = {
   '全部': tagAll,
   '满意': tagSatisfied,
@@ -24,6 +26,10 @@ const tagMap = {
   '味道好': tagTasteGood,
   '送货快': tagFastDelivery,
 }
+
+let loginedUser = { ...persistence.getItem('USER') }
+
+console.log('persistence:', persistence)
 
 export default {
   'GET /users/current': { id: 1731112177, username: '757f8734cc8' },
@@ -36,6 +42,18 @@ export default {
     
     return { username }
   },
+
+  'GET https://h5.ele.me/restapi/eus/v1/current_user': () => loginedUser.user_id || 0,
+  'GET https://h5.ele.me/restapi/eus/v3/users/:id': user,
+  'GET https://h5.ele.me/restapi/eus/v1/users/:id/extra_profile': extraProfile,
+  'POST https://h5.ele.me/restapi/eus/login/login_by_mobile': function () {
+    loginedUser = user
+    return {
+      "need_bind_mobile": false,
+      "user_id": loginedUser.user_id
+    }
+  },
+  'POST https://h5.ele.me/restapi/eus/login/logout': () => (loginedUser = {}),
 
   'GET /restaurants/:id': shopDetails,
   'GET /restaurants/:id/menu': menu,
