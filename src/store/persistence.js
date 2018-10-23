@@ -8,6 +8,11 @@ export function initState(state) {
     initial.userId = userId
   }
 
+  const user = persistence.getItem('USER')
+  if (user != null && typeof user === 'object') {
+    initial.user = user
+  }
+
   const cartMap = persistence.getItem('CART_MAP')
   if (cartMap != null && typeof cartMap === 'object') {
     initial.cartMap = cartMap
@@ -33,6 +38,13 @@ export function wrapPersistence(store) {
     (value) => {
       persistence.setItem('USER_ID', value)
     },
+  )
+
+  store.watch(
+    (state) => state.user,
+    (value) => {
+      persistence.setItem('USER', value)
+    }
   )
 
   store.watch(
