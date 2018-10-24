@@ -46,3 +46,20 @@
   color: #2c3e50;
 }
 </style>
+
+<style lang="scss">
+  .console {
+    position: fixed;
+    z-index: 99999;
+    left: 20px;
+    top: 20px;
+    padding: 32px;
+    background-color: rgba(0, 0, 0, .5);
+    color: #fff;
+    font-size: 28px;
+    div, p {
+      line-height: 1.4;
+      margin-top: .3em;
+    }
+  }
+</style>
