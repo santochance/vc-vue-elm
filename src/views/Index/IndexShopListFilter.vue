@@ -98,6 +98,18 @@
       'filterOptions.outside.inside_sort_filter'(value) {
         this.initSelectedInsideSorterName(value)
       },
+      'filterPayload.cost_range'(value) {
+        debug && console.log('filterPayload.cost_range changed')
+
+        if (value !== null) {
+          const item = this.averageCostsGroupItems[value - 1]
+          this.filterPayload['cost_from'] = item[0]
+          this.filterPayload['cost_to'] = item[1]
+        } else {
+          this.filterPayload['cost_from'] = null
+          this.filterPayload['cost_to'] = null
+        }
+      },
     },
     created() {
       debug && (window[this.$options.name] = this)
@@ -106,6 +118,25 @@
       this.initSelectedInsideSorterName(this.insideSorterList)
     },
     methods: {
+      /* emit events */
+      submit() {
+        const excludes = ['cost_range']
+        let payload = this.filterPayload
+        payload = Object.keys(payload).reduce((rst, key) => {
+          if (
+            excludes.indexOf(key) === -1 &&
+            !this.isEmpty(payload[key])
+          ) {
+            rst[key] = payload[key]
+          }
+
+          return rst
+        }, {})
+
+        this.$emit('submit', payload)
+        debug && console.log('<IndexShopListFilter> request payload:', payload)
+      },
+
       initSelectedInsideSorterName(list) {
         let name
         try {
@@ -115,7 +146,34 @@
         }
         this.selectedInsideSorterName = name
       },
+      // open or close sorter panel
+      onNavSorterClick() {
+        // toggle visible
+        const sortDropdownVisible = this.sortDropdownVisible
+
+        if (!sortDropdownVisible) {
+          // 要将打开 panel
+          this.stick()
+          this.filterDropdownVisible = false
+        }
+        this.sortDropdownVisible = !sortDropdownVisible
+      },
+      // open or close filter panel
+      onNavFilterClick() {
+        // toggle visible
+        const filterDropdownVisible = this.filterDropdownVisible
+
+        if (!filterDropdownVisible) {
+          // 要将打开 panel
+          this.stick()
+          this.sortDropdownVisible = false
+        }
+
+        this.filterDropdownVisible = !filterDropdownVisible
+      },
+      // click inside or outside sorter
       onSorterClick(sorter, position) {
+        // 设置 filterPayload
         const filterPayload = this.filterPayload
         const keysToReset = this.uniqueSorterKeys.filter(key => key !== sorter.key)
 
@@ -125,12 +183,33 @@
         // 确保能够触发视图更新
         this.filterPayload = { ...filterPayload }
 
+        // 更新 selectedInsideSorterName
         this.selectedSorter = sorter
         if (position === 'outside') {
           this.selectedInsideSorterName = (this.insideSorterList[0] || {}).name || ''
         } else {
           this.selectedInsideSorterName = sorter.name
         }
+
+        this.closeAllPanel()
+        this.submit()
+      },
+      onFilterClear() {
+        this.filterPayload = {
+          ...this.filterPayload,
+          delivery_mode: [],
+          support_ids: [],
+          activity_types: null,
+          cost_range: null,
+        }
+      },
+      onFilterSubmit() {
+        this.closeAllPanel()
+        this.submit()
+      },
+      closeAllPanel() {
+        this.filterDropdownVisible = false
+        this.sortDropdownVisible = false
       },
       // 值相同时返回指定空值
       toggleValue,
@@ -146,7 +225,7 @@
           return compareSorter(sorter, selectedSorter)
         }
       },
-      checkFilteValueActive(value, selected) {
+      checkFilterValueActive(value, selected) {
         if (!selected) return false
 
         if (Array.isArray(selected)) {
@@ -155,14 +234,10 @@
           return value === selected
         }
       },
-      onFilterClear() {
-        this.filterPayload = {
-          ...this.filterPayload,
-          delivery_mode: [],
-          support_ids: [],
-          activity_types: null,
-          cost_range: null,
-        }
+      checkSomeFilterSelected() {
+        const filterPayload = this.filterPayload
+        return ['delivery_mode', 'support_ids', 'activity_types', 'cost_range'].some(key =>
+          !this.isEmpty(filterPayload[key]))
       },
       stick() {
         const elRect = this.$el.getBoundingClientRect()
@@ -175,6 +250,13 @@
           document.documentElement.scrollTop = targetScrollTop
         }
       },
+      isEmpty(value) {
+        if (value == null) return true
+        if (typeof value === 'string' && !value) return true
+        if (Array.isArray(value) && value.length <= 0) return true
+        if (typeof value === 'object' && Object.keys(value).length <= 0) return true
+        return false
+      },
     },
   }
 </script>
@@ -185,20 +267,22 @@
       class="b-filter__box">
       <div v-show="sortDropdownVisible || filterDropdownVisible"
         class="b-filter__mask"
-        @click="(sortDropdownVisible = false, filterDropdownVisible = false)"
+        @click="closeAllPanel"
       ></div>
       <div class="b-filter__header">
+
         <a href="javascript:"
-          class="b-filter__nav ellipsis"
+          class="b-filter__nav b-filter__nav-sorters ellipsis"
           :class="{
             'b-filter__nav_active': checkSorterActive(insideSorterList, selectedSorter),
             'b-filter__nav_open': sortDropdownVisible,
           }"
-          @click="sortDropdownVisible = !sortDropdownVisible, stick()"
+          @click="onNavSorterClick"
         >
           <span>{{ selectedInsideSorterName }}</span>
-          <!-- <svg><use></use></svg> -->
+          <svg class="b-filter__dropdown-icon"><use xlink:href="#dropdown-icon"></use></svg>
         </a>
+
         <a href="javascript:"
           v-for="(sorter, idx) in outsideSorterList" :key="sorter.name + idx"
           class="b-filter__nav"
@@ -207,12 +291,17 @@
         >
           <span>{{ sorter.name }}</span>
         </a>
+
         <a href="javascript:"
           class="b-filter__nav b-filter__nav-filters"
-          @click="filterDropdownVisible = !filterDropdownVisible, stick()"
+          :class="{
+            'b-filter__nav_active': checkSomeFilterSelected(),
+            'b-filter__nav_open': filterDropdownVisible,
+          }"
+          @click="onNavFilterClick"
         >
           <span>筛选</span>
-          <!-- <svg><use xlink:href=""></use></svg> -->
+          <svg class="b-filter__more-filter-icon"><use xlink:href="#more-filter"></use></svg>
         </a>
       </div>
 
@@ -241,7 +330,7 @@
             <div class="b-filter__filter-options">
               <div v-for="option in deliverMode" :key="option.id"
                 class="b-filter__filter-option"
-                :class="{ 'b-filter__filter-option_active': checkFilteValueActive(option.id, filterPayload['delivery_mode']) }"
+                :class="{ 'b-filter__filter-option_active': checkFilterValueActive(option.id, filterPayload['delivery_mode']) }"
                 @click="filterPayload['delivery_mode'] = toggleArray(filterPayload['delivery_mode'], option.id)"
               >
                 <img class="b-filter__filter-option-icon"
@@ -251,7 +340,7 @@
               </div>
               <div v-for="option in supportsGroup" :key="option.id"
                 class="b-filter__filter-option"
-                :class="{ 'b-filter__filter-option_active': checkFilteValueActive(option.id, filterPayload['support_ids']) }"
+                :class="{ 'b-filter__filter-option_active': checkFilterValueActive(option.id, filterPayload['support_ids']) }"
                 @click="filterPayload['support_ids'] = toggleArray(filterPayload['support_ids'], option.id)"
               >
                 <img class="b-filter__filter-option-icon"
@@ -266,7 +355,7 @@
             <div class="b-filter__filter-options">
               <div v-for="option in activityTypesGroup" :key="option.id"
                 class="b-filter__filter-option"
-                :class="{ 'b-filter__filter-option_active': checkFilteValueActive(option.id, filterPayload['activity_types']) }"
+                :class="{ 'b-filter__filter-option_active': checkFilterValueActive(option.id, filterPayload['activity_types']) }"
                 @click="filterPayload['activity_types'] = toggleValue(filterPayload['activity_types'], option.id)"
               >
                 <span class="b-filter__filter-option-name">{{ option.name }}</span>
@@ -278,7 +367,7 @@
             <div class="b-filter__filter-options">
               <div v-for="option in averageCostsGroup" :key="option.id"
                 class="b-filter__filter-option"
-                :class="{ 'b-filter__filter-option_active': checkFilteValueActive(option.id, filterPayload['cost_range']) }"
+                :class="{ 'b-filter__filter-option_active': checkFilterValueActive(option.id, filterPayload['cost_range']) }"
                 @click="filterPayload['cost_range'] = toggleValue(filterPayload['cost_range'], option.id)"
               >
                 <span class="b-filter__filter-option-name">{{ option.description }}</span>
@@ -287,8 +376,12 @@
           </div>
         </div>
         <div class="b-filter__filter-btns">
-          <button class="b-filter__filter-btn b-filter__filter-btn-clear">清空</button>
-          <button class="b-filter__filter-btn b-filter__filter-btn-ok">确定</button>
+          <button class="b-filter__filter-btn b-filter__filter-btn-clear"
+            @click="onFilterClear"
+          >清空</button>
+          <button class="b-filter__filter-btn b-filter__filter-btn-ok"
+            @click="onFilterSubmit"
+          >确定</button>
         </div>
       </section>
 
@@ -360,7 +453,36 @@
         font-weight: 700;
       }
     }
+    .b-filter__dropdown-icon {
+      width: 12px;
+      height: 6px;
+      margin-left: 10px;
+      margin-bottom: 4px;
+      fill: #333;
+      will-change: transform;
+      transition: transform .3s;
+
+      .b-filter__nav_active &,
+      .b-filter__nav_open & {
+        fill: currentColor;
+      }
+    }
+    .b-filter__more-filter-icon {
+      width: 26px;
+      height: 26px;
+      margin-left: 4px;
+      fill: #666;
+
+      .b-filter__nav_active &,
+      .b-filter__nav_open & {
+        fill: currentColor;
+      }
+    }
+
+
     .b-filter__nav-filters {
+      display: flex;
+      align-items: center;
       flex: 0 auto;
       width: 160px;
     }
@@ -434,6 +556,7 @@
       margin: 20px 0;
     }
     .b-filter__filter-select-title {
+      font-size: 24px;
       margin-left: 7px;
       margin-bottom: 15px;
       color: #666;
