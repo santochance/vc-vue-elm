@@ -219,6 +219,66 @@
       </ul>
     </section>
 
+    <section class="b-filter__extend b-filter__extend-filters"
+      :class="{ 'b-filter__extend_open': filterDropdownVisible }"
+    >
+      <div class="b-filter__filter-selects">
+        <div class="b-filter__filter-select">
+          <div class="b-filter__filter-select-title">商家服务（可多选）</div>
+          <div class="b-filter__filter-options">
+            <div v-for="option in deliverMode" :key="option.id"
+              class="b-filter__filter-option"
+              :class="{ 'b-filter__filter-option_active': checkFilteValueActive(option.id, filterPayload['delivery_mode']) }"
+              @click="filterPayload['delivery_mode'] = toggleArray(filterPayload['delivery_mode'], option.id)"
+            >
+              <img class="b-filter__filter-option-icon"
+                :src="$getImage(option.icon_hash, deliverModeIconParam)"
+              />
+              <span class="b-filter__filter-option-name">{{ option.text }}</span>
+            </div>
+            <div v-for="option in supportsGroup" :key="option.id"
+              class="b-filter__filter-option"
+              :class="{ 'b-filter__filter-option_active': checkFilteValueActive(option.id, filterPayload['support_ids']) }"
+              @click="filterPayload['support_ids'] = toggleArray(filterPayload['support_ids'], option.id)"
+            >
+              <img class="b-filter__filter-option-icon"
+                :src="$getImage(option.icon_hash, deliverModeIconParam)"
+              />
+              <span class="b-filter__filter-option-name">{{ option.name }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="b-filter__filter-select">
+          <div class="b-filter__filter-select-title">优惠活动（单选）</div>
+          <div class="b-filter__filter-options">
+            <div v-for="option in activityTypesGroup" :key="option.id"
+              class="b-filter__filter-option"
+              :class="{ 'b-filter__filter-option_active': checkFilteValueActive(option.id, filterPayload['activity_types']) }"
+              @click="filterPayload['activity_types'] = toggleValue(filterPayload['activity_types'], option.id)"
+            >
+              <span class="b-filter__filter-option-name">{{ option.name }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="b-filter__filter-select">
+          <div class="b-filter__filter-select-title">人均消费</div>
+          <div class="b-filter__filter-options">
+            <div v-for="option in averageCostsGroup" :key="option.id"
+              class="b-filter__filter-option"
+              :class="{ 'b-filter__filter-option_active': checkFilteValueActive(option.id, filterPayload['cost_range']) }"
+              @click="filterPayload['cost_range'] = toggleValue(filterPayload['cost_range'], option.id)"
+            >
+              <span class="b-filter__filter-option-name">{{ option.description }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="b-filter__filter-btns">
+        <button class="b-filter__filter-btn b-filter__filter-btn-clear">清空</button>
+        <button class="b-filter__filter-btn b-filter__filter-btn-ok">确定</button>
+      </div>
+    </section>
+
     <!--
     <div class="console">
       <p>filterPayload: {{ JSON.stringify(filterPayload) }}</p>
@@ -342,5 +402,78 @@
       }
     }
 
+  /* filters panel */
+
+    .b-filter__extend-filters {}
+    .b-filter__filter-selects {
+      overflow: auto;
+      height: 100%;
+      padding: 0 20px;
+      background-color: #fff;
+    }
+    .b-filter__filter-select {
+      margin: 20px 0;
+    }
+    .b-filter__filter-select-title {
+      margin-left: 7px;
+      margin-bottom: 15px;
+      color: #666;
+
+    }
+    .b-filter__filter-options {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .b-filter__filter-option {
+      flex: 1 auto;
+      width: 31.33%;
+      margin: 6px 7px;
+      white-space: nowrap;
+      font-size: 26px;
+      line-height: 70px;
+      background-color: #fafafa;
+      &_active {
+        font-weight: 700;
+        color: #3190e8;
+        background-color: #edf5ff;
+      }
+    }
+    .b-filter__filter-option-icon {
+      width: 26px;
+      height: 26px;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+    .b-filter__filter-option-name {
+      margin-left: 2%;
+      vertical-align: middle;
+    }
+    .b-filter__filter-btns {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      box-shadow: 0 -2px 4px 0 #ededed;
+      background-color: #fafafa;
+    }
+    .b-filter__filter-btn {
+      flex: 1;
+      text-align: center;
+      text-decoration: none;
+      font-size: 32px;
+      line-height: 86px;
+    }
+    .b-filter__filter-btn-ok {
+      color: #fff;
+      background-color: #00d762;
+      // border: 1px solid #00d762;
+    }
+    .b-filter__filter-btn-clear {
+      color: #333;
+      background-color: #fff;
+    }
 
 </style>
