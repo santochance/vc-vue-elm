@@ -6,11 +6,11 @@
 
     },
     props: {
-      
+
     },
     data() {
       return {
-        
+
       }
     },
     computed: {
@@ -30,9 +30,11 @@
 
 
 <style lang="scss" scoped>
-  .b-list {@at-root{
+  .b-list {
+    // height: 3000px;
+  }
 
+  /* part */
     .b-list__box {}
 
-  }}
 </style>

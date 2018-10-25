@@ -40,7 +40,7 @@
 #app {
   display: flex;
   flex-direction: column;
-  flex: 1 0 auto;
+  flex: 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;

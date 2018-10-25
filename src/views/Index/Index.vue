@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="p-index">
     <IndexHeader :address="address"></IndexHeader>
     <IndexSearch></IndexSearch>
     <IndexMainEntries v-if="entryGroupMap.main"
@@ -8,6 +8,7 @@
     <!-- <IndexSkeleton></IndexSkeleton> -->
     <div class="index__member"></div>
     <div class="index__banner"></div>
+    <div class="p-index__shoplist-title">推荐商家</div>
     <IndexShopList></IndexShopList>
   </div>
 </template>
@@ -73,7 +74,32 @@
 </script>
 
 <style lang="scss" scoped>
-  .index {@at-root{
-
-  }}
+  .p-index {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+  }
+    .p-index__shoplist-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 72px;
+      font-size: 30px;
+      color: #000;
+      &:before,
+      &:after {
+        content: '';
+        display: block;
+        width: 40px;
+        height: 1px;
+        background-color: #999;
+      }
+      &:before {
+        margin-right: 26px;
+      }
+      &:after {
+        margin-left: 26px;
+      }
+    }
 </style>

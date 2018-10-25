@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="tabpage">
     <header class="tabpage__header"></header>
     <template v-if="!injectedComponent">
       <div class="tabpage__body">
@@ -36,7 +36,7 @@
     },
     data() {
       return {
-        
+
       }
     },
     computed: {
@@ -51,5 +51,14 @@
 </script>
 
 <style lang="scss" scoped>
-
+  .tabpage {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .tabpage__body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
 </style>
