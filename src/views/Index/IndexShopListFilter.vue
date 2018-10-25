@@ -95,12 +95,13 @@
     },
     watch: {
       // 动态设置 selectedInsideSorterName 初始值
-      'filterOptions.inside_sort_filter'(value) {
+      'filterOptions.outside.inside_sort_filter'(value) {
         this.initSelectedInsideSorterName(value)
       },
     },
     created() {
       debug && (window[this.$options.name] = this)
+      debug && console.log('<IndexShopListFilter> created')
 
       this.initSelectedInsideSorterName(this.insideSorterList)
     },
@@ -163,132 +164,150 @@
           cost_range: null,
         }
       },
+      stick() {
+        const elRect = this.$el.getBoundingClientRect()
+        const elRectTop = Math.round(elRect.top)
+        const offset = parseFloat(this.$toRpx(100))
+
+        if (elRectTop > offset) {
+          debug && console.log('should update scrollTop')
+          const targetScrollTop = window.scrollY + elRectTop - offset
+          document.documentElement.scrollTop = targetScrollTop
+        }
+      },
     },
   }
 </script>
 
 <template>
-  <aside v-if="filterOptions"
-    class="b-filter b-filter__box">
-    <div v-show="sortDropdownVisible || filterDropdownVisible"
-      class="b-filter__mask"
-      @click="(sortDropdownVisible = false, filterDropdownVisible = false)"
-    ></div>
-    <div class="b-filter__header">
-      <a href="javascript:"
-        class="b-filter__nav ellipsis"
-        :class="{
-          'b-filter__nav_active': checkSorterActive(insideSorterList, selectedSorter),
-          'b-filter__nav_open': sortDropdownVisible,
-        }"
-        @click="sortDropdownVisible = !sortDropdownVisible"
-      >
-        <span>{{ selectedInsideSorterName }}</span>
-        <!-- <svg><use></use></svg> -->
-      </a>
-      <a href="javascript:"
-        v-for="(sorter, idx) in outsideSorterList" :key="sorter.name + idx"
-        class="b-filter__nav"
-        :class="{ 'b-filter__nav_active': checkSorterActive(sorter, selectedSorter) }"
-        @click="onSorterClick(sorter, 'outside')"
-      >
-        <span>{{ sorter.name }}</span>
-      </a>
-      <a href="javascript:"
-        class="b-filter__nav b-filter__nav-filters"
-        @click="filterDropdownVisible = !filterDropdownVisible"
-      >
-        <span>筛选</span>
-        <!-- <svg><use xlink:href=""></use></svg> -->
-      </a>
-    </div>
-
-    <section
-      class="b-filter__extend b-filter__extend-sorters"
-      :class="{ 'b-filter__extend_open': sortDropdownVisible }"
-    >
-      <ul>
-        <li v-for="(sorter, idx) in insideSorterList" :key="sorter.name + idx"
-          @click="onSorterClick(sorter)"
-          class="b-filter__sorter-item"
-          :class="{ 'b-filter__sorter-item_active': checkSorterActive(sorter, selectedSorter) }"
+  <div class="b-filter sticky-box">
+    <aside v-if="filterOptions"
+      class="b-filter__box">
+      <div v-show="sortDropdownVisible || filterDropdownVisible"
+        class="b-filter__mask"
+        @click="(sortDropdownVisible = false, filterDropdownVisible = false)"
+      ></div>
+      <div class="b-filter__header">
+        <a href="javascript:"
+          class="b-filter__nav ellipsis"
+          :class="{
+            'b-filter__nav_active': checkSorterActive(insideSorterList, selectedSorter),
+            'b-filter__nav_open': sortDropdownVisible,
+          }"
+          @click="sortDropdownVisible = !sortDropdownVisible, stick()"
+        >
+          <span>{{ selectedInsideSorterName }}</span>
+          <!-- <svg><use></use></svg> -->
+        </a>
+        <a href="javascript:"
+          v-for="(sorter, idx) in outsideSorterList" :key="sorter.name + idx"
+          class="b-filter__nav"
+          :class="{ 'b-filter__nav_active': checkSorterActive(sorter, selectedSorter) }"
+          @click="onSorterClick(sorter, 'outside')"
         >
           <span>{{ sorter.name }}</span>
-          <img src="./selected.png" alt="">
-        </li>
-      </ul>
-    </section>
-
-    <section class="b-filter__extend b-filter__extend-filters"
-      :class="{ 'b-filter__extend_open': filterDropdownVisible }"
-    >
-      <div class="b-filter__filter-selects">
-        <div class="b-filter__filter-select">
-          <div class="b-filter__filter-select-title">商家服务（可多选）</div>
-          <div class="b-filter__filter-options">
-            <div v-for="option in deliverMode" :key="option.id"
-              class="b-filter__filter-option"
-              :class="{ 'b-filter__filter-option_active': checkFilteValueActive(option.id, filterPayload['delivery_mode']) }"
-              @click="filterPayload['delivery_mode'] = toggleArray(filterPayload['delivery_mode'], option.id)"
-            >
-              <img class="b-filter__filter-option-icon"
-                :src="$getImage(option.icon_hash, deliverModeIconParam)"
-              />
-              <span class="b-filter__filter-option-name">{{ option.text }}</span>
-            </div>
-            <div v-for="option in supportsGroup" :key="option.id"
-              class="b-filter__filter-option"
-              :class="{ 'b-filter__filter-option_active': checkFilteValueActive(option.id, filterPayload['support_ids']) }"
-              @click="filterPayload['support_ids'] = toggleArray(filterPayload['support_ids'], option.id)"
-            >
-              <img class="b-filter__filter-option-icon"
-                :src="$getImage(option.icon_hash, deliverModeIconParam)"
-              />
-              <span class="b-filter__filter-option-name">{{ option.name }}</span>
-            </div>
-          </div>
-        </div>
-        <div class="b-filter__filter-select">
-          <div class="b-filter__filter-select-title">优惠活动（单选）</div>
-          <div class="b-filter__filter-options">
-            <div v-for="option in activityTypesGroup" :key="option.id"
-              class="b-filter__filter-option"
-              :class="{ 'b-filter__filter-option_active': checkFilteValueActive(option.id, filterPayload['activity_types']) }"
-              @click="filterPayload['activity_types'] = toggleValue(filterPayload['activity_types'], option.id)"
-            >
-              <span class="b-filter__filter-option-name">{{ option.name }}</span>
-            </div>
-          </div>
-        </div>
-        <div class="b-filter__filter-select">
-          <div class="b-filter__filter-select-title">人均消费</div>
-          <div class="b-filter__filter-options">
-            <div v-for="option in averageCostsGroup" :key="option.id"
-              class="b-filter__filter-option"
-              :class="{ 'b-filter__filter-option_active': checkFilteValueActive(option.id, filterPayload['cost_range']) }"
-              @click="filterPayload['cost_range'] = toggleValue(filterPayload['cost_range'], option.id)"
-            >
-              <span class="b-filter__filter-option-name">{{ option.description }}</span>
-            </div>
-          </div>
-        </div>
+        </a>
+        <a href="javascript:"
+          class="b-filter__nav b-filter__nav-filters"
+          @click="filterDropdownVisible = !filterDropdownVisible, stick()"
+        >
+          <span>筛选</span>
+          <!-- <svg><use xlink:href=""></use></svg> -->
+        </a>
       </div>
-      <div class="b-filter__filter-btns">
-        <button class="b-filter__filter-btn b-filter__filter-btn-clear">清空</button>
-        <button class="b-filter__filter-btn b-filter__filter-btn-ok">确定</button>
-      </div>
-    </section>
 
-    <!--
-    <div class="console">
-      <p>filterPayload: {{ JSON.stringify(filterPayload) }}</p>
-    </div>
-     -->
-  </aside>
+      <section
+        class="b-filter__extend b-filter__extend-sorters"
+        :class="{ 'b-filter__extend_open': sortDropdownVisible }"
+      >
+        <ul>
+          <li v-for="(sorter, idx) in insideSorterList" :key="sorter.name + idx"
+            @click="onSorterClick(sorter)"
+            class="b-filter__sorter-item"
+            :class="{ 'b-filter__sorter-item_active': checkSorterActive(sorter, selectedSorter) }"
+          >
+            <span>{{ sorter.name }}</span>
+            <img src="./selected.png" alt="">
+          </li>
+        </ul>
+      </section>
+
+      <section class="b-filter__extend b-filter__extend-filters"
+        :class="{ 'b-filter__extend_open': filterDropdownVisible }"
+      >
+        <div class="b-filter__filter-selects">
+          <div class="b-filter__filter-select">
+            <div class="b-filter__filter-select-title">商家服务（可多选）</div>
+            <div class="b-filter__filter-options">
+              <div v-for="option in deliverMode" :key="option.id"
+                class="b-filter__filter-option"
+                :class="{ 'b-filter__filter-option_active': checkFilteValueActive(option.id, filterPayload['delivery_mode']) }"
+                @click="filterPayload['delivery_mode'] = toggleArray(filterPayload['delivery_mode'], option.id)"
+              >
+                <img class="b-filter__filter-option-icon"
+                  :src="$getImage(option.icon_hash, deliverModeIconParam)"
+                />
+                <span class="b-filter__filter-option-name">{{ option.text }}</span>
+              </div>
+              <div v-for="option in supportsGroup" :key="option.id"
+                class="b-filter__filter-option"
+                :class="{ 'b-filter__filter-option_active': checkFilteValueActive(option.id, filterPayload['support_ids']) }"
+                @click="filterPayload['support_ids'] = toggleArray(filterPayload['support_ids'], option.id)"
+              >
+                <img class="b-filter__filter-option-icon"
+                  :src="$getImage(option.icon_hash, deliverModeIconParam)"
+                />
+                <span class="b-filter__filter-option-name">{{ option.name }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="b-filter__filter-select">
+            <div class="b-filter__filter-select-title">优惠活动（单选）</div>
+            <div class="b-filter__filter-options">
+              <div v-for="option in activityTypesGroup" :key="option.id"
+                class="b-filter__filter-option"
+                :class="{ 'b-filter__filter-option_active': checkFilteValueActive(option.id, filterPayload['activity_types']) }"
+                @click="filterPayload['activity_types'] = toggleValue(filterPayload['activity_types'], option.id)"
+              >
+                <span class="b-filter__filter-option-name">{{ option.name }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="b-filter__filter-select">
+            <div class="b-filter__filter-select-title">人均消费</div>
+            <div class="b-filter__filter-options">
+              <div v-for="option in averageCostsGroup" :key="option.id"
+                class="b-filter__filter-option"
+                :class="{ 'b-filter__filter-option_active': checkFilteValueActive(option.id, filterPayload['cost_range']) }"
+                @click="filterPayload['cost_range'] = toggleValue(filterPayload['cost_range'], option.id)"
+              >
+                <span class="b-filter__filter-option-name">{{ option.description }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="b-filter__filter-btns">
+          <button class="b-filter__filter-btn b-filter__filter-btn-clear">清空</button>
+          <button class="b-filter__filter-btn b-filter__filter-btn-ok">确定</button>
+        </div>
+      </section>
+
+      <!--
+      <div class="console">
+        <p>filterPayload: {{ JSON.stringify(filterPayload) }}</p>
+      </div>
+       -->
+    </aside>
+  </div>
 </template>
 
 <style lang="scss" scoped>
 
+  .sticky-box {
+    position: sticky;
+    top: 100px;
+    z-index: 100;
+  }
   .b-filter {}
 
   /* base */

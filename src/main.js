@@ -35,6 +35,9 @@ Vue.prototype.$toRem = function (px) {
   if (!px) return 0
   return px / 750 * 10  + 'rem'
 }
+Vue.prototype.$toRpx = function (px) {
+  return px / 750 * window.innerWidth
+}
 
 Vue.directive('stick', {
   inserted(el, binding, vnode) {
