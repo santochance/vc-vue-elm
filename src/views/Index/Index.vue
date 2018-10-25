@@ -1,22 +1,11 @@
 <template>
   <div>
-    <header class="index__header">
-      
-    </header>
-    <div class="index__search"></div>
-    <div v-if="entryGroupMap.main"
-      class="index__main-entries">
-      <router-link v-for="mainEntry in entryGroupMap.main.entries"
-        :key="mainEntry.id"
-        to=""
-        class="index__main-entry"
-      >
-        <img :src="$getImage(mainEntry.image_hash, mainEntryImgParam)" alt="">
-        <p class="index__main-entry-title">{{ mainEntry.name }}</p>
-      </router-link>
-    </div>
-
-    <IndexSkeleton></IndexSkeleton>
+    <IndexHeader :address="address"></IndexHeader>
+    <IndexSearch></IndexSearch>
+    <IndexMainEntries v-if="entryGroupMap.main"
+      :entries="entryGroupMap.main.entries"
+    ></IndexMainEntries>
+    <!-- <IndexSkeleton></IndexSkeleton> -->
     <div class="index__member"></div>
     <div class="index__banner"></div>
     <IndexShopList></IndexShopList>
@@ -24,31 +13,42 @@
 </template>
 
 <script>
-  import { fetchEntryList } from '@/service/api'
+  import { fetchEntryList, reverseGeoCoding } from '@/service/api'
 
+  import IndexHeader from './IndexHeader'
+  import IndexSearch from './IndexSearch'
   import IndexSkeleton from './IndexSkeleton'
   import IndexShopList from './IndexShopList'
+  import IndexMainEntries from './IndexMainEntries'
+
+  const debug = true
 
   export default {
     name: 'Index',
     components: {
+      IndexHeader,
+      IndexSearch,
       IndexSkeleton,
       IndexShopList,
+      IndexMainEntries,
     },
     props: {
-      
+
     },
     data() {
       return {
         /* remote data */
         entryGroupMap: {},
-
-        /* image param */
-        mainEntryImgParam: '?imageMogr/format/webp/thumbnail/!90x90r/gravity/Center/crop/90x90/',
+        address: null,
+        latitude: 22.6222519,
+        longitude: 114.0327521,
       }
     },
     created() {
+      debug && (window[this.$options.name] = this)
+
       this.fetchEntryList()
+      this.reverseGeoCoding()
     },
     methods: {
       fetchEntryList() {
@@ -62,33 +62,18 @@
             , {})
           })
       },
+      reverseGeoCoding() {
+        return reverseGeoCoding()
+          .then((address) => {
+            this.address = address
+          })
+      }
     },
   }
 </script>
 
 <style lang="scss" scoped>
   .index {@at-root{
-    
-    .index__main-entries {
-      display: flex;
-      flex-wrap: wrap;
-      overflow: hidden;
-      height: 354px;
-      text-align: center;
-      background-color: #fff;
-    }
-    .index__main-entry {
-      width: 20%;
-      margin-top: 22px;
-      img {
-        display: inline-block;
-      }
-    }
-    .index__main-entry-title {
-      display: block;
-      margin-top: 10px;
-      font-size: 24px;
-      color: #666;
-    }
+
   }}
 </style>
