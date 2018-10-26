@@ -1,19 +1,25 @@
 <script>
 
+  const debug = false
+
   export default {
     name: 'Simple',
     components: {
 
     },
     props: {
-      
+
     },
     data() {
       return {
-        
+
       }
     },
     computed: {
+
+    },
+    created() {
+      debug && (window[this.$options.name] = this)
 
     },
     methods: {
@@ -23,16 +29,15 @@
 </script>
 
 <template>
-  <div class="b-simple b-simple__box">
-    <span>simple</span>
+  <div class="b-namespace b-namespace__box">
+    <span>Simple</span>
   </div>
 </template>
 
 
 <style lang="scss" scoped>
-  .b-simple {@at-root{
+  .b-namespace {}
 
-    .b-simple__box {}
+    .b-namespace__box {}
 
-  }}
 </style>
