@@ -23,8 +23,8 @@
       </div>
       <div class="infinite-scroll__completed" v-if="complete">没有更多了哦~</div>
     </div>
-    
-    <!-- 
+
+    <!--
     <div class="console">
       <p>elBottom: {{ elBottom }}</p>
       <p>vpBottom: {{ vpBottom }}</p>
@@ -37,10 +37,12 @@
 <script>
   import { Toast } from '@/components/common'
 
+  const debug = false
+
   export default {
     name: 'InfiniteScroll',
     components: {
-      
+
     },
     props: {
       handler: {
@@ -61,7 +63,8 @@
     created() {
       window.addEventListener('scroll', this.scrollHandler)
       window.addEventListener('resize', this.scrollHandler)
-      window.addEventListener('resize', () => {
+
+      debug && window.addEventListener('resize', () => {
         Toast.open({
           content: `resize to height ${window.innerHeight}`,
         })
@@ -83,7 +86,7 @@
         // console.log('debug - InfiniteScroll scrolling...')
         if (!this.loaded) return
         if (this.complete) return
-        
+
         // console.log('debug - InfiniteScroll check')
         const el = this.$refs.infinite;
         const elRect = el.getBoundingClientRect();
@@ -97,7 +100,9 @@
         this.touched = shouldHandle
 
         if (shouldHandle && this.handler) {
-          console.log('debug - InfiniteScroll load')
+
+          debug && console.log('debug - InfiniteScroll load')
+
           this.loaded = false
           this.handler({
             loaded: () => {
@@ -238,40 +243,40 @@
   .sk-fading-circle .sk-circle11 {
     -webkit-transform: rotate(300deg);
         -ms-transform: rotate(300deg);
-            transform: rotate(300deg); 
+            transform: rotate(300deg);
   }
   .sk-fading-circle .sk-circle12 {
     -webkit-transform: rotate(330deg);
         -ms-transform: rotate(330deg);
-            transform: rotate(330deg); 
+            transform: rotate(330deg);
   }
   .sk-fading-circle .sk-circle2:before {
     -webkit-animation-delay: -1.1s;
-            animation-delay: -1.1s; 
+            animation-delay: -1.1s;
   }
   .sk-fading-circle .sk-circle3:before {
     -webkit-animation-delay: -1s;
-            animation-delay: -1s; 
+            animation-delay: -1s;
   }
   .sk-fading-circle .sk-circle4:before {
     -webkit-animation-delay: -0.9s;
-            animation-delay: -0.9s; 
+            animation-delay: -0.9s;
   }
   .sk-fading-circle .sk-circle5:before {
     -webkit-animation-delay: -0.8s;
-            animation-delay: -0.8s; 
+            animation-delay: -0.8s;
   }
   .sk-fading-circle .sk-circle6:before {
     -webkit-animation-delay: -0.7s;
-            animation-delay: -0.7s; 
+            animation-delay: -0.7s;
   }
   .sk-fading-circle .sk-circle7:before {
     -webkit-animation-delay: -0.6s;
-            animation-delay: -0.6s; 
+            animation-delay: -0.6s;
   }
   .sk-fading-circle .sk-circle8:before {
     -webkit-animation-delay: -0.5s;
-            animation-delay: -0.5s; 
+            animation-delay: -0.5s;
   }
   .sk-fading-circle .sk-circle9:before {
     -webkit-animation-delay: -0.4s;
@@ -297,6 +302,6 @@
 
   @keyframes sk-circleFadeDelay {
     0%, 39%, 100% { opacity: 0; }
-    40% { opacity: 1; } 
+    40% { opacity: 1; }
   }
 </style>
