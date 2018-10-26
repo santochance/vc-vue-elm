@@ -1,9 +1,9 @@
 <template>
-  <div class="b-list">
+  <div class="b-index-shoplist">
     <IndexShopListFilter
       :filterOptions="filterOptions"
     ></IndexShopListFilter>
-<!--     <section v-if="!item || !item.length" class="b-list__nodata">
+<!--     <section v-if="!item || !item.length" class="b-b-index-shoplist__nodata">
       <img src="./index-no-result.gif" alt="">
       <h3>附近没有外卖商家</h3>
       <p>饿了么正在以光速来到你身边</p>
@@ -14,6 +14,11 @@
         :item="item.restaurant"
       ></IndexShopListItem>
     </IndexShopListView>
+    <InfiniteScroll
+      :handler="infiniteScrollHandler"
+      ref="infiniteScroll"
+      class="b-index-shoplist__infinite"
+    ></InfiniteScroll>
   </div>
 </template>
 
@@ -22,6 +27,9 @@
   import IndexShopListFilter from './IndexShopListFilter'
   import IndexShopListView from './IndexShopListView'
   import IndexShopListItem from './IndexShopListItem'
+  import InfiniteScroll from '@/components/common/InfiniteScroll'
+
+  const debug = true
 
   export default {
     name: 'IndexShopList',
@@ -29,6 +37,7 @@
       IndexShopListFilter,
       IndexShopListView,
       IndexShopListItem,
+      InfiniteScroll,
     },
     props: {
 
@@ -37,6 +46,9 @@
       return {
         // fetchRestaurantList
         items: [],
+        offset: 0,
+        limit: 8,
+
         rankId: '',
 
         // fetchBatchFilter
@@ -45,6 +57,8 @@
       }
     },
     created() {
+      debug && (window[this.$options.name] = this)
+
       this.loadData()
     },
     activated() {
@@ -62,10 +76,49 @@
           })
       },
       fetchRestaurantList() {
-        return fetchRestaurantList()
+        const payload = {
+          limit: this.limit,
+          offset: this.offset,
+        }
+        // 分页式加载数据
+        return fetchRestaurantList(payload)
           .then(({ items, rank_id }) => {
-            this.items = items
+
+            debug && console.log('debug - get response of comments')
+
+            if (this.offset === 0) {
+              // 重置列表数据
+              this.items = items;
+            } else {
+              // 增添列表数据
+              this.items = this.items.concat(items)
+            }
             this.rankId = rank_id
+            this.offset = this.items.length
+            // 根据响应数据数量判断是否全部加载完成
+            return items.length > 1 ? 'loaded' : 'complete'
+          })
+      },
+      onFiltersSubmit() {
+        this.offset = 0
+        this.items = []
+
+        this.$nextTick(() => {
+          // 在过滤器 tab 改变时主动调用 infiniteScroll 的 reset 接口
+          this.$refs.infiniteScroll.reset()
+        })
+      },
+
+      infiniteScrollHandler($state) {
+
+        debug && console.log('debug - exec infiniteScrollHandler')
+
+        this.fetchRestaurantList()
+          .then(method => {
+
+            debug && console.log('debug - infinite scroll loaded')
+
+            $state[method]()
           })
       },
     },
@@ -73,11 +126,12 @@
 </script>
 
 <style lang="scss" scoped>
-  .b-list {
+  .b-index-shoplist {
     display: flex;
     flex-direction: column;
+    padding-bottom: 100px;
   }
-    .b-list__nodata {
+    .b-index-shoplist__nodata {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -96,5 +150,8 @@
         font-size: 23px;
         color: #999;
       }
+    }
+    .b-index-shoplist__infinite {
+      padding: 20px 0;
     }
 </style>
