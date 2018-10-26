@@ -110,6 +110,12 @@
           this.filterPayload['cost_to'] = null
         }
       },
+      'sortDropdownVisible'() {
+        this.watchModals()
+      },
+      'filterDropdownVisible'() {
+        this.watchModals()
+      },
     },
     created() {
       debug && (window[this.$options.name] = this)
@@ -256,6 +262,14 @@
         if (Array.isArray(value) && value.length <= 0) return true
         if (typeof value === 'object' && Object.keys(value).length <= 0) return true
         return false
+      },
+
+      watchModals() {
+        if (this.sortDropdownVisible || this.filterDropdownVisible) {
+          document.body.style.overflow = 'hidden'
+        } else {
+          document.body.style.overflow = ''
+        }
       },
     },
   }
@@ -483,6 +497,7 @@
     .b-filter__nav-filters {
       display: flex;
       align-items: center;
+      justify-content: center;
       flex: 0 auto;
       width: 160px;
     }
