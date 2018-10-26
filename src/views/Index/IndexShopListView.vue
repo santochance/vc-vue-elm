@@ -23,15 +23,15 @@
 </script>
 
 <template>
-  <div class="b-list b-list__box">
+  <div class="b-index-listview b-index-listview__box">
     <slot></slot>
   </div>
 </template>
 
 
 <style lang="scss" scoped>
-  .b-list {}
+  .b-index-listview {}
 
-    .b-list__box {}
+    .b-index-listview__box {}
 
 </style>

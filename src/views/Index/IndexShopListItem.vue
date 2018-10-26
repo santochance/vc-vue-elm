@@ -1,10 +1,12 @@
 <script>
   import { Tag } from '@/components/common'
+  import RatingStars from '@/components/RatingStars'
 
   export default {
     name: 'IndexShopListItem',
     components: {
       Tag,
+      RatingStars,
     },
     filters: {
       formatDistance(value) {
@@ -73,6 +75,11 @@
     </div>
     <div class="b-item__shop-info">
       <div class="b-item__logo-wrap">
+        <div class="b-item__new-icon"
+          v-if="item.is_new"
+        >
+          <span>新店</span>
+        </div>
         <img :src="$getImage(item.image_path, logoImgParam)" alt="">
       </div>
       <div class="b-item__main-wrap">
@@ -94,7 +101,7 @@
         </div>
         <div class="b-item__info-line">
           <div class="b-item__rating-misc-wrap">
-            <div class="b-item__rating-stars"></div>
+            <RatingStars class="b-item__stars" :value="item.rating"></RatingStars>
             <span class="b-item__rating"
             >{{ item.rating }}</span>
             <span class="b-item__sales"
@@ -110,9 +117,9 @@
         </div>
         <div class="b-item__info-line">
           <div class="b-item__delivery-limit-wrap">
-            <span>&yen;{{ item.rules }}起送</span>
+            <span>&yen;{{ item.piecewise_agent_fee.rules[0].price }}起送</span>
             <span class="b-item__delivery-fee ellipsis"
-            >优惠配送费&yen;{{ item.rules }}</span>
+            >优惠配送费&yen;{{ item.piecewise_agent_fee.rules[0].fee }}</span>
           </div>
           <div class="b-item__time-distance-wrap">
             <span>{{ item.distance | formatDistance }}</span>
@@ -211,6 +218,26 @@
         height: 100%;
       }
     }
+    .b-item__new-icon {
+      position: absolute;
+      z-index: 5;
+      left: 0;
+      top: 0;
+      height: 64px;
+      width: 64px;
+      text-align: center;
+      background-image: linear-gradient(135deg,#26ce61,#26ce61 50%,transparent 0);
+      & span {
+        position: absolute;
+        top: 10px;
+        left: 2px;
+        font-size: 18px;
+        font-weight: 700;
+        transform: rotate(-45deg);
+        color: #fff;
+
+      }
+    }
     .b-item__main-wrap {
       flex: 1;
       display: flex;
@@ -268,7 +295,9 @@
       display: flex;
       align-items: center;
     }
-    .b-item__rating-stars {}
+    .b-item__stars {
+      margin-right: 8px;
+    }
     .b-item__rating {
       margin-right: 8px;
     }
