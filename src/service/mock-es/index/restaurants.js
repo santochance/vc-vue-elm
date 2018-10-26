@@ -1,3 +1,19 @@
+/*
+  restaurant {
+    餐馆名 name
+    品牌徽标 is_premium
+    评分 rating
+    月售 recent_order_num
+    起送价 rules[0].price
+    配送费 rules[0].fee
+    距离 distance
+    配送时长 order_lead_time
+    标签行 support_tags
+    口碑标签 support_tags[n]
+    活动 restaurant.activities
+  }
+*/
+
 export default {
   "items": [
     {

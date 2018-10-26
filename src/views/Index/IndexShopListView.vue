@@ -24,17 +24,14 @@
 
 <template>
   <div class="b-list b-list__box">
-    <span>simple</span>
+    <slot></slot>
   </div>
 </template>
 
 
 <style lang="scss" scoped>
-  .b-list {
-    // height: 3000px;
-  }
+  .b-list {}
 
-  /* part */
     .b-list__box {}
 
 </style>

@@ -3,17 +3,17 @@
     <IndexShopListFilter
       :filterOptions="filterOptions"
     ></IndexShopListFilter>
-    <IndexShopListView>
-      <IndexShopListItem
-        v-for="item in items" :key="item.id"
-        :item="item"
-      ></IndexShopListItem>
-    </IndexShopListView>
-    <section class="b-list__nodata">
+<!--     <section v-if="!item || !item.length" class="b-list__nodata">
       <img src="./index-no-result.gif" alt="">
       <h3>附近没有外卖商家</h3>
       <p>饿了么正在以光速来到你身边</p>
-    </section>
+    </section> -->
+    <IndexShopListView>
+      <IndexShopListItem
+        v-for="item in items" :key="item.id"
+        :item="item.restaurant"
+      ></IndexShopListItem>
+    </IndexShopListView>
   </div>
 </template>
 
