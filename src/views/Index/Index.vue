@@ -1,6 +1,10 @@
 <template>
   <div class="p-index">
-    <IndexHeader :address="address"></IndexHeader>
+    <IndexHeader
+      :location-name="location.locationName"
+      :locating="locating"
+      :detecting="!loaded"
+    ></IndexHeader>
     <IndexSearch></IndexSearch>
     <IndexMainEntries v-if="entryGroupMap.main"
       :entries="entryGroupMap.main.entries"
@@ -14,7 +18,8 @@
 </template>
 
 <script>
-  import { fetchEntryList, reverseGeoCoding } from '@/service/api'
+  import { mapActions, mapState } from 'vuex'
+  import { fetchEntryList } from '@/service/api'
 
   import IndexHeader from './IndexHeader'
   import IndexSearch from './IndexSearch'
@@ -40,18 +45,83 @@
       return {
         /* remote data */
         entryGroupMap: {},
-        address: null,
-        latitude: 22.6222519,
-        longitude: 114.0327521,
+
+        loaded: false,
+        locating: false,
       }
+    },
+    computed: {
+      ...mapState({
+        location(state) {
+          return {
+            longitude: state.longitude,
+            latitude: state.latitude,
+            geohash: state.geohash,
+            locationName: state.locationName,
+          }
+        }
+      }),
     },
     created() {
       debug && (window[this.$options.name] = this)
 
-      this.fetchEntryList()
-      this.reverseGeoCoding()
+      this.loadData()
+    },
+    activated() {
+      this.loadData()
     },
     methods: {
+      loadData() {
+        this.loaded = false
+
+        // 如果 items 为空，会显示无商家反馈视图
+        return Promise.resolve()
+          .then(() => {
+            if (!this.checkLocation(this.location)) {
+              return this.locate()
+            } else {
+              return this.location
+            }
+          })
+          .then((coords) => {
+            // 查询接口
+            return Promise.all([
+              // 查询导航入口
+              this.fetchEntryList(),
+              // 识别地址
+              this.reverseGeoCoding(coords)
+            ])
+          })
+          .then(() => {
+            this.loaded = true
+          })
+          .catch(() => {
+            this.loaded = true
+          })
+      },
+      locate() {
+        this.locating = true
+
+        debug && console.log('正在定位地址...')
+
+        return this.getCurrentPosition()
+          .then(({ coords }) => {
+            this.locating = false
+            return coords
+          })
+      },
+      checkLocation(location) {
+        const { longitude, latitude, geohash, locationName } = location
+        if (
+          longitude == null ||
+          latitude == null ||
+          !geohash ||
+          !locationName
+        ) {
+          return false
+        }
+        return true
+      },
       fetchEntryList() {
         return fetchEntryList()
           .then((entryGroupList) => {
@@ -63,12 +133,10 @@
             , {})
           })
       },
-      reverseGeoCoding() {
-        return reverseGeoCoding()
-          .then((address) => {
-            this.address = address
-          })
-      }
+      ...mapActions([
+        'reverseGeoCoding',
+        'getCurrentPosition'
+      ]),
     },
   }
 </script>

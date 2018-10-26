@@ -174,7 +174,9 @@ export default {
     state.latitude = latitude
   },
   // 保存 geohash 和 locationName
-  [SAVE_LOCATION]: function (state, { geohash, locationName }) {
+  [SAVE_LOCATION]: function (state, { longitude, latitude, geohash, locationName }) {
+    state.longitude = longitude
+    state.latitude = latitude
     state.geohash = geohash
     state.locationName = locationName
   },

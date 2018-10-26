@@ -8,18 +8,30 @@
 
     },
     props: {
-      address: {
-        type: Object,
-      }
+      locationName: {
+        type: String,
+      },
+      detecting: {
+        type: Boolean,
+        default: false,
+      },
+      locating: {
+        type: Boolean,
+        default: false,
+      },
     },
     data() {
       return {
         detectingText: '正在识别地址...',
+        locatingText: '正在定位...',
+        unknownText: '未知地址'
       }
     },
     computed: {
       addressText() {
-        return { ...this.address }.address || this.detectingText
+        return this.locating ? this.locatingText
+          : this.detecting ? this.detectingText
+            : this.locationName || this.unknownText
       }
     },
     created() {
