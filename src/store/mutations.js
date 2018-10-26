@@ -24,6 +24,8 @@ import {
 
   SAVE_COORDS,
   SAVE_LOCATION,
+  SET_CITY_LIST,
+  SET_CITY_NAME,
 } from './mutation-types'
 
 
@@ -179,6 +181,12 @@ export default {
     state.latitude = latitude
     state.geohash = geohash
     state.locationName = locationName
+  },
+  [SET_CITY_LIST]: function (state, cityList) {
+    state.cityList = cityList
+  },
+  [SET_CITY_NAME]: function (state, cityName) {
+    state.cityName = cityName
   },
 }
 

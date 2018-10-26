@@ -25,3 +25,5 @@ export const SAVE_USED_REMARK = 'SAVE_USED_REMARK'
 /* location */
 export const SAVE_COORDS = 'SAVE_COORDS'
 export const SAVE_LOCATION = 'SAVE_LOCATION'
+export const SET_CITY_LIST = 'SET_CITY_LIST'
+export const SET_CITY_NAME = 'SET_CITY_NAME'

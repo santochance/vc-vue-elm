@@ -22,6 +22,10 @@ export default new Router({
       component: tabPageWrapper('index', () => import(/* webpackChunkName: "index" */ '@/views/Index')),
     },
     {
+      path: '/select-address',
+      component: () => import(/* webpackChunkName: "index" */ '@/views/SelectAddress')
+    },
+    {
       path: '/discover',
       component: tabPageWrapper('discover', () => import(/* webpackChunkName: "discover" */ '@/views/Discover')),
     },
@@ -47,10 +51,10 @@ export default new Router({
       }, {
         path: 'address',
         component: () => import(/* webpackChunkName: "checkout-address" */ '@/views/Checkout/CheckoutAddress'),
-      }, {        
+      }, {
         path: 'address/(edit|create)',
         component: () => import(/* webpackChunkName: "checkout-address-edit" */ '@/views/Checkout/CheckoutAddressEdit'),
-      }, {        
+      }, {
         path: 'remark',
         component: () => import(/* webpackChunkName: "remark" */ '@/views/Checkout/Remark'),
       }]

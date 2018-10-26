@@ -1,9 +1,9 @@
-import { fetchCurrentUser, fetchUser, loginByMobile, logout, fetchAddressList, reverseGeoCoding } from '@/service/api'
+import { fetchCurrentUser, fetchUser, loginByMobile, logout, fetchAddressList, reverseGeoCoding, fetchCityList } from '@/service/api'
 import {
-  SAVE_COORDS,
   SAVE_LOCATION,
 } from './mutation-types.js'
 
+import persistence from '@/util/persistence'
 
 export default {
 
@@ -90,5 +90,20 @@ export default {
 
         return location
       })
-  }
+  },
+
+  getCityList({ commit }) {
+    const cityListData = persistence.get('CITY_LIST')
+    const cityList = cityListData && cityListData.cityList
+
+    if (cityList) {
+      return Promise.resolve(cityList)
+    } else {
+      return fetchCityList()
+        .then((cities) => {
+          commit('SET_CITY_LIST', cities)
+          persistence.set('CITY_LIST', cities)
+        })
+    }
+  },
 }

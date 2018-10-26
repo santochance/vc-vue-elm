@@ -8,7 +8,7 @@ export const fetchHello = () => request(`/hello`)
 /**
  * 获取短信验证码
  */
-export const fetchMobileCode = ({ mobile, captcha_value, captcha_hash }) => 
+export const fetchMobileCode = ({ mobile, captcha_value, captcha_hash }) =>
   request(`https://h5.ele.me/restapi/eus/login/mobile_send_code`, {
     method: 'POST',
     body: {
@@ -21,7 +21,7 @@ export const fetchMobileCode = ({ mobile, captcha_value, captcha_hash }) =>
 /**
  * 获取图形验证码
  */
-export const fetchCaptcha = ({ captcha_str }) => 
+export const fetchCaptcha = ({ captcha_str }) =>
   request(`https://h5.ele.me/restapi/eus/v3/captchas`, {
     method: 'POST',
     body: {
@@ -32,7 +32,7 @@ export const fetchCaptcha = ({ captcha_str }) =>
 /**
  * 短语登录
  */
-export const loginByMobile = ({ mobile, validate_code, validate_token }) => 
+export const loginByMobile = ({ mobile, validate_code, validate_token }) =>
   request(`https://h5.ele.me/restapi/eus/login/login_by_mobile`, {
     method: 'POST',
     body: {
@@ -45,7 +45,7 @@ export const loginByMobile = ({ mobile, validate_code, validate_token }) =>
 /**
  * 退出登录
  */
-export const logout = ({ user_id }) => 
+export const logout = ({ user_id }) =>
   request(`https://h5.ele.me/restapi/eus/login/logout`, {
     method: 'POST',
     body: {
@@ -76,7 +76,7 @@ export const fetchExtraProfile = ({ user_id }) =>
 /**
  * 修改用户名
  */
-export const saveUsername = ({ userId, username }) => 
+export const saveUsername = ({ userId, username }) =>
   request(`/users/${userId}/username`, {
     method: 'POST',
     body: {
@@ -229,3 +229,19 @@ export const fetchBannerList = () =>
   })}`)
 
 
+/**
+ * 获取城市列表
+ */
+export const fetchCityList = () =>
+  request(`https://shadow.elemecdn.com/lib/city-list@0.0.3/city_list.json`)
+
+/**
+ * 搜索附近 POI
+ */
+export const searchNearby = ({ keyword, latitude, longitude }) =>
+  request(`https://h5.ele.me/restapi/bgs/poi/search_poi_nearby_alipay` + `?${stringify({
+    keyword,
+    ...(latitude && longitude ? { latitude, longitude } : null),
+    offset: 0,
+    limit: 20,
+  })}`)

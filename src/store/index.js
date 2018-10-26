@@ -25,7 +25,10 @@ Vue.use(Vuex);
     latitude: null,    // ?Number
     longitude: null,  // ?Number
     geohash: '',
-    locationName: '',
+    locationName: '', // Index 的地址名称
+    cityName: '',   // SelectCity 的城市名称
+    cityList: null, // 城市列表数据
+
 
 
   }),
