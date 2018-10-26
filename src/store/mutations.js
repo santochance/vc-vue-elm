@@ -21,6 +21,9 @@ import {
 
   SAVE_REMARK_LIST,
   SAVE_USED_REMARK,
+
+  SAVE_COORDS,
+  SAVE_LOCATION,
 } from './mutation-types'
 
 
@@ -53,7 +56,7 @@ function getCartDetail(cart, { food_id, attrs }) {
 }
 
 export default {
-  /* user */
+/* user */
   [SAVE_USER_ID]: function (state, user_id) {
     state.userId = user_id
   },
@@ -61,7 +64,7 @@ export default {
     state.user = user
   },
 
-  /* cart */
+/* cart */
   [SAVE_CART]: function (state, { restaurant_id, cart }) {
     state.cartMap[restaurant_id] = cart
   },
@@ -127,7 +130,7 @@ export default {
     state.currentRestaurantId = restaurant_id
   },
 
-  /* address */
+/* address */
   [SAVE_ADDRESS_LIST]: function (state, addressList) {
     state.addressList = addressList
   },
@@ -155,12 +158,25 @@ export default {
     state.editingAddress = address
   },
 
-  /* remark */
+/* remark */
   [SAVE_REMARK_LIST]: function (state, remarkList) {
     state.remarkList = remarkList
   },
   [SAVE_USED_REMARK]: function (state, usedRemark) {
     state.usedRemark = usedRemark
+  },
+
+/* location */
+
+  // 保存经纬度
+  [SAVE_COORDS]: function (state, { longitude, latitude }) {
+    state.longitude = longitude
+    state.latitude = latitude
+  },
+  // 保存 geohash 和 locationName
+  [SAVE_LOCATION]: function (state, { geohash, locationName }) {
+    state.geohash = geohash
+    state.locationName = locationName
   },
 }
 

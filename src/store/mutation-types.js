@@ -21,3 +21,7 @@ export const SAVE_EDITING_ADDRESS = 'SAVE_EDITING_ADDRESS'
 /* remark */
 export const SAVE_REMARK_LIST = 'SAVE_REMARK_LIST'
 export const SAVE_USED_REMARK = 'SAVE_USED_REMARK'
+
+/* location */
+export const SAVE_COORDS = 'SAVE_COORDS'
+export const SAVE_LOCATION = 'SAVE_LOCATION'

@@ -1,4 +1,9 @@
-import { fetchCurrentUser, fetchUser, loginByMobile, logout, fetchAddressList } from '@/service/api'
+import { fetchCurrentUser, fetchUser, loginByMobile, logout, fetchAddressList, reverseGeoCoding } from '@/service/api'
+import {
+  SAVE_COORDS,
+  SAVE_LOCATION,
+} from './mutation-types.js'
+
 
 export default {
 
@@ -18,7 +23,7 @@ export default {
       })
   },
   fetchUser({ commit }, { user_id }) {
-    
+
     return fetchUser({ user_id })
       .then((user) => {
         commit('SAVE_USER', user)
@@ -38,7 +43,7 @@ export default {
     return logout(payload)
       .then(() => {
         commit('SAVE_USER_ID', 0)
-        commit("SAVE_USER", null)        
+        commit("SAVE_USER", null)
       })
   },
 
@@ -53,4 +58,37 @@ export default {
         return addressList
       })
   },
+
+/* location */
+
+  getCurrentPosition() {
+    if ('geolocation' in navigator) {
+      return new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject)
+      })
+        .then((position) => {
+          return position
+        })
+    } else {
+      return Promise.reject({
+        code: 'not support geolcation',
+        message: '浏览器不支持地理定位功能'
+      })
+    }
+  },
+
+  reverseGeoCoding({ commit }, payload) {
+
+    return reverseGeoCoding(payload)
+      .then((location) => {
+        commit(SAVE_LOCATION, {
+          latitude: location.latitude,
+          longitude: location.longitude,
+          geohash: location.geohash,
+          locationName: location.name,
+        })
+
+        return location
+      })
+  }
 }

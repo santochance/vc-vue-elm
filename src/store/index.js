@@ -20,6 +20,14 @@ Vue.use(Vuex);
 
     remarkList: null, // ?Array, 订单备注选择列表
     usedRemark: null, // ?Object, 使用的订单备注
+
+    /* location */
+    latitude: null,    // ?Number
+    longitude: null,  // ?Number
+    geohash: '',
+    locationName: '',
+
+
   }),
   getters: {
     selectedAddress(state) {

@@ -1,4 +1,9 @@
 import persistence from '@/util/persistence'
+import {
+  SAVE_LOCATION
+} from './mutation-types'
+
+const debug = true
 
 export function initState(state) {
   let initial = {}
@@ -27,6 +32,12 @@ export function initState(state) {
   if (selectedAddressId != null && typeof selectedAddressId === 'number') {
     initial.selectedAddressId = selectedAddressId
   }
+
+  const location = persistence.getItem('LOCATION')
+  if (location != null && typeof location === 'object') {
+    initial = { ...initial, ...location }
+  }
+  debug && console.log('init state with location:', location)
 
   return { ...state, ...initial }
 }
@@ -68,4 +79,10 @@ export function wrapPersistence(store) {
       persistence.setItem('CURRENT_ADDRESS_ID', value, 'sessionStorage')
     },
   )
+
+  store.subscribe((mutation) => {
+    if (mutation.type === SAVE_LOCATION) {
+      persistence.setItem('LOCATION', mutation.payload)
+    }
+  })
 }
