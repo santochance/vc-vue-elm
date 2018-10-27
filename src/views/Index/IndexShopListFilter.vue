@@ -75,7 +75,9 @@
         return this.filterGroupList['activity_types'] || []
       },
       deliverMode() {
-        return [this.filterGroupList['delivery_mode']]
+        const option = this.filterGroupList['delivery_mode']
+        return option ? [option] : []
+
       },
       averageCostsGroup() {
         const items = this.averageCostsGroupItems
@@ -319,8 +321,7 @@
         </a>
       </div>
 
-      <section
-        class="b-filter__extend b-filter__extend-sorters"
+      <section class="b-filter__extend b-filter__extend-sorters"
         :class="{ 'b-filter__extend_open': sortDropdownVisible }"
       >
         <ul>
