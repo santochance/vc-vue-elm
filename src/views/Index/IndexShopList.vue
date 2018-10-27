@@ -70,7 +70,7 @@
         this.fetchRestaurantList()
       },
       fetchBatchFilter() {
-        return fetchBatchFilter()
+        return fetchBatchFilter({})
           .then((filterOptions) => {
             this.filterOptions = filterOptions
           })

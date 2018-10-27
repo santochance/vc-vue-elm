@@ -196,8 +196,8 @@
       v-show="!resultListVisible"
     >
       <h4>当前地址</h4>
-      <div class="p-select-address__current ellipsis">
-        <span>{{ locationName }}</span>
+      <div class="p-select-address__current">
+        <span class="ellipsis">{{ locationName }}</span>
         <span class="p-select-address__relocate"
           @click="reLocate"
         >

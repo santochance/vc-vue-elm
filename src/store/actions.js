@@ -78,6 +78,11 @@ export default {
   },
 
   reverseGeoCoding({ commit, state }, payload) {
+    
+    payload || (payload = {
+      latitude: state.latitude,
+      longitude: state.longitude,
+    })
 
     return reverseGeoCoding(payload)
       .then((location) => {

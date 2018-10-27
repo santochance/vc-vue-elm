@@ -47,7 +47,7 @@ const request = function (url, options) {
     newOptions.proxy !== false
   ) {
     // 使用 cors proxy
-    
+
     // 不在 fetch 设置 headers，而是发送给代理设置，避免 CORS prefight 请求失败
     const proxyHeaders = newOptions.headers
     newOptions.headers = {}
@@ -67,8 +67,9 @@ const request = function (url, options) {
 
     // 添加 proxy target host 到路径开头作为标识以方便和调试
     urlObj.pathname = `/proxy/${urlObj.host}` + urlObj.pathname
+
     debug && console.log('proxy used path:', urlObj.pathname)
-    
+
     // 添加 proxy 参数到 queryString
     urlObj.search = [
       urlObj.search || '',
@@ -77,7 +78,7 @@ const request = function (url, options) {
     ].join('')
 
     debug && console.log('proxy used quersy string:', urlObj.search)
-    
+
     // 组装请求 url
     reqUrl = proxyServer + urlObj.pathname + urlObj.search
   }
@@ -122,11 +123,15 @@ const request = function (url, options) {
 const noProxy = process.env.NO_PROXY === 'true'
 console.warn('[mock service] 当前正在使用 mock service')
 
-// const mockRequestWrapper = (url, options) =>
-//   mockRequest(url, options)
-//     .catch(() => request(url, options))
+const mockRequestWrapper = (url, options) =>
+  mockRequest(url, options)
+    .catch((err) => {
+      console.warn('[mock service]尝试通过 network 请求...')
+      throw err
+    })
+    .catch(() => request(url, options))
 
-const usedRequest = noProxy ? request : mockRequest
+const usedRequest = noProxy ? request : mockRequestWrapper
 debug && (window['request'] = usedRequest)
 
 export default usedRequest

@@ -103,11 +103,11 @@ export default {
   'GET https://h5.ele.me/restapi/shopping/v3/restaurants': restaurants ,
   'GET https://h5.ele.me/restapi/member/v2/users/:id/location': location,
   'GET https://h5.ele.me/pizza/shopping/restaurants/batch_filter': batchFilter,
-  'GET https://h5.ele.me/restapi/bgs/poi/reverse_geo_coding': reverseGeoCoding,
+  // 'GET https://h5.ele.me/restapi/bgs/poi/reverse_geo_coding': reverseGeoCoding,
   'GET https://h5.ele.me/restapi/shopping/openapi/entries': entries,
   'GET https://h5.ele.me/restapi/shopping/v2/banners': banners,
 
-  'GET https://h5.ele.me/restapi/bgs/poi/search_poi_nearby_alipay': searchNearby,
+  // 'GET https://h5.ele.me/restapi/bgs/poi/search_poi_nearby_alipay': searchNearby,
   'GET https://shadow.elemecdn.com/lib/city-list@0.0.3/city_list.json': cityList,
 }
 

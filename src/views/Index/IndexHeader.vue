@@ -40,8 +40,8 @@
     },
     methods: {
       /* emit events */
-      onAddressClick() {
-        this.$emit('address-click')
+      onClickAddress() {
+        this.$emit('click:address')
       }
     },
   }
@@ -51,7 +51,7 @@
   <header class="b-header b-header__box">
     <div class="b-header__content">
       <div class="b-header__address"
-        @click="onAddressClick"
+        @click="onClickAddress"
       >
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 31"
           class="b-header__location-icon">

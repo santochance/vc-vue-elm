@@ -4,22 +4,25 @@
       :location-name="location.locationName"
       :locating="locating"
       :detecting="!loaded"
+      @click:address="onClickAddress"
     ></IndexHeader>
     <IndexSearch></IndexSearch>
-    <IndexMainEntries v-if="entryGroupMap.main"
+    <IndexMainEntries
+      v-if="entryGroupMap.main"
       :entries="entryGroupMap.main.entries"
     ></IndexMainEntries>
-    <!-- <IndexSkeleton></IndexSkeleton> -->
     <div class="index__member"></div>
     <div class="index__banner"></div>
     <div class="p-index__shoplist-title">推荐商家</div>
-    <IndexShopList></IndexShopList>
+    <!-- <IndexShopList></IndexShopList> -->
+    <!-- <IndexSkeleton v-if="true || !loaded"></IndexSkeleton> -->
   </div>
 </template>
 
 <script>
   import { mapActions, mapState } from 'vuex'
-  import { fetchEntryList } from '@/service/api'
+  import { fetchRestaurantList, fetchEntryList, fetchBatchFilter, fetchBannerList } from '@/service/api'
+
 
   import IndexHeader from './IndexHeader'
   import IndexSearch from './IndexSearch'
@@ -45,9 +48,15 @@
       return {
         /* remote data */
         entryGroupMap: {},
+        bannerList: [],
+        filterOptions: [],
+        restaurantList: [],
 
         loaded: false,
         locating: false,
+        locState: 0,
+
+        offset: 0,
       }
     },
     computed: {
@@ -61,6 +70,9 @@
           }
         }
       }),
+      ...mapState([
+        'latitude', 'longitude', 'geohash', 'locationName',
+      ]),
     },
     created() {
       debug && (window[this.$options.name] = this)
@@ -77,17 +89,21 @@
         // 如果 items 为空，会显示无商家反馈视图
         return Promise.resolve()
           .then(() => {
-            if (!this.checkLocation(this.location)) {
+            if (!this.geohash) {
               return this.locate()
             } else {
               return this.location
             }
           })
           .then((coords) => {
+
             // 查询接口
             return Promise.all([
               // 查询导航入口
               this.fetchEntryList(),
+              this.fetchRestaurantList(),
+              this.fetchBatchFilter(),
+              this.fetchBannerList(),
               // 识别地址
               this.reverseGeoCoding(coords)
             ])
@@ -110,20 +126,11 @@
             return coords
           })
       },
-      checkLocation(location) {
-        const { longitude, latitude, geohash, locationName } = location
-        if (
-          longitude == null ||
-          latitude == null ||
-          !geohash ||
-          !locationName
-        ) {
-          return false
-        }
-        return true
-      },
       fetchEntryList() {
-        return fetchEntryList()
+        return fetchEntryList({
+          latitude: this.latitude,
+          longitude: this.longitude,
+        })
           .then((entryGroupList) => {
             this.entryGroupMap = entryGroupList.reduce((rst, group) =>
               ({
@@ -133,16 +140,65 @@
             , {})
           })
       },
+      fetchBannerList() {
+        return fetchBannerList({
+          latitude: this.latitude,
+          longitude: this.longitude,
+        })
+          .then((bannerList) => {
+            this.bannerList= bannerList
+          })
+      },
+      fetchBatchFilter() {
+        return fetchBatchFilter({
+          latitude: this.latitude,
+          longitude: this.longitude,
+        })
+          .then((filterOptions) => {
+            this.filterOptions = filterOptions
+          })
+      },
+      fetchRestaurantList() {
+        // 分页式加载数据
+        return fetchRestaurantList({
+          latitude: this.latitude,
+          longitude: this.longitude,
+          offset: this.offset,
+        })
+          .then(({ items, rank_id }) => {
+
+            debug && console.log('debug - get response of comments')
+
+            if (this.offset === 0) {
+              // 重置列表数据
+              this.restaurantList = items;
+            } else {
+              // 增添列表数据
+              this.restaurantList = this.restaurantList.concat(items)
+            }
+            this.rankId = rank_id
+            this.offset = this.restaurantList.length
+            // 根据响应数据数量判断是否全部加载完成
+            return items.length > 1 ? 'loaded' : 'complete'
+          })
+      },
+
       ...mapActions([
         'reverseGeoCoding',
         'getCurrentPosition'
       ]),
+
+      /* event handlers */
+      onClickAddress() {
+        this.$router.push('/select-address')
+      },
     },
   }
 </script>
 
 <style lang="scss" scoped>
   .p-index {
+    position: relative;
     flex: 1;
     display: flex;
     flex-direction: column;
