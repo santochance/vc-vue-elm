@@ -1,7 +1,9 @@
 <template>
   <section class="shop__header">
     <nav v-if="shopDetails.shop_sign" class="shop__nav" :style="{ backgroundImage: 'url(' + $getImage(shopDetails.shop_sign.image_hash, shopPostImgParam) + ')' }">
-      <a class="shop__back-btn" href="javascript:"></a>
+      <a class="shop__back-btn" href="javascript:"
+        @click="onBack"
+      ></a>
     </nav>
     <div class="shop__overview">
       <div class="shop__logo">
@@ -69,7 +71,12 @@
         shopPostImgParam: '?imageMogr/format/webp/thumbnail/750x/',
         shopLogoImgParam: '?imageMogr/format/webp/thumbnail/150x/',
       }
-    }
+    },
+    methods: {
+      onBack() {
+        this.$router.back()
+      },
+    },
   }
 </script>
 

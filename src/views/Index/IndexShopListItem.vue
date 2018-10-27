@@ -61,7 +61,7 @@
 </script>
 
 <template>
-  <router-link to="" tag="div"
+  <router-link :to="{ path: '/shop', query: { id: item.id } }" tag="div"
     class="b-item b-item__box"
     v-if="item"
   >

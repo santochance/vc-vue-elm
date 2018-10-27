@@ -5,6 +5,8 @@ const { stringify } = qs
 
 export const fetchHello = () => request(`/hello`)
 
+/* login */
+
 /**
  * 获取短信验证码
  */
@@ -53,6 +55,8 @@ export const logout = ({ user_id }) =>
     },
   })
 
+/* user */
+
 /**
  * 查询当前登录用户
  */
@@ -68,8 +72,8 @@ export const fetchUser = ({ user_id }) =>
   request(`https://h5.ele.me/restapi/eus/v3/users/${user_id}`)
 
 /**
-* 查询额外的用户信息
-*/
+ * 查询额外的用户信息
+ */
 export const fetchExtraProfile = ({ user_id }) =>
   request(`https://h5.ele.me/restapi/eus/v1/users/${user_id}/extra_profile`)
 
@@ -84,10 +88,26 @@ export const saveUsername = ({ userId, username }) =>
     }
   })
 
+/* shop */
+
+/**
+ * 批量查询餐馆信息（菜单、评价、商家详情）
+ */
+export const fetchBatchShop = ({ user_id,  latitude, longitude, restaurantId }) =>
+  // request(`/restaurants/${restaurantId}`)
+  request(`https://h5.ele.me/pizza/shopping/restaurants/${restaurantId}/batch_shop` + `?${stringify({
+    user_id,
+    code: 0.6971780616926742,
+    extras: ["activities","albums","license","identification","qualification"],
+    terminal: 'h5',
+    latitude,
+    longitude,
+  })}`)
+
 /**
  * 查询餐厅信息
  */
-export const fetchRestaurant = (restaurantId) =>
+export const fetchRestaurant = ({ restaurantId }) =>
   request(`/restaurants/${restaurantId}`)
 
 /**

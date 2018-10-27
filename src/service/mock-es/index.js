@@ -43,6 +43,9 @@ let loginedUser = { ...persistence.getItem('USER') }
 console.log('persistence:', persistence)
 
 export default {
+
+/* user */
+
   'GET /users/current': { id: 1731112177, username: '757f8734cc8' },
   'GET /users/:id': user,
   'GET /users/:id/extra_profile': extraProfile,
@@ -54,17 +57,29 @@ export default {
     return { username }
   },
 
-  'GET https://h5.ele.me/restapi/eus/v1/current_user': () => loginedUser.user_id || 0,
-  'GET https://h5.ele.me/restapi/eus/v3/users/:id': user,
-  'GET https://h5.ele.me/restapi/eus/v1/users/:id/extra_profile': extraProfile,
-  'POST https://h5.ele.me/restapi/eus/login/login_by_mobile': function () {
-    loginedUser = user
-    return {
-      "need_bind_mobile": false,
-      "user_id": loginedUser.user_id
-    }
-  },
-  'POST https://h5.ele.me/restapi/eus/login/logout': () => (loginedUser = {}),
+/* login*/
+
+  // 'GET https://h5.ele.me/restapi/eus/v1/current_user': () => loginedUser.user_id || 0,
+  // 'GET https://h5.ele.me/restapi/eus/v3/users/:id': user,
+  // 'GET https://h5.ele.me/restapi/eus/v1/users/:id/extra_profile': extraProfile,
+  // 'POST https://h5.ele.me/restapi/eus/login/login_by_mobile': function () {
+  //   loginedUser = user
+  //   return {
+  //     "need_bind_mobile": false,
+  //     "user_id": loginedUser.user_id
+  //   }
+  // },
+  // 'POST https://h5.ele.me/restapi/eus/login/logout': () => (loginedUser = {}),
+
+/* shop */
+
+  // 'GET https://h5.ele.me/pizza/shopping/restaurants/:id/batch_shop': function () {
+  //   return {
+  //     rst: shopDetails,
+  //     menu,
+  //     recomend: [],
+  //   }
+  // },
 
   'GET /restaurants/:id': shopDetails,
   'GET /restaurants/:id/menu': menu,
@@ -99,6 +114,7 @@ export default {
   'POST /checkout': checkout,
 
   /* index */
+
   'GET https://h5.ele.me/restapi/eus/v2/new_user_check': newUserCheck,
   'GET https://h5.ele.me/restapi/shopping/v3/restaurants': restaurants ,
   'GET https://h5.ele.me/restapi/member/v2/users/:id/location': location,

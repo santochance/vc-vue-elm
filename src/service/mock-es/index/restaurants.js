@@ -1,5 +1,6 @@
 /*
   restaurant {
+    id
     餐馆名 name
     品牌徽标 is_premium
     新店角标 is_new

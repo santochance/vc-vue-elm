@@ -1,6 +1,6 @@
 <template>
   <div class="b-index-shoplist">
-    <section v-show="complete && !items.length"
+    <section v-show="infiniteComplete && !items.length"
       class="b-index-shoplist__nodata">
       <img src="./index-no-result.gif" alt="">
       <h3>附近没有外卖商家</h3>

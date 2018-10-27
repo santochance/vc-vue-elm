@@ -13,7 +13,8 @@
 </template>
 
 <script>
-  import { fetchRestaurant, fetchFoodMenu } from '@/service/api'
+  import { mapState, mapActions } from 'vuex'
+  import { fetchBatchShop } from '@/service/api'
   import { Tabs } from '@/components/common'
   import ShopSkeleton from '@/components/ShopSkeleton'
 
@@ -40,7 +41,6 @@
         shopDetails: null,
         menu: null,
 
-        restaurantId: 157158603, // 餐厅 id
         tabs: [{
           key: 'order-food',
           title: '点餐',
@@ -67,9 +67,14 @@
           })
         , {})
       },
+      ...mapState([
+        'userId', 'latitude', 'longitude',
+      ]),
+      restaurantId() {
+        return this.$route.query.id
+      },
     },
     created() {
-      this.restaurantId = this.$route.query.id || this.restaurantId
 
       this.loadData()
     },
@@ -77,22 +82,27 @@
       loadData() {
         this.loading = true
 
-        // 查询餐厅信息和餐厅菜单
-        return Promise.all([
-          fetchRestaurant(this.restaurantId),
-          fetchFoodMenu(this.restaurantId),
-        ]).then(([ shopDetails, menu ]) => {
-          this.shopDetails = shopDetails
-          this.menu = menu
-        }).then(() => {
-          return new Promise((resolve) => {
-            setTimeout(resolve, 3000)
+        return this.reverseGeoCoding()
+          .then(() => {
+            return fetchBatchShop({
+              user_id: this.userId,
+              latitude: this.latitude,
+              longitude: this.longitude,
+              restaurantId: this.restaurantId,
+            })
           })
-        }).then(() => {
-          this.loading = false
-          this.$emit('loaded')
-        })
+          .then(({ rst, menu }) => {
+            this.shopDetails = rst
+            this.menu = menu
+          })
+          .then(() => {
+            this.loading = false
+            this.$emit('loaded')
+          })
       },
+      ...mapActions([
+        'reverseGeoCoding',
+      ]),
     },
   }
 </script>

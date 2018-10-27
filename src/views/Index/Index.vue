@@ -37,6 +37,7 @@
     <transition name="fade">
       <div class="p-index__back-top"
         v-show="backTopVisible"
+        @click="onBackTop"
       >
         <img src="@/assets/backtop.svg" alt="">
       </div>
@@ -256,6 +257,9 @@
           .then(method => {
             $state[method]()
           })
+      },
+      onBackTop() {
+        document.documentElement.scrollTop = 0
       },
     },
   }
