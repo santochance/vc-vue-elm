@@ -27,6 +27,7 @@ import entries from './index/entries'
 import banners from './index/banners'
 
 import searchNearby from './index/search_nearby'
+import cityList from './index/cityList'
 
 const tagMap = {
   '全部': tagAll,
@@ -107,6 +108,7 @@ export default {
   'GET https://h5.ele.me/restapi/shopping/v2/banners': banners,
 
   'GET https://h5.ele.me/restapi/bgs/poi/search_poi_nearby_alipay': searchNearby,
+  'GET https://shadow.elemecdn.com/lib/city-list@0.0.3/city_list.json': cityList,
 }
 
 

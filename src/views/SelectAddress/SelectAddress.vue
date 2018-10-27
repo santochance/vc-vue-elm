@@ -2,6 +2,7 @@
   import { mapState, mapActions } from 'vuex'
   import { fetchAddressList, searchNearby } from '@/service/api'
   import Page from '@/components/Page'
+  import SelectCity from '@/views/SelectCity'
 
   const debug = true
 
@@ -10,6 +11,7 @@
     /* options: 模板依赖 */
     components: {
       Page,
+      SelectCity,
     },
     // filters: {},
     // directives: { bind, inserted, update, componentUpdated, unbind },
@@ -31,7 +33,12 @@
         results: [],
         currentAddress: {
           geohash: this.$store.state.geohash,
-          locationName: this.$store.state.locationName,
+          // locationName: this.$store.state.locationName,
+        },
+        currentCity: {
+          latitude: this.$store.state.longitude,
+          longitude: this.$store.state.latitude,
+          cityName: this.$store.state.cityName,
         },
         loaded: false,
         reloading: false,
@@ -41,15 +48,22 @@
           content: '换个关键字试试',
         },
 
+        selectCityVisible: false,
       }
     },
     computed: {
       ...mapState([
-        'useId', 'cityName', 'longitude', 'latitude', 'locationName',
+        'useId', 'longitude', 'latitude', 'locationName', 'cityList',
       ]),
       resultListVisible() {
         return this.query && this.results.length
-      }
+      },
+      addressListVisible() {
+        return !this.resultListVisible && this.addressList.length
+      },
+      cityName() {
+        return (this.currentCity.name || '').replace(/市$/, '') || '选择...'
+      },
     },
 
     /* options: 事件 */
@@ -60,9 +74,6 @@
     created() {
       debug && (window[this.$options.name] = this)
 
-      this.fetchAddressList()
-    },
-    activated() {
       this.fetchAddressList()
     },
     watch: {
@@ -91,8 +102,8 @@
         if (keyword) {
           searchNearby({
             keyword,
-            latitude: this.latitude,
-            longitude: this.longitude,
+            latitude: this.currentCity.latitude,
+            longitude: this.currentCity.longitude,
           }).then((pois) => {
             this.results = pois
           })
@@ -120,6 +131,10 @@
           .then(({ name, geohash }) => {
             this.currentAddress.locationName = name
             this.currentAddress.geohash = geohash
+          })
+          .then(() => {
+            this.reloading = false
+          }, () => {
             this.reloading = false
           })
       },
@@ -133,7 +148,20 @@
       ]),
       chooseCity() {
         this.getCityList()
+        this.selectCityVisible = true
       },
+      onChangeCity(city) {
+        this.currentCity = {
+          latitude: city.latitude,
+          longitude: city.longitude,
+          name: city.name,
+        }
+        this.reverseGeoCoding({
+          longitude: city.longitude,
+          latitude: city.latitude,
+        })
+        this.selectCityVisible = false
+      }
     },
   }
 </script>
@@ -143,7 +171,9 @@
     class="p-select-address p-select-address__box"
   >
     <div class="p-select-address__search-bar">
-      <div class="p-select-address__city-btn">
+      <div class="p-select-address__city-btn"
+        @click="chooseCity"
+      >
         <span class="p-select-address__city-name ellipsis">{{ cityName }}</span>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 8" class="">
           <path fill="#333" fill-rule="evenodd" d="M5.588 6.588c.78.78 2.04.784 2.824 0l5.176-5.176c.78-.78.517-1.412-.582-1.412H.994C-.107 0-.372.628.412 1.412l5.176 5.176z">
@@ -167,7 +197,7 @@
     >
       <h4>当前地址</h4>
       <div class="p-select-address__current ellipsis">
-        <span>{{ currentAddress.locationName }}</span>
+        <span>{{ locationName }}</span>
         <span class="p-select-address__relocate"
           @click="reLocate"
         >
@@ -182,7 +212,7 @@
       </div>
     </section>
     <section class="p-select-address__section"
-      v-show="!resultListVisible"
+      v-show="addressListVisible"
     >
       <h4>收货地址</h4>
       <div class="p-select-address__address-list">
@@ -223,6 +253,12 @@
         <p>详细地址（如门牌号）可稍后输入</p>
       </div>
     </div>
+    <SelectCity class="p-select-address__select-city"
+      v-show="selectCityVisible"
+      :city-data="cityList"
+      :default-name="currentCity.name"
+      @change="onChangeCity"
+    ></SelectCity>
   </page>
 </template>
 
@@ -404,4 +440,12 @@
       }
     }
 
+  .p-select-address__select-city {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 20;
+  }
 </style>

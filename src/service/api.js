@@ -166,11 +166,11 @@ export const checkNewUser = () =>
 /**
  * 查询餐馆列表
  */
-export const fetchRestaurantList = () =>
+export const fetchRestaurantList = ({ latitude, longitude, offset }) =>
   request(`https://h5.ele.me/restapi/shopping/v3/restaurants` + `?${stringify({
-    latitude: 22.6221812,
-    longitude: 114.0327159,
-    offset: 0,
+    latitude,
+    longitude,
+    offset,
     limit: 8,
     extras: ['activities', 'tags'],
     extra_filters: 'home',
@@ -181,38 +181,38 @@ export const fetchRestaurantList = () =>
 /**
  * 查询用户地址信息v2
  */
-export const fetchLocation = () =>
+export const fetchLocation = ({ latitude, longitude }) =>
   request(`https://h5.ele.me/restapi/member/v2/users/:id/location` + `?${stringify({
-    longitude: 114.0327159,
-    latitude: 22.6221812,
+    longitude,
+    latitude,
   })}}`)
 
 /**
  * 批量查询餐馆列表筛选器
  */
-export const fetchBatchFilter = () =>
+export const fetchBatchFilter = ({ latitude, longitude }) =>
   request(`https://h5.ele.me/pizza/shopping/restaurants/batch_filter` + `?${stringify({
-    latitude: 22.6221812,
-    longitude: 114.0327159,
+    latitude,
+    longitude,
     terminal: 'h5',
   })}`)
 
 /**
  * 逆向查询 geo 编码
  */
-export const reverseGeoCoding = () =>
+export const reverseGeoCoding = ({ latitude, longitude }) =>
   request(`https://h5.ele.me/restapi/bgs/poi/reverse_geo_coding` + `?${stringify({
-    latitude: 22.6221812,
-    longitude: 114.0327159,
+    latitude,
+    longitude,
   })}`)
 
 /**
  * 查询导航入口列表
  */
-export const fetchEntryList = () =>
+export const fetchEntryList = ({ latitude, longitude }) =>
   request(`https://h5.ele.me/restapi/shopping/openapi/entries` + `?${stringify({
-    latitude: 22.6221812,
-    longitude: 114.0327159,
+    latitude,
+    longitude,
     templates: ['main_template', 'favourable_template', 'svip_template'],
     terminal: 'h5',
   })}`)
@@ -220,12 +220,12 @@ export const fetchEntryList = () =>
 /**
  * 查询 banner 列表
  */
-export const fetchBannerList = () =>
+export const fetchBannerList = ({ latitude, longitude }) =>
   request(`https://h5.ele.me/restapi/shopping/v2/banners` + `?${stringify({
     consumer: 1,
     type: 1,
-    latitude: 22.6221812,
-    longitude: 114.0327159,
+    latitude,
+    longitude,
   })}`)
 
 

@@ -25,7 +25,8 @@ import {
   SAVE_COORDS,
   SAVE_LOCATION,
   SET_CITY_LIST,
-  SET_CITY_NAME,
+  // SET_CITY_NAME,
+  // SET_LOCATION_NAME,
 } from './mutation-types'
 
 
@@ -176,17 +177,21 @@ export default {
     state.latitude = latitude
   },
   // 保存 geohash 和 locationName
-  [SAVE_LOCATION]: function (state, { longitude, latitude, geohash, locationName }) {
+  [SAVE_LOCATION]: function (state, { longitude, latitude, geohash, locationName, cityName }) {
     state.longitude = longitude
     state.latitude = latitude
     state.geohash = geohash
-    state.locationName = locationName
+    state.locationName = locationName,
+    state.cityName = cityName
   },
   [SET_CITY_LIST]: function (state, cityList) {
     state.cityList = cityList
   },
-  [SET_CITY_NAME]: function (state, cityName) {
-    state.cityName = cityName
-  },
+  // [SET_CITY_NAME]: function (state, cityName) {
+  //   state.cityName = cityName
+  // },
+  // [SET_LOCATION_NAME]: function (state, locationName) {
+  //   state.locationName = locationName
+  // },
 }
 

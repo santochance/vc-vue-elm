@@ -77,7 +77,7 @@ export default {
     }
   },
 
-  reverseGeoCoding({ commit }, payload) {
+  reverseGeoCoding({ commit, state }, payload) {
 
     return reverseGeoCoding(payload)
       .then((location) => {
@@ -85,25 +85,29 @@ export default {
           latitude: location.latitude,
           longitude: location.longitude,
           geohash: location.geohash,
+          cityName: location.city,
           locationName: location.name,
         })
-
         return location
       })
   },
 
-  getCityList({ commit }) {
-    const cityListData = persistence.get('CITY_LIST')
-    const cityList = cityListData && cityListData.cityList
-
-    if (cityList) {
-      return Promise.resolve(cityList)
-    } else {
-      return fetchCityList()
-        .then((cities) => {
-          commit('SET_CITY_LIST', cities)
-          persistence.set('CITY_LIST', cities)
-        })
+  getCityList({ commit, state }) {
+    if (state.cityList) {
+      return Promise.resolve(state.cityList)
     }
+
+    const cityData = persistence.getItem('CITY_LIST')
+    if (cityData) {
+      commit('SET_CITY_LIST', cityData)
+      return Promise.resolve(cityData)
+    }
+
+    return fetchCityList()
+      .then((cities) => {
+        persistence.setItem('CITY_LIST', cities)
+        commit('SET_CITY_LIST', cities)
+        return cities
+      })
   },
 }
