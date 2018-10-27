@@ -33,7 +33,7 @@
     },
     methods: {
       onBack() {
-        this.$router.back()
+        this.$emit('back')
       }
     }
   }

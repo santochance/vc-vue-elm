@@ -3,7 +3,7 @@
     <page-header
       :title="title"
       :back-btn="backBtn"
-      v-stick
+      @back="onBack"
     />
     <div class="page__main">
       <slot></slot>
@@ -40,17 +40,27 @@
 
       }
     },
+    methods: {
+      onBack() {
+        this.$emit('back')
+      }
+    },
   }
 </script>
 
 <style lang="scss" scoped>
+  .sticky-box {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+  }
   .page__container {
-    flex: 1 auto;
+    flex: 1;
     display: flex;
     flex-direction: column;
   }
   .page__main {
-    flex: 1 auto;
+    flex: 1;
     display: flex;
     flex-direction: column;
   }

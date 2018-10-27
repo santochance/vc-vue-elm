@@ -16,6 +16,13 @@
     <div class="p-index__shoplist-title">推荐商家</div>
     <!-- <IndexShopList></IndexShopList> -->
     <!-- <IndexSkeleton v-if="true || !loaded"></IndexSkeleton> -->
+    <transition name="slide-left">
+      <SelectAddress
+        class="p-index__select-address"
+        v-show="selectAddressVisible"
+        @back="selectAddressVisible = false"
+      ></SelectAddress>
+    </transition>
   </div>
 </template>
 
@@ -29,6 +36,7 @@
   import IndexSkeleton from './IndexSkeleton'
   import IndexShopList from './IndexShopList'
   import IndexMainEntries from './IndexMainEntries'
+  import SelectAddress from '../SelectAddress'
 
   const debug = true
 
@@ -40,6 +48,7 @@
       IndexSkeleton,
       IndexShopList,
       IndexMainEntries,
+      SelectAddress,
     },
     props: {
 
@@ -57,6 +66,8 @@
         locState: 0,
 
         offset: 0,
+
+        selectAddressVisible: false,
       }
     },
     computed: {
@@ -190,7 +201,7 @@
 
       /* event handlers */
       onClickAddress() {
-        this.$router.push('/select-address')
+        this.selectAddressVisible = true
       },
     },
   }
@@ -226,4 +237,23 @@
         margin-left: 26px;
       }
     }
+
+  .p-index__select-address {
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+  .slide-left-enter-active {
+    transition: all .3s ease-in-out;
+  }
+  .slide-left-leave-active {
+    transition: all .3s ease-in-out;
+  }
+  .slide-left-enter,
+  .slide-left-leave-to {
+    transform: translateX(100%)
+  }
 </style>

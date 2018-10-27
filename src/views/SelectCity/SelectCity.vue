@@ -70,8 +70,8 @@
         const elRect = el.getBoundingClientRect()
         scroller.scrollTop += (elRect.top - scrollerRect.top)
       },
-      back() {
-
+      onBack() {
+        this.$emit('back')
       },
     },
   }
@@ -79,7 +79,8 @@
 
 <template>
   <page title="城市选择"
-    class="b-select-city b-select-city__box">
+    class="b-select-city b-select-city__box"
+    @back="onBack">
     <section class="b-select-city__search">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"
         class="b-select-city__search-icon">
@@ -145,7 +146,6 @@
   .b-select-city {
     width: 100%;
     background-color: #fff;
-    overflow: auto;
   }
 
     .b-select-city__box {}

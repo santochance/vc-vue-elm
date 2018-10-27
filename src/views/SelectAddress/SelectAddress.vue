@@ -138,8 +138,8 @@
             this.reloading = false
           })
       },
-      back() {
-
+      onBack() {
+        this.$emit('back')
       },
       ...mapActions([
         'getCityList',
@@ -169,6 +169,7 @@
 <template>
   <page title="选择收货地址"
     class="p-select-address p-select-address__box"
+    @back="onBack"
   >
     <div class="p-select-address__search-bar">
       <div class="p-select-address__city-btn"
@@ -258,13 +259,17 @@
       :city-data="cityList"
       :default-name="currentCity.name"
       @change="onChangeCity"
+      @back="selectCityVisible = false"
     ></SelectCity>
   </page>
 </template>
 
 
 <style lang="scss" scoped>
-  .p-select-address {}
+  .p-select-address {
+    width: 100%;
+    background-color: #f4f4f4;
+  }
 
     .p-select-address__box {}
 
@@ -368,7 +373,9 @@
 
   /* address list */
 
-    .p-select-address__address-list {}
+    .p-select-address__address-list {
+      overflow: auto;
+    }
     .p-select-address__address-item {
       padding: 22px 30px;
       font-size: 24px;
