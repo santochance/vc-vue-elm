@@ -27,6 +27,7 @@
       <div v-if="galleryVisible" class="gallery__container o-image__gallery">
         <div class="gallery__wrap">
           <div v-for="(item, idx) in items" :key="idx"
+            v-show="galleryCurrentIdx === idx"
             class="gallery__item">
             <div class="o-image__item" @click.stop.prevent="close(galleryCurrentIdx)">
               <img :src="item.image" alt="">
