@@ -35,3 +35,19 @@ export function matchPathBy(sPath, pattern) {
     return null
   }
 }
+
+export function debounce(fn, delay) {
+  var timeout
+  delay || (delay = 100)
+
+  return function () {
+    var args = [].slice.call(arguments)
+    var ctx = this
+    if (timeout) {
+      clearTimeout(timeout)
+    }
+    timeout = setTimeout(function () {
+      fn.apply(ctx, args)
+    }, delay)
+  }
+}

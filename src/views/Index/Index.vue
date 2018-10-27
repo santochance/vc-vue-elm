@@ -33,13 +33,21 @@
         @back="selectAddressVisible = false"
       ></SelectAddress>
     </transition>
+
+    <transition name="fade">
+      <div class="p-index__back-top"
+        v-show="backTopVisible"
+      >
+        <img src="@/assets/backtop.svg" alt="">
+      </div>
+    </transition>
   </div>
 </template>
 
 <script>
   import { mapActions, mapState } from 'vuex'
   import { fetchRestaurantList, fetchEntryList, fetchBatchFilter, fetchBannerList } from '@/service/api'
-
+  import { debounce } from '@/util/utils'
 
   import IndexHeader from './IndexHeader'
   import IndexSearch from './IndexSearch'
@@ -75,7 +83,7 @@
         /* remote data */
         entryGroupMap: {},
         bannerList: [],
-        filterOptions: [],
+        filterOptions: {},
         restaurantList: [],
 
         loaded: false,
@@ -86,6 +94,7 @@
         rankId: '',
 
         selectAddressVisible: false,
+        backTopVisible: false,
       }
     },
     computed: {
@@ -110,6 +119,11 @@
     },
     activated() {
       this.loadData()
+    },
+    mounted() {
+      window.addEventListener('scroll', debounce(() => {
+        this.backTopVisible = window.scrollY > 1800
+      }), 100)
     },
     methods: {
       loadData() {
@@ -184,6 +198,7 @@
           longitude: this.longitude,
         })
           .then((filterOptions) => {
+
             this.filterOptions = filterOptions
           })
       },
@@ -329,4 +344,43 @@
       }
     }
 
+  /* backtop */
+    .p-index__back-top {
+      position: fixed;
+      z-index: 50;
+      right: 30px;
+      bottom: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 83px;
+      width: 83px;
+      background-color: #fff;
+      border-radius: 50%;
+      border: 1px solid #999; /*no*/
+
+      will-change: opacity;
+
+      img {
+        width: 40px;
+        height: 40px;
+      }
+
+      // visibility: hidden;
+      // opacity: 0;
+
+      // &_visible {
+      //   visibility: visible;
+      //   opacity: 1;
+      // }
+    }
+    .fade-enter-active,
+    .fade-leave-active {
+      transition: opacity .3s;
+    }
+
+    .fade-enter,
+    .fade-leave-to {
+      opacity: 0;
+    }
 </style>
