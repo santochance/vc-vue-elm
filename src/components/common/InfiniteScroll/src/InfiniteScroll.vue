@@ -100,6 +100,7 @@
         this.touched = shouldHandle
 
         if (shouldHandle && this.handler) {
+          this.$emit('infinite')
 
           debug && console.log('debug - InfiniteScroll load')
 
@@ -107,10 +108,12 @@
           this.handler({
             loaded: () => {
               this.loaded = true
+              this.$emit('loaded')
             },
             complete: () => {
               this.loaded = true
               this.complete = true
+              this.$emit('complete')
             },
             vpBottom,
             elBottom,
