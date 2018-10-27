@@ -73,6 +73,8 @@
 
 <style lang="scss" scoped>
   .b-index-shoplist {
+    box-sizing: border-box;
+    min-height: 1154px;
     display: flex;
     flex-direction: column;
     padding-bottom: 100px;

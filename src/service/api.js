@@ -186,7 +186,7 @@ export const checkNewUser = () =>
 /**
  * 查询餐馆列表
  */
-export const fetchRestaurantList = ({ latitude, longitude, offset }) =>
+export const fetchRestaurantList = ({ latitude, longitude, offset, ...options }) =>
   request(`https://h5.ele.me/restapi/shopping/v3/restaurants` + `?${stringify({
     latitude,
     longitude,
@@ -196,6 +196,7 @@ export const fetchRestaurantList = ({ latitude, longitude, offset }) =>
     extra_filters: 'home',
     rank_id: '',
     terminal: 'h5',
+    ...options,
   })}`)
 
 /**

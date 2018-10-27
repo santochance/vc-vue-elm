@@ -4,7 +4,7 @@
       :location-name="location.locationName"
       :locating="locating"
       :detecting="!loaded"
-      @click:address="onClickAddress"
+      @click:address="onClickHeaderAddress"
     ></IndexHeader>
     <IndexSearch></IndexSearch>
 
@@ -30,6 +30,7 @@
       <SelectAddress
         class="p-index__select-address"
         v-show="selectAddressVisible"
+        @select="onSelectAddress"
         @back="selectAddressVisible = false"
       ></SelectAddress>
     </transition>
@@ -93,6 +94,7 @@
 
         offset: 0,
         rankId: '',
+        filterPayload: null,
 
         selectAddressVisible: false,
         backTopVisible: false,
@@ -135,12 +137,15 @@
           .then(() => {
             if (!this.geohash) {
               return this.locate()
+                .then(({ coords }) => {
+                  // 识别地址
+                  return this.reverseGeoCoding(coords)
+                })
             } else {
               return this.location
             }
           })
-          .then((coords) => {
-
+          .then(() => {
             // 查询接口
             return Promise.all([
               // 查询导航入口
@@ -148,8 +153,6 @@
               this.fetchRestaurantList(),
               this.fetchBatchFilter(),
               this.fetchBannerList(),
-              // 识别地址
-              this.reverseGeoCoding(coords)
             ])
           })
           .then(() => {
@@ -209,6 +212,7 @@
           latitude: this.latitude,
           longitude: this.longitude,
           offset: this.offset,
+          ...this.filterPayload,
         })
           .then(({ items, rank_id }) => {
 
@@ -234,11 +238,12 @@
       ]),
 
       /* event handlers */
-      onClickAddress() {
+      onClickHeaderAddress() {
         this.selectAddressVisible = true
       },
 
-      onSubmitFilters() {
+      onSubmitFilters(options) {
+        this.filterPayload = options
         this.offset = 0
         this.restaurantList = []
 
@@ -257,6 +262,19 @@
           .then(method => {
             $state[method]()
           })
+      },
+      onSelectAddress(/*address*/) {
+        // const location = {
+        //   latitude: address.latitude,
+
+        // }
+        // this.$store.commit('SAVE_LOCATION', {
+
+        // })
+/*        this.fetchEntryList(),
+        this.fetchRestaurantList(),
+        this.fetchBatchFilter(),
+        this.fetchBannerList(),*/
       },
       onBackTop() {
         document.documentElement.scrollTop = 0
@@ -322,10 +340,7 @@
     .p-index__shoplist {
       display: flex;
       flex-direction: column;
-      padding-bottom: 100px;
-    }
-    .p-index__infinite {
-      padding: 20px 0;
+      padding-bottom: 140px;
     }
     .p-index__shoplist-nodata {
       display: flex;

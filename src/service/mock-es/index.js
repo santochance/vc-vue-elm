@@ -22,11 +22,11 @@ import newUserCheck from './index/new_user_check'
 import restaurants from './index/restaurants'
 import location from './index/location'
 import batchFilter from './index/batch_filter.js'
-import reverseGeoCoding from './index/reverse_geo_coding'
+// import reverseGeoCoding from './index/reverse_geo_coding'
 import entries from './index/entries'
 import banners from './index/banners'
 
-import searchNearby from './index/search_nearby'
+// import searchNearby from './index/search_nearby'
 import cityList from './index/cityList'
 
 const tagMap = {
@@ -38,7 +38,7 @@ const tagMap = {
   '送货快': tagFastDelivery,
 }
 
-let loginedUser = { ...persistence.getItem('USER') }
+// let loginedUser = { ...persistence.getItem('USER') }
 
 console.log('persistence:', persistence)
 
@@ -116,7 +116,7 @@ export default {
   /* index */
 
   'GET https://h5.ele.me/restapi/eus/v2/new_user_check': newUserCheck,
-  'GET https://h5.ele.me/restapi/shopping/v3/restaurants': restaurants ,
+  // 'GET https://h5.ele.me/restapi/shopping/v3/restaurants': restaurants ,
   'GET https://h5.ele.me/restapi/member/v2/users/:id/location': location,
   'GET https://h5.ele.me/pizza/shopping/restaurants/batch_filter': batchFilter,
   // 'GET https://h5.ele.me/restapi/bgs/poi/reverse_geo_coding': reverseGeoCoding,

@@ -140,7 +140,9 @@
           <span>{{ recommendTag.text }}</span>
         </span>
       </div>
-      <div class="b-item__activity-wrap">
+      <div class="b-item__activity-wrap"
+        v-if="item.activities"
+      >
         <div class="b-item__activity-list">
           <div class="b-item__activity-item"
             v-for="(activity, idx) in item.activities" :key="activity.id"
