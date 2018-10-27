@@ -211,7 +211,8 @@
     display: flex;
   }
   .tabs__pane {
-    flex: 1 0 100%;
+    flex: 1;
+    width: 100%;
     display: flex;
     flex-direction: column;
   }
