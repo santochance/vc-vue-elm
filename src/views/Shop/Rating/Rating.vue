@@ -36,7 +36,7 @@
         </ul>
 
         <ul v-if="comments.length"
-          class="rating__comments" 
+          class="rating__comments"
         >
           <li v-for="(comment, index) in comments" :key="String(comment.food_id) + index"
             class="comment"
@@ -102,17 +102,17 @@
 </template>
 
 <script>
-  import { fetchRatingOverview, fetchComments } from '@/service/api'
+  import { fetchBatchComments, fetchRatings } from '@/service/api'
   import LoadingImage from '@/components/LoadingImage'
   import Viewer from '@/components/Viewer'
   import InfiniteScroll from '@/components/common/InfiniteScroll'
-  
+
   const debug = false
 
   export default {
     props: {
       restaurantId: {
-        type: Number,
+        type: [Number, String],
       }
     },
     components: {
@@ -152,8 +152,12 @@
     methods: {
       loadOverview() {
         this.loading = true
-        fetchRatingOverview(this.restaurantId).then(overview => {
+        fetchBatchComments({
+          restaurantId: this.restaurantId,
+          has_content: true,
+        }).then(overview => {
           this.comments = overview.comments
+          this.offset = this.comments.length
           this.rating = overview.rating
           this.tags = overview.tags
           this.tagNameCurrent = overview.tags[0].name
@@ -174,7 +178,7 @@
       },
       infiniteScrollHandler($state) {
         debug && console.log('debug - exec infiniteScrollHandler')
-        this.loadComments() 
+        this.loadComments()
           .then(method => {
             console.log('debug - infinite scroll loaded')
             $state[method]()
@@ -182,12 +186,12 @@
       },
       loadComments() {
         debug && console.log('debug - exec loadComments')
-        const { restaurantId, tagNameCurrent: tagName, limit, offset } = this
+        const { restaurantId, tagNameCurrent: tagName, offset } = this
         // 返回 promise 供 infiniteLoading决定状态
-        return fetchComments({
+        return fetchRatings({
           restaurantId,
-          tagName,
-          limit,
+          has_content: true,
+          tag_name: tagName,
           offset
         }).then(comments => {
           debug && console.log('debug - get response of comments')

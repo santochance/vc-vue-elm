@@ -19,7 +19,7 @@ import extraProfile from './extra_profile.js'
 import persistence from '@/util/persistence'
 
 import newUserCheck from './index/new_user_check'
-import restaurants from './index/restaurants'
+// import restaurants from './index/restaurants'
 import location from './index/location'
 import batchFilter from './index/batch_filter.js'
 // import reverseGeoCoding from './index/reverse_geo_coding'
@@ -80,6 +80,8 @@ export default {
   //     recomend: [],
   //   }
   // },
+  // 'GET https://h5.ele.me/pizza/ugc/restaurants/:id/batch_comments': overview,
+  // 'GET https://h5.ele.me/restapi/ugc/v3/restaurants/:id/ratings': comments,
 
   'GET /restaurants/:id': shopDetails,
   'GET /restaurants/:id/menu': menu,

@@ -3,7 +3,8 @@ import request from '@/util/request'
 
 const { stringify } = qs
 
-export const fetchHello = () => request(`/hello`)
+export const fetchHello = (/* payload */) =>
+  request(`/path` + `?${stringify({/* query */})}`)
 
 /* login */
 
@@ -93,7 +94,7 @@ export const saveUsername = ({ userId, username }) =>
 /**
  * 批量查询餐馆信息（菜单、评价、商家详情）
  */
-export const fetchBatchShop = ({ user_id,  latitude, longitude, restaurantId }) =>
+export const fetchBatchShop = ({ restaurantId, user_id,  latitude, longitude }) =>
   // request(`/restaurants/${restaurantId}`)
   request(`https://h5.ele.me/pizza/shopping/restaurants/${restaurantId}/batch_shop` + `?${stringify({
     user_id,
@@ -103,6 +104,29 @@ export const fetchBatchShop = ({ user_id,  latitude, longitude, restaurantId }) 
     latitude,
     longitude,
   })}`)
+
+/**
+ * 批量查询餐饮评价信息（评价概况，过滤标签）
+ */
+export const fetchBatchComments = ({ restaurantId, has_content }) =>
+  request(`https://h5.ele.me/pizza/ugc/restaurants/${restaurantId}/batch_comments` + `?${stringify({
+      has_content,
+      offset: 0,
+      limit: 20,
+  })}`)
+
+/**
+ * 查询餐馆评价
+ */
+export const fetchRatings = ({ restaurantId, has_content, tag_name, offset  }) =>
+  request(`https://h5.ele.me/restapi/ugc/v3/restaurants/${restaurantId}/ratings` + `?${stringify({
+      tag_name,
+      has_content,
+      offset,
+      limit: 20,
+  })}`)
+
+
 
 /**
  * 查询餐厅信息
