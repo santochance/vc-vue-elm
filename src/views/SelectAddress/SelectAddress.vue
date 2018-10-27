@@ -36,9 +36,9 @@
           // locationName: this.$store.state.locationName,
         },
         currentCity: {
-          latitude: this.$store.state.longitude,
-          longitude: this.$store.state.latitude,
-          cityName: this.$store.state.cityName,
+          latitude: this.$store.state.latitude,
+          longitude: this.$store.state.longitude,
+          name: this.$store.state.cityName,
         },
         loaded: false,
         reloading: false,
@@ -197,10 +197,12 @@
       v-show="!resultListVisible"
     >
       <h4>当前地址</h4>
-      <div class="p-select-address__current">
+      <div class="p-select-address__current"
+        @click="onBack"
+      >
         <span class="ellipsis">{{ locationName }}</span>
         <span class="p-select-address__relocate"
-          @click="reLocate"
+          @click.stop="reLocate"
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15"
             :class="{ 'p-select-address__reloading': reloading }"
@@ -238,6 +240,7 @@
     >
       <div class="p-select-address__result-item"
         v-for="result in results" :key="result.id"
+        @click="select(result)"
       >
         <div class="p-select-address__result-info">
           <div class="p-select-address__result-name"
@@ -285,6 +288,7 @@
   /* search-bar */
 
     .p-select-address__search-bar {
+      flex-shrink: 0;
       display: flex;
       background-color: #fff;
     }

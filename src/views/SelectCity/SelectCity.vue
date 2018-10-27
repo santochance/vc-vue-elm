@@ -53,7 +53,7 @@
         if (this.currentCity.id !== city.id) {
           this.currentCity = city
           this.$emit('change', city)
-          this.back()
+          this.onBack()
         }
       },
 
