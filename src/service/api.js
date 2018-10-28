@@ -231,7 +231,7 @@ export const fetchRestaurantList = ({ latitude, longitude, offset, ...options })
     rank_id: '',
     terminal: 'h5',
     ...options,
-  })}`)
+  }, { arrayFormat: 'brackets' })}`)
 
 /**
  * 查询用户地址信息v2
@@ -270,7 +270,7 @@ export const fetchEntryList = ({ latitude, longitude }) =>
     longitude,
     templates: ['main_template', 'favourable_template', 'svip_template'],
     terminal: 'h5',
-  })}`)
+  }, { arrayFormat: 'brackets' })}`)
 
 /**
  * 查询 banner 列表
