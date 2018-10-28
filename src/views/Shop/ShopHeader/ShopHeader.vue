@@ -207,11 +207,13 @@
   .shop__activity {
     display: flex;
     align-items: center;
-    width: 600px;;
+    justify-content: space-between;
+    width: 600px;
     margin: 24px 75px 0;
     font-size: 22px;
   }
   .shop__activity-abstract {
+    min-width: 300px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;

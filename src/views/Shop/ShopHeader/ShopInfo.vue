@@ -10,7 +10,7 @@
           <p class="imc__service-text">评分</p>
         </li>
         <li class="imc__service-item">
-          <h3 class="imc__service-title imc__sales">{{ shopDetails.recent_order_num }}</h3>
+          <h3 class="imc__service-title imc__sales">{{ shopDetails.recent_order_num }}单</h3>
           <p class="imc__service-text">月售</p>
         </li>
         <li class="imc__service-item">
@@ -18,11 +18,11 @@
           <p class="imc__service-text">约{{ shopDetails.order_lead_time }}分钟</p>
         </li>
         <li class="imc__service-item">
-          <h3 class="imc__service-title imc__delivery-fee">{{ shopDetails.piecewise_agent_fee && shopDetails.piecewise_agent_fee.rules[0].fee }}</h3>
+          <h3 class="imc__service-title imc__delivery-fee">{{ shopDetails.piecewise_agent_fee && shopDetails.piecewise_agent_fee.rules[0].fee }}元</h3>
           <p class="imc__service-text">配送费</p>
         </li>
         <li class="imc__service-item">
-          <h3 class="imc__service-title imc__distance">{{ shopDetails.distance }}m</h3>
+          <h3 class="imc__service-title imc__distance">{{ shopDetails.distance | formatDistance }}</h3>
           <p class="imc__service-text">距离</p>
         </li>
       </ul>
@@ -40,6 +40,17 @@
   export default {
     props: {
       shopDetails: Object,
+    },
+    filters: {
+      formatDistance(value) {
+        if (value >= 1000) {
+          return Number(value / 1000).toFixed(1) + 'km'
+        } else if (value >= 0) {
+          return Number(value) + 'm'
+        } else {
+          return ''
+        }
+      },
     },
   }
 </script>

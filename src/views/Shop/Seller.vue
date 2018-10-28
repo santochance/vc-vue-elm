@@ -5,12 +5,14 @@
       <div class="seller__item-content deliver-info">
         <p>
           <tag class="deliver-info__mode"
+            v-if="shopDetails.delivery_mode.id === 1"
             :style="{fontSize: $toRem(22), backgroundColor: '#' + shopDetails.delivery_mode.color}"
             >{{ shopDetails.delivery_mode.text }}</tag>
+          <span v-else>{{ shopDetails.delivery_mode.text }}</span>
           <span>约{{ shopDetails.order_lead_time }}分钟送达，</span>
           <span>距离{{ shopDetails.distance }}m</span>
         </p>
-        <p><span>配送费&yen;{{ shopDetails.piecewise_agent_fee.rules[0].fee }}</span></p>
+        <p><span>配送费 &yen; {{ shopDetails.piecewise_agent_fee.rules[0].fee }}</span></p>
       </div>
     </div>
     <div class="seller__item">
