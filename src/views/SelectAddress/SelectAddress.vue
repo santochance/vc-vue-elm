@@ -20,9 +20,10 @@
 
     /* options: 接口 */
     props: {
-      // propName: {
-      //   type, required, default, validator,
-      // }
+      visible: {
+        type: Boolean,
+        default: false,
+      },
     },
     // model: {},
 
@@ -32,17 +33,7 @@
         query: '',
         addressList: [],
         results: [],
-        currentAddress: {
-          geohash: this.$store.state.geohash,
-          // address: ''
-          // cityId: ''
-          // districtId:''
-        },
-        currentCity: {
-          latitude: this.$store.state.latitude,
-          longitude: this.$store.state.longitude,
-          name: this.$store.state.cityName,
-        },
+
         loaded: false,
         reloading: false,
         emptyTip: {
@@ -50,6 +41,7 @@
           title: '没有搜索结果',
           content: '换个关键字试试',
         },
+        geohashChanged: false,
 
         selectCityVisible: false,
       }
@@ -65,20 +57,10 @@
         return !this.resultListVisible && this.addressList.length
       },
       cityName() {
-        return (this.currentCity.name || '').replace(/市$/, '') || '选择...'
+        return (this.$store.state.cityName || '').replace(/市$/, '') || '选择...'
       },
     },
-
     /* options: 事件 */
-    // watch: {}
-
-    // beforeCreate, created, beforeMount, mounted, beforeUpdate, update,
-    // activated, deactivated, beforeDestroy, destroyed
-    created() {
-      debug && (window[this.$options.name] = this)
-
-      this.fetchAddressList()
-    },
     watch: {
       query(value, oldValue) {
 
@@ -87,8 +69,32 @@
         if (value && value !== oldValue) {
           this.search(value)
         }
+
+        if (!value) {
+          this.results = []
+        }
+      },
+      // geohash(value, oldValue) {
+      //   if (this.visible && value !== oldValue) {
+      //     this.geohashChanged = true
+      //   }
+      // },
+      visible(value, oldValue) {
+        if (value && value !== oldValue) {
+          this.geohashChanged = false
+          this.reverseGeoCoding()
+        }
       },
     },
+
+    // beforeCreate, created, beforeMount, mounted, beforeUpdate, update,
+    // activated, deactivated, beforeDestroy, destroyed
+    created() {
+      debug && (window[this.$options.name] = this)
+
+      this.fetchAddressList()
+    },
+
     methods: {
       fetchAddressList() {
         this.loaded = false
@@ -108,24 +114,20 @@
         if (keyword) {
           searchNearby({
             keyword,
-            latitude: this.currentCity.latitude,
-            longitude: this.currentCity.longitude,
+            latitude: this.latitude,
+            longitude: this.longitude,
           }).then((pois) => {
             this.results = pois
           })
         }
       },
       select(address) {
-        this.query = ''
-
         if (!address) {
-          address = {
-            geohash: this.currentAddress.geohash,
-            address: this.currentAddress.address,
-            cityId: this.currentAddress.city_id,
-            districtId: this.currentAddress.district_id
-          }
+          throw new TypeError('select() expect an object as argument but got undefeind')
         }
+
+        this.geohashChanged = true
+        this.query = ''
         if (!address.latitude || !address.longitude) {
           const coords = Geohash.decode(address.geohash)
           address = {
@@ -137,7 +139,17 @@
           debug && console.log('parse geohash to:', coords)
         }
 
-        this.$emit('select', address)
+        this.$store.commit('SET_CITY_NAME', address.city || '')
+        this.$store.commit('SET_LOCATION_NAME', address.address)
+
+        this.$store.commit('SAVE_LOCATION', {
+          latitude: address.latitude,
+          longitude: address.longitude,
+          geohash: address.geohash,
+        })
+
+        // this.$emit('select')
+        this.onBack()
       },
       reLocate() {
         this.reloading = true
@@ -146,9 +158,9 @@
           .then(({ coords }) => {
             return this.reverseGeoCoding(coords)
           })
-          .then(({ name, geohash }) => {
-            this.currentAddress.locationName = name
-            this.currentAddress.geohash = geohash
+          .then(({ name }) => {
+            this.geohashChanged = true
+            this.$store.commit('SET_LOCATION_NAME', name || '未知地址')
           })
           .then(() => {
             this.reloading = false
@@ -156,7 +168,37 @@
             this.reloading = false
           })
       },
+      onChangeCity(city) {
+        this.geohashChanged = true
+        this.$store.commit('SET_CITY_NAME', city.name)
+
+        this.reverseGeoCoding({
+          latitude: city.latitude,
+          longitude: city.longitude,
+        })
+          .then(({ name }) => {
+            this.$store.commit('SET_LOCATION_NAME', name || '未知地址')
+          })
+          .catch(() => {
+            this.$store.commit('SAVE_LOCATION', {
+              latitude: city.latitude,
+              longitude: city.longitude,
+              geohash: Geohash.encode(city.latitude, city.longitude, 12)
+            })
+          })
+
+        this.query && this.search(this.query)
+
+        this.selectCityVisible = false
+      },
+      chooseCity() {
+        this.getCityList()
+        this.selectCityVisible = true
+      },
       onBack() {
+        if (this.geohashChanged) {
+          this.$emit('change')
+        }
         this.$emit('back')
       },
       ...mapActions([
@@ -164,22 +206,6 @@
         'getCurrentPosition',
         'reverseGeoCoding'
       ]),
-      chooseCity() {
-        this.getCityList()
-        this.selectCityVisible = true
-      },
-      onChangeCity(city) {
-        this.currentCity = {
-          latitude: city.latitude,
-          longitude: city.longitude,
-          name: city.name,
-        }
-        this.reverseGeoCoding({
-          longitude: city.longitude,
-          latitude: city.latitude,
-        })
-        this.selectCityVisible = false
-      }
     },
   }
 </script>
@@ -187,6 +213,7 @@
 <template>
   <page title="选择收货地址"
     class="p-select-address p-select-address__box"
+    v-show="visible"
     @back="onBack"
   >
     <div class="p-select-address__search-bar">
@@ -278,7 +305,7 @@
     <SelectCity class="p-select-address__select-city"
       v-show="selectCityVisible"
       :city-data="cityList"
-      :default-name="currentCity.name"
+      :default-name="cityName"
       @change="onChangeCity"
       @back="selectCityVisible = false"
     ></SelectCity>

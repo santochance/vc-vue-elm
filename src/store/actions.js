@@ -1,6 +1,8 @@
 import { fetchCurrentUser, fetchUser, loginByMobile, logout, fetchAddressList, reverseGeoCoding, fetchCityList } from '@/service/api'
 import {
   SAVE_LOCATION,
+  SET_CITY_NAME,
+  SET_LOCATION_NAME,
 } from './mutation-types.js'
 
 import persistence from '@/util/persistence'
@@ -78,7 +80,7 @@ export default {
   },
 
   reverseGeoCoding({ commit, state }, payload) {
-    
+
     payload || (payload = {
       latitude: state.latitude,
       longitude: state.longitude,
@@ -90,9 +92,13 @@ export default {
           latitude: location.latitude,
           longitude: location.longitude,
           geohash: location.geohash,
-          cityName: location.city,
-          locationName: location.name,
         })
+        if (!state.cityName) {
+          commit(SET_CITY_NAME, location.city)
+        }
+        if (!state.locationName) {
+          commit(SET_LOCATION_NAME, location.name)
+        }
         return location
       })
   },

@@ -29,8 +29,8 @@
     <transition name="slide-left">
       <SelectAddress
         class="p-index__select-address"
-        v-show="selectAddressVisible"
-        @select="onSelectAddress"
+        :visible="selectAddressVisible"
+        @change="onChangeAddress"
         @back="selectAddressVisible = false"
       ></SelectAddress>
     </transition>
@@ -115,6 +115,9 @@
         'latitude', 'longitude', 'geohash', 'locationName',
       ]),
     },
+    watch: {
+
+    },
     created() {
       debug && (window[this.$options.name] = this)
 
@@ -137,7 +140,7 @@
         // 如果 items 为空，会显示无商家反馈视图
         return Promise.resolve()
           .then(() => {
-            if (!this.geohash) {
+            if (!this.geohash || !this.locationName) {
               return this.locate()
                 .then(({ coords }) => {
                   // 识别地址
@@ -152,7 +155,8 @@
             return Promise.all([
               // 查询导航入口
               this.fetchEntryList(),
-              this.fetchRestaurantList(),
+              // this.fetchRestaurantList(),
+              this.$refs.infinite.reset(),
               this.fetchBatchFilter(),
               this.fetchBannerList(),
             ])
@@ -246,16 +250,10 @@
 
       onSubmitFilters(options) {
         this.filterPayload = options
+
         this.offset = 0
         this.restaurantList = []
-
         this.$refs.infinite.reset()
-        // this.$nextTick(() => {
-        //   this.$nextTick(() => {
-        //     // 在过滤器 tab 改变时主动调用 infiniteScroll 的 reset 接口
-        //     this.$refs.infinite.reset()
-        //   })
-        // })
       },
       onInifiniteScroll($state) {
         debug && console.log('<Index> onInifiniteScroll')
@@ -265,18 +263,10 @@
             $state[method]()
           })
       },
-      onSelectAddress(/*address*/) {
-        // const location = {
-        //   latitude: address.latitude,
-
-        // }
-        // this.$store.commit('SAVE_LOCATION', {
-
-        // })
-/*        this.fetchEntryList(),
-        this.fetchRestaurantList(),
-        this.fetchBatchFilter(),
-        this.fetchBannerList(),*/
+      onChangeAddress() {
+        this.offset = 0
+        this.restaurantList = []
+        this.loadData()
       },
       onBackTop() {
         document.documentElement.scrollTop = 0
