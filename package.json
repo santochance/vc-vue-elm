@@ -13,6 +13,7 @@
     "es6-promise": "^4.2.4",
     "isomorphic-fetch": "^2.2.1",
     "lodash-es": "^4.17.10",
+    "ngeohash": "^0.6.0",
     "qs": "^6.5.2",
     "vue": "^2.5.17",
     "vue-infinite-loading": "^2.3.3",

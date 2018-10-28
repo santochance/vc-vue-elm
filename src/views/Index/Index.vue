@@ -60,7 +60,7 @@
   import IndexShopListFilter from './IndexShopListFilter'
   import IndexShopListItem from './IndexShopListItem'
   import InfiniteScroll from '@/components/common/InfiniteScroll'
-
+  const importGeohash = () => import(/* webpackChunkName: "Geohash" */'ngeohash')
 
   const debug = true
 
@@ -124,6 +124,8 @@
       this.loadData()
     },
     mounted() {
+      importGeohash()
+
       window.addEventListener('scroll', debounce(() => {
         this.backTopVisible = window.scrollY > 1800
       }), 100)

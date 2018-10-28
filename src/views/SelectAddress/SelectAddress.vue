@@ -3,6 +3,7 @@
   import { fetchAddressList, searchNearby } from '@/service/api'
   import Page from '@/components/Page'
   import SelectCity from '@/views/SelectCity'
+  let Geohash = import('ngeohash').then((module) => { Geohash = module })
 
   const debug = true
 
@@ -33,7 +34,9 @@
         results: [],
         currentAddress: {
           geohash: this.$store.state.geohash,
-          // locationName: this.$store.state.locationName,
+          // address: ''
+          // cityId: ''
+          // districtId:''
         },
         currentCity: {
           latitude: this.$store.state.latitude,
@@ -92,7 +95,10 @@
         return fetchAddressList()
           .then((addressList) => {
             this.addressList = addressList.filter(address => {
-              return address.poi_type === 0 && address.st_geohash !== '0'
+              if (address.poi_type === 0 && address.st_geohash !== '0'){
+                address.geohash = address.st_geohash
+                return true
+              }
             })
             this.loaded = true
             this.addressList.length || this.$refs.input.focus()
@@ -111,6 +117,7 @@
       },
       select(address) {
         this.query = ''
+
         if (!address) {
           address = {
             geohash: this.currentAddress.geohash,
@@ -119,6 +126,17 @@
             districtId: this.currentAddress.district_id
           }
         }
+        if (!address.latitude || !address.longitude) {
+          const coords = Geohash.decode(address.geohash)
+          address = {
+            ...address,
+            latitude: coords.latitude,
+            longitude: coords.longitude,
+          }
+
+          debug && console.log('parse geohash to:', coords)
+        }
+
         this.$emit('select', address)
       },
       reLocate() {
