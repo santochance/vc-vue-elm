@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-import ShopContainer from './views/ShopContainer.vue'
-
+import Index from '@/views/Index'
+// import ShopContainer from '@/views/ShopContainer'
 
 Vue.use(Router);
 
@@ -19,7 +19,8 @@ export default new Router({
     /* tabbar */
     {
       path: '/',
-      component: tabPageWrapper('index', () => import(/* webpackChunkName: "index" */ '@/views/Index')),
+      // component: tabPageWrapper('index', () => import(/* webpackChunkName: "index" */ '@/views/Index')),
+      component: tabPageWrapper('index', Index),
     },
     {
       path: '/select-address',
@@ -37,8 +38,8 @@ export default new Router({
     /* shop */
     {
       path: '/shop',
-      // component: () => import(/* webpackChunkName: "shop" */ '@/views/Shop/Shop'),
-      component: ShopContainer,
+      component: () => import(/* webpackChunkName: "Shop" */ '@/views/ShopContainer'),
+      // component: ShopContainer,
     },
 
     /* checkout */
