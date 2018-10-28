@@ -28,6 +28,7 @@ import banners from './index/banners'
 
 // import searchNearby from './index/search_nearby'
 import cityList from './index/cityList'
+import batchShop from './shop/batch_shop'
 
 const tagMap = {
   '全部': tagAll,
@@ -73,13 +74,7 @@ export default {
 
 /* shop */
 
-  // 'GET https://h5.ele.me/pizza/shopping/restaurants/:id/batch_shop': function () {
-  //   return {
-  //     rst: shopDetails,
-  //     menu,
-  //     recomend: [],
-  //   }
-  // },
+  // 'GET https://h5.ele.me/pizza/shopping/restaurants/:id/batch_shop': batchShop,
   // 'GET https://h5.ele.me/pizza/ugc/restaurants/:id/batch_comments': overview,
   // 'GET https://h5.ele.me/restapi/ugc/v3/restaurants/:id/ratings': comments,
 

@@ -1,6 +1,16 @@
 import * as qs from 'qs'
 import request from '@/util/request'
 
+/* 注意 Array 风格的选择 */
+/*
+  qs.stringify({ a: ['b', 'c'] }, { arrayFormat: 'indices' })
+  // 'a[0]=b&a[1]=c'
+  qs.stringify({ a: ['b', 'c'] }, { arrayFormat: 'brackets' })
+  // 'a[]=b&a[]=c'
+  qs.stringify({ a: ['b', 'c'] }, { arrayFormat: 'repeat' })
+  // 'a=b&a=c'
+ */
+
 const { stringify } = qs
 
 export const fetchHello = (/* payload */) =>
@@ -99,7 +109,7 @@ export const fetchBatchShop = ({ restaurantId, user_id,  latitude, longitude }) 
   request(`https://h5.ele.me/pizza/shopping/restaurants/${restaurantId}/batch_shop` + `?${stringify({
     user_id,
     code: 0.6971780616926742,
-    extras: ["activities","albums","license","identification","qualification"],
+    extras: JSON.stringify(["activities","albums","license","identification","qualification"]),
     terminal: 'h5',
     latitude,
     longitude,
