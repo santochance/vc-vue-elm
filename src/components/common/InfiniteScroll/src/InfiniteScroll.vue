@@ -99,10 +99,12 @@
         this.vpBottom = vpBottom
         this.touched = shouldHandle
 
+        debug && console.log('<InfiniteScroll> shouldHandle')
+
         if (shouldHandle && this.handler) {
           this.$emit('infinite')
 
-          debug && console.log('debug - InfiniteScroll load')
+          debug && console.log('<InfiniteScroll> trigger infinite')
 
           this.loaded = false
           this.handler({

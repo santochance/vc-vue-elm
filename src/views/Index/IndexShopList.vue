@@ -56,11 +56,12 @@
         this.$emit('infinite', payload)
       },
       reset() {
+        this.infiniteComplete = false
         this.$nextTick(() => {
           this.$nextTick(() => {
-            this.infiniteComplete = false
             // 在过滤器 tab 改变时主动调用 infiniteScroll 的 reset 接口
             this.$refs.infiniteScroll.reset()
+            // reset 后马上触发 infinite 事件
           })
         })
       },
