@@ -53,8 +53,9 @@
       onToggleActivityList() {
         this.activityListCollapsed = !this.activityListCollapsed
       },
-      onDislike() {
-
+      onDislike(item) {
+        this.$emit('dislike', item)
+        this.dislikeVisible = false
       },
     },
   }
@@ -67,10 +68,10 @@
   >
     <div class="b-item__mask"
       v-if="dislikeVisible"
-      @click="dislikeVisible = false"
+      @click.stop="dislikeVisible = false"
     >
       <div class="b-item__dislike-btn"
-        @click="onDislike"
+        @click.stop="onDislike(item)"
       >不喜欢</div>
     </div>
     <div class="b-item__shop-info">
@@ -95,7 +96,7 @@
             <tag class="b-item__ad-icon"
               v-if="item.recommend.is_ad">{{ item.recommend.reason }}</tag>
             <span class="b-item__omit-btn"
-              @click="dislikeVisible = true"
+              @click.stop="dislikeVisible = true"
             >&#183;&#183;&#183;</span>
           </div>
         </div>
@@ -145,7 +146,7 @@
       >
         <div class="b-item__activity-list">
           <div class="b-item__activity-item"
-            v-for="(activity, idx) in item.activities" :key="activity.id"
+            v-for="(activity, idx) in item.activities" :key="activity.id + idx"
             v-show="idx < 2 || !activityListCollapsed"
           >
             <tag class="b-item__activity-item-icon"
@@ -158,7 +159,7 @@
         <div class="b-item__activity-btn"
           v-if="item.activities.length > 2"
           :class="{ 'b-item__activity-btn_expanded': activityListCollapsed}"
-          @click="onToggleActivityList"
+          @click.stop="onToggleActivityList"
         >
           <span>{{ item.activities.length }}个活动</span>
           <img src="./arrow.svg" alt="">
