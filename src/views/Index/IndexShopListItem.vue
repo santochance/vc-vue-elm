@@ -214,7 +214,7 @@
     .b-item__logo-wrap {
       width: 130px;
       height: 130px;
-      background-image: url(./picsum.jpeg) no-repeat;
+      background: url(./picsum.jpeg) no-repeat;
       img {
         display: block;
         width: 100%;
