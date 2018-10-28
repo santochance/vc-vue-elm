@@ -53,14 +53,14 @@
 
   import IndexHeader from './IndexHeader'
   import IndexSearch from './IndexSearch'
-  import IndexSkeleton from './IndexSkeleton'
   import IndexShopList from './IndexShopList'
   import IndexMainEntries from './IndexMainEntries'
-  import SelectAddress from '../SelectAddress'
   import IndexShopListFilter from './IndexShopListFilter'
   import IndexShopListItem from './IndexShopListItem'
   import InfiniteScroll from '@/components/common/InfiniteScroll'
-  const importGeohash = () => import(/* webpackChunkName: "Geohash" */'ngeohash')
+  const importGeohash = () => import(/* webpackChunkName: "Geohash" */ 'ngeohash')
+  // import SelectAddress from '../SelectAddress'
+  const SelectAddress = () => import(/* webpackChunkName: "SelectAddress" */ '../SelectAddress')
 
   const debug = true
 
@@ -69,13 +69,12 @@
     components: {
       IndexHeader,
       IndexSearch,
-      IndexSkeleton,
       IndexShopList,
       IndexMainEntries,
-      SelectAddress,
       IndexShopListFilter,
       InfiniteScroll,
       IndexShopListItem,
+      SelectAddress,
     },
     props: {
 
@@ -121,7 +120,21 @@
     created() {
       debug && (window[this.$options.name] = this)
 
+      this.loaded = false
       this.loadData()
+        .then(() => {
+          return new Promise((resolve) => {
+            setTimeout(resolve, 3000)
+          })
+        })
+        .then(() => {
+          this.loaded = true
+          this.$emit('load')
+        })
+        .catch(() => {
+          this.loaded = true
+          this.$emit('load')
+        })
     },
     activated() {
       this.loadData()
@@ -135,7 +148,7 @@
     },
     methods: {
       loadData() {
-        this.loaded = false
+        // this.loaded = false
 
         // 如果 items 为空，会显示无商家反馈视图
         return Promise.resolve()
@@ -152,20 +165,11 @@
           })
           .then(() => {
             // 查询接口
-            return Promise.all([
-              // 查询导航入口
-              this.fetchEntryList(),
-              // this.fetchRestaurantList(),
-              this.$refs.infinite.reset(),
-              this.fetchBatchFilter(),
-              this.fetchBannerList(),
-            ])
-          })
-          .then(() => {
-            this.loaded = true
-          })
-          .catch(() => {
-            this.loaded = true
+            this.fetchEntryList()
+            // this.fetchRestaurantList()
+            this.$refs.infinite.reset()
+            this.fetchBatchFilter()
+            this.fetchBannerList()
           })
       },
       locate() {
