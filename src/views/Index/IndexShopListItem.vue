@@ -1,5 +1,5 @@
 <script>
-  import { Tag } from '@/components/common'
+  import Tag from '@/components/common/Tag'
   import RatingStars from '@/components/RatingStars'
 
   export default {

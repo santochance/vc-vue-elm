@@ -1,9 +1,6 @@
 <script>
-  import { toggleValue, toggleArray } from '@/util/toggleChange'
 
   const debug = true
-  debug && (window.toggleValue = toggleValue)
-  debug && (window.toggleArray = toggleArray)
 
   export default {
     name: 'IndexShopListFilter',
@@ -186,7 +183,7 @@
         const keysToReset = this.uniqueSorterKeys.filter(key => key !== sorter.key)
 
         keysToReset.forEach(key =>filterPayload[key] = null)
-        filterPayload[sorter.key] = toggleValue(filterPayload[sorter.key], sorter.value)
+        filterPayload[sorter.key] = this.toggleValue(filterPayload[sorter.key], sorter.value)
 
         // 确保能够触发视图更新
         this.filterPayload = { ...filterPayload }
@@ -220,8 +217,37 @@
         this.sortDropdownVisible = false
       },
       // 值相同时返回指定空值
-      toggleValue,
-      toggleArray,
+      toggleValue(source, input, options) {
+        const toggle = options && options.toggle || true
+
+        if (source === input) {
+          toggle && (source = null)
+        } else {
+          source = input
+        }
+
+        return source
+      },
+      toggleArray(source, input, options) {
+        if (!Array.isArray(source)) {
+          throw new TypeError('first argument must be an array!')
+        }
+
+        const toggle = options && options.toggle || true
+        let index = -1
+        source.some((v, i) =>
+          v === input ? (index = i, true) : false
+        )
+
+        source = [...source]
+        if (index !== -1) {
+          toggle && source.splice(index, 1)
+        } else {
+          source.push(input)
+        }
+
+        return source
+      },
       checkSorterActive(sorter, selectedSorter) {
         if (!selectedSorter) return false
 

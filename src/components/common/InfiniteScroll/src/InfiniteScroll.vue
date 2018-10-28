@@ -35,7 +35,7 @@
 </template>
 
 <script>
-  import { Toast } from '@/components/common'
+  // import { Toast } from '@/components/common'
 
   const debug = false
 
@@ -64,11 +64,11 @@
       window.addEventListener('scroll', this.scrollHandler)
       window.addEventListener('resize', this.scrollHandler)
 
-      debug && window.addEventListener('resize', () => {
-        Toast.open({
-          content: `resize to height ${window.innerHeight}`,
-        })
-      })
+      // debug && window.addEventListener('resize', () => {
+      //   Toast.open({
+      //     content: `resize to height ${window.innerHeight}`,
+      //   })
+      // })
     },
     activated() {
 
