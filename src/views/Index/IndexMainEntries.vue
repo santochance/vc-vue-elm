@@ -8,6 +8,7 @@
     props: {
       entries: {
         type: Array,
+        default: () => [],
       }
     },
     data() {
@@ -27,7 +28,7 @@
 
 <template>
   <div class="b-entries b-entries__box">
-    <div v-if="entries"
+    <div
       class="b-entries__main-entries">
       <router-link v-for="mainEntry in entries"
         :key="mainEntry.id"

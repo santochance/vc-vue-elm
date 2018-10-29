@@ -3,8 +3,8 @@
     ref="infinite"
   >
     <div class="infinite-scroll__trigger">
-      <div class="infinite-scroll__loading" v-show="!complete">
-        <span class="infinite-scroll__loading-default" v-show="!loaded">
+      <div class="infinite-scroll__loading" v-show="triggerBarVisible">
+        <div class="infinite-scroll__loading-default" v-show="!loaded">
           <div class="sk-fading-circle">
             <div class="sk-circle1 sk-circle"></div>
             <div class="sk-circle2 sk-circle"></div>
@@ -19,7 +19,7 @@
             <div class="sk-circle11 sk-circle"></div>
             <div class="sk-circle12 sk-circle"></div>
           </div>
-        </span>
+        </div>
       </div>
       <div class="infinite-scroll__completed" v-if="complete">没有更多了哦~</div>
     </div>
@@ -53,11 +53,18 @@
       return {
         loaded: true,
         complete: false,
+        empty: false,
 
         // debug
         elBottom: null,
         vpBottom: null,
         touched: false,
+      }
+    },
+    computed: {
+      triggerBarVisible() {
+        // 这样是为了通过惯性滚动到底部时能看见 loading 条
+        return !this.complete || !this.empty
       }
     },
     created() {
@@ -86,6 +93,7 @@
         // console.log('debug - InfiniteScroll scrolling...')
         if (!this.loaded) return
         if (this.complete) return
+        if (this.empty) return
 
         // console.log('debug - InfiniteScroll check')
         const el = this.$refs.infinite;
@@ -93,7 +101,7 @@
         const elBottom = Math.round(elRect.bottom);
         const vpBottom = window.innerHeight;
 
-        const shouldHandle = elBottom - vpBottom <= 0;
+        const shouldHandle = elBottom - vpBottom <= 50;
 
         this.elBottom = elBottom
         this.vpBottom = vpBottom
@@ -115,7 +123,14 @@
             complete: () => {
               this.loaded = true
               this.complete = true
+              this.empty = false
               this.$emit('complete')
+            },
+            empty: () => {
+              this.loaded = true
+              this.complete = false
+              this.empty = true
+              this.$emit('empty')
             },
             vpBottom,
             elBottom,
@@ -125,6 +140,7 @@
       reset() {
         this.loaded = true
         this.complete = false
+        this.empty = false
         this.scrollHandler()
       }
     },
@@ -134,6 +150,7 @@
 <style lang="scss" scoped>
   .infinite-scroll__loading,
   .infinite-scroll__completed {
+    box-sizing: content-box;
     position: relative;
     text-align: center;
     font-size: 28px;
@@ -142,6 +159,7 @@
     line-height: 2;
     height: 2em;
   }
+
   .infinite-scroll__loading-default {
     // position: absolute;
     // left: 0;

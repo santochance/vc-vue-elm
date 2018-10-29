@@ -1,12 +1,11 @@
 <template>
   <div class="b-index-shoplist">
-    <section v-show="infiniteComplete && !items.length"
+    <section v-show="noDataTipVisible"
       class="b-index-shoplist__nodata">
       <img src="./index-no-result.gif" alt="">
       <h3>附近没有外卖商家</h3>
       <p>饿了么正在以光速来到你身边</p>
     </section>
-
     <IndexShopListView v-show="items.length">
       <IndexShopListItem
         v-for="item in items" :key="item.id"
@@ -18,7 +17,6 @@
       :handler="infiniteScrollHandler"
       ref="infiniteScroll"
       class="b-index-shoplist__infinite"
-      @complete="complete"
     ></InfiniteScroll>
   </div>
 </template>
@@ -40,34 +38,52 @@
     props: {
       items: {
         type: Array,
+      },
+      state: {
+        type: [String, Number],
       }
     },
     data() {
       return {
-        infiniteComplete: false
+
       }
     },
     created() {
       debug && (window[this.$options.name] = this)
 
     },
+    computed: {
+      noDataTipVisible() {
+        return this.state === 'empty'
+      },
+    },
     methods: {
       infiniteScrollHandler(payload) {
         this.$emit('infinite', payload)
       },
       reset() {
-        this.infiniteComplete = false
+
+
         this.$nextTick(() => {
+          this.resetScroll()
           this.$nextTick(() => {
+            // 重置滚动值
             // 在过滤器 tab 改变时主动调用 infiniteScroll 的 reset 接口
             this.$refs.infiniteScroll.reset()
-            // reset 后马上触发 infinite 事件
           })
         })
       },
-      complete() {
-        this.infiniteComplete = true
-      },
+      resetScroll() {
+        const elRect = this.$el.getBoundingClientRect()
+        const elRectTop = Math.round(elRect.top)
+        const offset = parseFloat(this.$toRpx(100 + 80))
+
+        if (elRectTop < offset) {
+          debug && console.log('<IndexShopList> should update scrollTop')
+          const targetScrollTop = window.scrollY + elRectTop - offset
+          document.documentElement.scrollTop = targetScrollTop
+        }
+      }
     },
   }
 </script>
@@ -75,7 +91,7 @@
 <style lang="scss" scoped>
   .b-index-shoplist {
     box-sizing: border-box;
-    min-height: 1154px;
+    min-height: 1200px;
     display: flex;
     flex-direction: column;
     padding-bottom: 100px;
@@ -101,6 +117,6 @@
       }
     }
     .b-index-shoplist__infinite {
-      padding: 20px 0;
+      padding: 16px 0;
     }
 </style>

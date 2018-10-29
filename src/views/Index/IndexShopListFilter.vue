@@ -279,7 +279,7 @@
         const offset = parseFloat(this.$toRpx(100))
 
         if (elRectTop > offset) {
-          debug && console.log('should update scrollTop')
+          debug && console.log('<IndexShopListFilter> should update scrollTop')
           const targetScrollTop = window.scrollY + elRectTop - offset
           document.documentElement.scrollTop = targetScrollTop
         }

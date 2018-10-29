@@ -21,16 +21,20 @@
     <div class="p-index__member"></div>
     <div class="p-index__banner"></div>
 
-    <div class="p-index__shoplist-title">推荐商家</div>
-    <IndexShopListFilter
-      :filterOptions="filterOptions"
-      @submit="onSubmitFilters"
-    ></IndexShopListFilter>
-    <IndexShopList
-      ref="infinite"
-      :items="restaurantList"
-      @infinite="onInifiniteScroll"
-    ></IndexShopList>
+    <template v-if="listLoaded">
+      <div class="p-index__shoplist-title">推荐商家</div>
+      <IndexShopListFilter
+        ref="filter"
+        :filterOptions="filterOptions"
+        @submit="onSubmitFilters"
+      ></IndexShopListFilter>
+      <IndexShopList
+        ref="infinite"
+        :items="restaurantList"
+        :state="restaurantListState"
+        @infinite="onInifiniteScroll"
+      ></IndexShopList>
+    </template>
 
     <transition name="slide-left">
       <SelectAddress
@@ -110,7 +114,7 @@
         entriesLoaded: false,
         listLoaded: false,
 
-        restaurantListState: 0, // 0: init, 1: loading, 2: loaded, 3: complete, 4: empty
+        restaurantListState: 'loaded', // 0: init, 1: loading, 2: loaded, 3: complete, 4: empty
       }
     },
     computed: {
@@ -239,6 +243,8 @@
           })
       },
       fetchRestaurantList() {
+        this.restaurantListState = 'loading'
+
         // 分页式加载数据
         return fetchRestaurantList({
           latitude: this.latitude,
@@ -260,7 +266,18 @@
             this.rankId = rank_id
             this.offset = this.restaurantList.length
             // 根据响应数据数量判断是否全部加载完成
-            return items.length > 1 ? 'loaded' : 'complete'
+
+            if (!this.offset) {
+              this.restaurantListState = 'empty'
+            } else if (!items.length) {
+              this.restaurantListState = 'complete'
+            } else {
+              this.restaurantListState = 'loaded'
+            }
+            return this.restaurantListState
+          })
+          .catch(() => {
+            this.offset || (this.restaurantListState = 'empty')
           })
       },
 
@@ -279,19 +296,24 @@
 
         this.offset = 0
         this.restaurantList = []
+        this.restaurantListState = 'loaded'
         this.$refs.infinite.reset()
       },
       onInifiniteScroll($state) {
-        debug && console.log('<Index> onInifiniteScroll')
+        debug && console.log('<Index> handle infinite event')
 
         this.fetchRestaurantList()
           .then(method => {
+            // 等到新数据渲染完成设置 infiniteScroll 状态
+            // 否则新数据渲染完可能会触发 scroll 导致 infiniteScroll 自动加载第二次
+            console.log('<Index> notice <InfiniteScroll> result')
             $state[method]()
           })
       },
       onChangeAddress() {
         this.offset = 0
         this.restaurantList = []
+        this.restaurantListState = 'loaded'
         this.loadData()
       },
       onBackTop() {
