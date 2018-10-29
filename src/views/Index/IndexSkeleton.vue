@@ -6,13 +6,15 @@
 
     },
     props: {
-
+      headerLoaded: Boolean,
+      entriesLoaded: Boolean,
+      listLoaded: Boolean,
     },
     data() {
       return {
-        headerLoaded: false,
-        entriesLoaded: false,
-        listLoaded: false,
+        // headerLoaded: false,
+        // entriesLoaded: false,
+        // listLoaded: false,
       }
     },
     computed: {

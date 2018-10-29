@@ -1,5 +1,11 @@
 <template>
   <div class="p-index">
+    <IndexSkeleton class="p-index__shell"
+      :headerLoaded="headerLoaded"
+      :entriesLoaded="entriesLoaded"
+      :listLoaded="listLoaded"
+    ></IndexSkeleton>
+
     <IndexHeader
       :location-name="location.locationName"
       :locating="locating"
@@ -51,6 +57,7 @@
   import { fetchRestaurantList, fetchEntryList, fetchBatchFilter, fetchBannerList } from '@/service/api'
   import { debounce } from '@/util/utils'
 
+  import IndexSkeleton from './IndexSkeleton'
   import IndexHeader from './IndexHeader'
   import IndexSearch from './IndexSearch'
   import IndexShopList from './IndexShopList'
@@ -67,6 +74,7 @@
   export default {
     name: 'Index',
     components: {
+      IndexSkeleton,
       IndexHeader,
       IndexSearch,
       IndexShopList,
@@ -97,6 +105,12 @@
 
         selectAddressVisible: false,
         backTopVisible: false,
+
+        headerLoaded: false,
+        entriesLoaded: false,
+        listLoaded: false,
+
+        restaurantListState: 0, // 0: init, 1: loading, 2: loaded, 3: complete, 4: empty
       }
     },
     computed: {
@@ -164,11 +178,19 @@
             }
           })
           .then(() => {
+            this.headerLoaded = true
+          })
+          .then(() => {
             // 查询接口
             this.fetchEntryList()
-            // this.fetchRestaurantList()
-            this.$refs.infinite.reset()
+              .then(() => {
+                this.entriesLoaded = true
+              })
             this.fetchBatchFilter()
+              .then(() => {
+                this.listLoaded = true
+              })
+            this.fetchRestaurantList()
             this.fetchBannerList()
           })
       },
@@ -287,6 +309,14 @@
     flex-direction: column;
     background-color: #fff;
   }
+    .p-index__shell {
+      position: absolute;
+      z-index: 1000;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+    }
     .p-index__shoplist-title {
       display: flex;
       align-items: center;
