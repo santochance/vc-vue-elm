@@ -133,7 +133,7 @@
     <div class="b-item__tags-and-activities">
       <div class="b-item__tag-line">
         <Tag class="b-item__support-tag"
-          v-for="tag in supportTags" :key="tag.text"
+          v-for="(tag, idx) in supportTags" :key="tag.text + idx + item.id"
         >{{ tag.text }}</Tag>
         <span class="b-item__recommend-tag"
           v-if="recommendTag">
@@ -146,7 +146,7 @@
       >
         <div class="b-item__activity-list">
           <div class="b-item__activity-item"
-            v-for="(activity, idx) in item.activities" :key="activity.id + idx"
+            v-for="(activity, idx) in item.activities" :key="activity.id + idx + item.id"
             v-show="idx < 2 || !activityListCollapsed"
           >
             <tag class="b-item__activity-item-icon"
