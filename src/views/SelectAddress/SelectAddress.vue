@@ -214,6 +214,7 @@
   <page title="选择收货地址"
     class="p-select-address p-select-address__box"
     v-show="visible"
+    :back-default="false"
     @back="onBack"
   >
     <div class="p-select-address__search-bar">

@@ -30,10 +30,14 @@
         type: Boolean,
         default: true,
       },
+      backDefault: {
+        type: Boolean,
+        default: true,
+      },
       loading: {
         type: Boolean,
         default: false,
-      }
+      },
     },
     data() {
       return {
@@ -43,6 +47,9 @@
     methods: {
       onBack() {
         this.$emit('back')
+        if (this.backDefault) {
+          this.$router.back()
+        }
       }
     },
   }
