@@ -3,7 +3,7 @@ import fetch from 'isomorphic-fetch'
 import mockRequest from '../service/mock-es/mockRequest'
 
 const debug = true
-const proxyServer = 'http://localhost:5000'
+const proxyServer = 'http://localhost:3000'
 
 const request = function (url, options) {
   // fetch 默认不发送 cookie
