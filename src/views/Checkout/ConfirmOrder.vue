@@ -68,7 +68,7 @@
                <div class="food-item__attr"><span v-for="(attr, idx) in food.attrs" :key="idx">{{ attr.value }}</span></div>
              </div>
              <div class="food-item__quantity">× {{ food.quantity }}</div>
-             <div class="food-item__price">{{ food.quantity * food.price }}</div>
+             <div class="food-item__price">{{ food.quantity * food.price | toPrice }}</div>
            </li>
          </ul>
          <div class="checkout-item cart-group__item">
@@ -76,14 +76,14 @@
              <span class="cart-group__tag cart-group__packing-fee">{{ checkout.cart.extra.packing_fee.icon.name }}</span>
              <span class="cart-group__item-title ellipsis">{{ checkout.cart.extra.packing_fee.name }}</span>
            </div>
-           <div class="cart-group__price">{{ checkout.cart.extra.packing_fee.price }}</div>
+           <div class="cart-group__price">{{ checkout.cart.extra.packing_fee.price | toPrice }}</div>
          </div>
          <div class="checkout-item cart-group__item">
            <div>
              <span class="cart-group__tag cart-group__agent-fee">{{ checkout.cart.extra.agent_fee.icon.name }}</span>
              <span class="cart-group__item-title ellipsis">{{ checkout.cart.extra.agent_fee.name }}</span>
            </div>
-           <div class="cart-group__price">{{ checkout.cart.extra.agent_fee.price }}</div>
+           <div class="cart-group__price">{{ checkout.cart.extra.agent_fee.price | toPrice}}</div>
          </div>
          <div class="checkout-item cart-group__discount">新用户立减与其他优惠不能同享</div>
          <div class="checkout-item cart-group__item">
@@ -100,7 +100,7 @@
            </a>
            <div class="cart-group__total-price-wrap">
              <span>小计 &#xA5;</span>
-             <span class="cart-group__total-price">{{ /* checkout.cart.original_total */ mockTotalPrice }}</span>
+             <span class="cart-group__total-price">{{ /* checkout.cart.original_total */ mockTotalPrice | toPrice }}</span>
            </div>
          </div>
        </section>
@@ -142,7 +142,7 @@
      </div>
 
      <footer class="action-bar">
-       <span class="action-bar__total-price">&#xA5;{{ /* checkout.cart.original_total */ mockTotalPrice }}</span>
+       <span class="action-bar__total-price">&#xA5;{{ /* checkout.cart.original_total */ mockTotalPrice | toPrice }}</span>
        <!-- <span class="action-bar__verify-feedback">{{ verifyFailedMsg }}</span> -->
        <a href="javascript:" class="action-bar__submit-btn" @click.stop.prevent="submit">去支付</a>
      </footer>
@@ -211,6 +211,11 @@
     },
     props: {
 
+    },
+    filters: {
+      toPrice(value) {
+        return (value || 0).toFixed(1)
+      },
     },
     data() {
       return {
