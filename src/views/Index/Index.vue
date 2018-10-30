@@ -1,40 +1,46 @@
 <template>
   <div class="p-index">
-    <IndexSkeleton class="p-index__shell"
-      :headerLoaded="headerLoaded"
-      :entriesLoaded="entriesLoaded"
-      :listLoaded="listLoaded"
-    ></IndexSkeleton>
+    <div v-show="!selectAddressVisible">
+      <IndexSkeleton class="p-index__shell"
+        :headerLoaded="headerLoaded"
+        :entriesLoaded="entriesLoaded"
+        :listLoaded="listLoaded"
+      ></IndexSkeleton>
 
-    <IndexHeader
-      :location-name="location.locationName"
-      :locating="locating"
-      :detecting="!loaded"
-      @click:address="onClickHeaderAddress"
-    ></IndexHeader>
-    <IndexSearch></IndexSearch>
+      <template>
+        <IndexHeader
+          :location-name="location.locationName"
+          :locating="locating"
+          :detecting="!loaded"
+          @click:address="onClickHeaderAddress"
+        ></IndexHeader>
+        <IndexSearch></IndexSearch>
 
-    <IndexMainEntries
-      v-if="entryGroupMap.main"
-      :entries="entryGroupMap.main.entries"
-    ></IndexMainEntries>
-    <div class="p-index__member"></div>
-    <div class="p-index__banner"></div>
+        <IndexMainEntries
+          v-if="entryGroupMap.main"
+          :entries="entryGroupMap.main.entries"
+        ></IndexMainEntries>
+        <div class="p-index__member"></div>
+        <div class="p-index__banner"></div>
 
-    <template v-if="listLoaded">
-      <div class="p-index__shoplist-title">推荐商家</div>
-      <IndexShopListFilter
-        ref="filter"
-        :filterOptions="filterOptions"
-        @submit="onSubmitFilters"
-      ></IndexShopListFilter>
-      <IndexShopList
-        ref="infinite"
-        :items="restaurantList"
-        :state="restaurantListState"
-        @infinite="onInifiniteScroll"
-      ></IndexShopList>
-    </template>
+        <template v-if="listLoaded">
+          <div class="p-index__shoplist-title">推荐商家</div>
+          <IndexShopListFilter
+            ref="filter"
+            :filterOptions="filterOptions"
+            @submit="onSubmitFilters"
+          ></IndexShopListFilter>
+          <IndexShopList
+            ref="infinite"
+            :items="restaurantList"
+            :state="restaurantListState"
+            @infinite="onInifiniteScroll"
+          ></IndexShopList>
+        </template>
+      </template>
+
+    </div>
+
 
     <transition name="slide-left">
       <SelectAddress
