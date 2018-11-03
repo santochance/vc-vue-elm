@@ -28,7 +28,7 @@ import banners from './index/banners'
 
 // import searchNearby from './index/search_nearby'
 import cityList from './index/cityList'
-import batchShop from './shop/batch_shop'
+// import batchShop from './shop/batch_shop'
 
 const tagMap = {
   '全部': tagAll,

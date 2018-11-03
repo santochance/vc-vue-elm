@@ -12,8 +12,8 @@ export default function mockRequest(url, options) {
     const { method = 'GET' } = options || {}
     const [ pathStr, queryStr ] = url.split('?')
     const reqStr = `${method} ${pathStr}`
-    
-    debug && console.group('% mock Request %: %s %s', method, url)
+
+    debug && console.log('% mock Request %: %s %s', method, url)
 
     let req = { ...options, url, method }
     let foundPath
@@ -42,7 +42,7 @@ export default function mockRequest(url, options) {
       debug && console.warn('reqeust fail')
       reject()
     }
-    
-    debug && console.groupEnd()
+
+    // debug && console.groupEnd()
   })
 }
