@@ -91,6 +91,8 @@
               restaurantId: this.restaurantId,
             })
           })
+          // reverseGeoCoding rejected
+          .catch(() => {})
           .then(({ rst, menu }) => {
             this.shopDetails = rst
             this.menu = menu
@@ -98,6 +100,9 @@
           .then(() => {
             this.loading = false
             this.$emit('loaded')
+          })
+          .catch((error) => {
+            this.$emit('error', error)
           })
       },
       ...mapActions([
