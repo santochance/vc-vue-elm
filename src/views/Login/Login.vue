@@ -9,7 +9,7 @@
           <a href="javascript;"
             class="b-login__mobile-login"
           >
-            <span>短信登录</span>  
+            <span>短信登录</span>
           </a>
         </div>
       </header>
@@ -20,11 +20,13 @@
               v-model="phoneItem.value"
               type="tel"
               maxlength="11"
-              placeholder="手机号" 
+              placeholder="手机号"
+              name="phone"
+              v-validate="{ required: true, regex: /^1\d{10}$/ }"
             />
             <button class="b-login__get-code"
               :disabled="countButtonDisabled"
-              @click="onCountClick"
+              @click.stop.prevent="onCountClick"
             >{{ this.countTimeout ? `已发送(${countValue}s)`
               : this.countButtonDirty? '重新获取' : '获取验证码' }}</button>
           </div>
@@ -32,8 +34,10 @@
             <input class="b-login__form-control"
               v-model="codeItem.value"
               type="tel"
-              maxlength="8"
-              placeholder="验证码" 
+              maxlength="6"
+              placeholder="验证码"
+              name="code"
+              v-validate="{ required: true, regex: /^\w{6}$/ }"
             />
           </div>
           <div class="b-login__form-desc">
@@ -44,7 +48,7 @@
           </div>
           <div class="b-login__form-submit">
             <button class="b-login__submit-btn"
-              @click="onLogin"
+              @click.stop.prevent="onLogin"
             >登录</button>
           </div>
         </form>
@@ -66,21 +70,21 @@
               v-model="captchaValue"
             >
             <img :src="captchaImage" alt=""
-              @click="onRequestCaptcha"
+              @click.stop.prevent="onRequestCaptcha"
             >
           </div>
           <p class="captcha-panel__error">
-            <span  v-if="captchaError">
+            <span v-if="captchaError">
               <img src="./error.png" alt="">验证码错误，请重新填写
             </span>
           </p>
         </div>
         <div class="captcha-panel__btns">
           <button class="captcha-panel__btn captcha-panel__btn-cancel"
-            @click="captchaShow = false"
+            @click.stop.prevent="captchaShow = false"
           >取消</button>
           <button class="captcha-panel__btn captcha-panel__btn-ok"
-            @click="onSubmitCaptcha"
+            @click.stop.prevent="onSubmitCaptcha"
           >确定</button>
         </div>
       </div>
@@ -92,17 +96,17 @@
   import { mapActions } from 'vuex'
   import { Modal, Toast } from '@/components/common'
   import { fetchMobileCode, fetchCaptcha } from '@/service/api'
-  
-  const debug = false
+
+  const debug = true
   debug && console.warn('[Debug] Login debug is activating')
 
   export default {
     name: 'Login',
     components: {
-      Modal, 
+      Modal,
     },
     props: {
-      
+
     },
     data() {
       return {
@@ -125,6 +129,17 @@
         captchaImage: '',
 
         validateToken: '',
+
+        errorMsgs: {
+          phone: {
+            required: '请输入正确的手机号',
+            regex: '请输入正确的手机号',
+          },
+          code: {
+            required: '请输入6位短信验证码',
+            regex: '请输入6位短信验证码',
+          },
+        }
       }
     },
     watch: {
@@ -137,11 +152,11 @@
       },
     },
     created() {
-      debug && (window['vm_login'] = this)
+      debug && (window[this.$options.name] = this)
     },
     methods: {
       /* call APIs */
-      fetchMobileCode() {      
+      fetchMobileCode() {
         const payload = {
           mobile: this.phoneItem.value,
           'captcha_hash': this.captchaHash,
@@ -184,17 +199,33 @@
         this.fetchMobileCode()
       },
       onLogin() {
-        const payload = {
-          mobile: this.phoneItem.value,
-          validate_code: this.codeItem.value,
-          validate_token: this.validateToken,
-        }
-        return this.loginByMobile(payload)
-          .then(this.loginByMobileFulfilled)
+        return this.$validator.validate()
+          .then((valid) => {
+            if (valid) {
+              const payload = {
+                mobile: this.phoneItem.value,
+                validate_code: this.codeItem.value,
+                validate_token: this.validateToken,
+              }
+              return this.loginByMobile(payload)
+                .then(this.loginByMobileFulfilled)
+                .catch(this.loginByMobileRejected)
+            } else {
+              const error = this.errors.items[0]
+              if (error) {
+                const msg = this.errorMsgs[error.field] && this.errorMsgs[error.field][error.rule]
+                  return Toast.open({
+                    content: msg,
+                    mask: false,
+                  })
+              }
+            }
+          })
       },
 
       fetchMobileCodeFulfilled({ validate_token }) {
         this.validateToken = validate_token
+        this.captchaValue = ''
         this.captchaError = false
         this.captchaShow = false
       },
@@ -211,17 +242,19 @@
 
         if (name === "HERMES_CLIENT_ERROR") {
           this.captchaShow = false
-          // 显示反馈信息 
+          // 显示反馈信息
           return Toast.open({
             content: message,
+            mask: false,
           })
         }
 
         if (name === "INVALID_MOBILE") {
           this.captchaShow = false
-          // 显示反馈信息 
+          // 显示反馈信息
           return Toast.open({
-            content: message
+            content: message,
+            mask: false,
           })
         }
       },
@@ -234,11 +267,21 @@
       loginByMobileFulfilled() {
         this.redirect()
       },
+      loginByMobileRejected({ name, message }) {
+        if (name === 'INVALID_VALIDATE_TOKEN') {
+          this.code = ''
+          return Toast.open({
+            content: message + '，请尝试重新获取验证码',
+            mask: false,
+            duration: 4,
+          })
+        }
+      },
 
       redirect() {
         this.$router.replace(this.$route.query.redirect || '/')
       },
-      
+
       setCount() {
         this.countButtonDirty = true
         this.countValue = 30
@@ -271,7 +314,7 @@
       min-height: 100%;
       background-color: #fff;
     }
-    .b-login__wrap {      
+    .b-login__wrap {
       display: flex;
       flex-direction: column;
       align-items: center;
