@@ -15,6 +15,7 @@
 
     <InfiniteScroll
       :handler="infiniteScrollHandler"
+      :state="state"
       ref="infiniteScroll"
       class="b-index-shoplist__infinite"
     ></InfiniteScroll>
@@ -61,15 +62,14 @@
       infiniteScrollHandler(payload) {
         this.$emit('infinite', payload)
       },
-      reset() {
-
+      reset(immediate) {
 
         this.$nextTick(() => {
           this.resetScroll()
           this.$nextTick(() => {
             // 重置滚动值
             // 在过滤器 tab 改变时主动调用 infiniteScroll 的 reset 接口
-            this.$refs.infiniteScroll.reset()
+            this.$refs.infiniteScroll.reset(immediate)
           })
         })
       },

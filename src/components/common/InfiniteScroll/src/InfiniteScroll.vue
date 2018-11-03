@@ -48,6 +48,9 @@
       handler: {
         type: Function,
       },
+      state: {
+        type: String,
+      },
     },
     data() {
       return {
@@ -67,6 +70,13 @@
         return !this.complete || !this.empty
       }
     },
+    watch: {
+      state(value, oldValue) {
+        if (value !== oldValue) {
+          this.setState(value)
+        }
+      },
+    },
     created() {
       window.addEventListener('scroll', this.scrollHandler)
       window.addEventListener('resize', this.scrollHandler)
@@ -76,6 +86,7 @@
       //     content: `resize to height ${window.innerHeight}`,
       //   })
       // })
+      this.setState(this.state)
     },
     activated() {
 
@@ -114,35 +125,43 @@
 
           debug && console.log('<InfiniteScroll> trigger infinite')
 
-          this.loaded = false
-          this.handler({
-            loaded: () => {
-              this.loaded = true
-              this.$emit('loaded')
-            },
-            complete: () => {
-              this.loaded = true
-              this.complete = true
-              this.empty = false
-              this.$emit('complete')
-            },
-            empty: () => {
-              this.loaded = true
-              this.complete = false
-              this.empty = true
-              this.$emit('empty')
-            },
-            vpBottom,
-            elBottom,
+          this.setState('loading')
+
+          this.handler((state) => {
+            this.setState(state)
           })
         }
       },
-      reset() {
+      reset(immediate = true) {
         this.loaded = true
         this.complete = false
         this.empty = false
-        this.scrollHandler()
-      }
+        if (immediate) {
+          this.scrollHandler()
+        }
+      },
+      setState(state) {
+        if (state === 'loading') {
+          this.loaded = false
+          this.complete = false
+          this.empty = false
+        } else if (state === 'loaded') {
+          this.loaded = true
+          this.complete = false
+          this.empty = false
+          this.$emit('loaded')
+        } else if (state === 'complete') {
+          this.loaded = true
+          this.complete = true
+          this.empty = false
+          this.$emit('complete')
+        } else if (state === 'empty') {
+          this.loaded = true
+          this.complete = false
+          this.empty = true
+          this.$emit('empty')
+        }
+      },
     },
   }
 </script>

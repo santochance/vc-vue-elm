@@ -289,17 +289,18 @@
             this.offset = this.restaurantList.length
             // 根据响应数据数量判断是否全部加载完成
 
+            let state
             if (!this.offset) {
-              this.restaurantListState = 'empty'
+              state = 'empty'
             } else if (!items.length) {
-              this.restaurantListState = 'complete'
+              state = 'complete'
             } else {
-              this.restaurantListState = 'loaded'
+              state = 'loaded'
             }
-            return this.restaurantListState
+            return (this.restaurantListState = state)
           })
           .catch(() => {
-            this.offset || (this.restaurantListState = 'empty')
+            return (this.restaurantListState = 'loaded')
           })
       },
 
@@ -321,21 +322,16 @@
         this.restaurantListState = 'loaded'
         this.$refs.infinite.reset()
       },
-      onInifiniteScroll($state) {
+      onInifiniteScroll() {
         debug && console.log('<Index> handle infinite event')
 
         this.fetchRestaurantList()
-          .then(method => {
-            // 等到新数据渲染完成设置 infiniteScroll 状态
-            // 否则新数据渲染完可能会触发 scroll 导致 infiniteScroll 自动加载第二次
-            console.log('<Index> notice <InfiniteScroll> result')
-            $state[method]()
-          })
       },
       onChangeAddress() {
         this.offset = 0
         this.restaurantList = []
         this.restaurantListState = 'loaded'
+        this.$refs.infinite.reset(false)
         this.loadData()
       },
       onBackTop() {

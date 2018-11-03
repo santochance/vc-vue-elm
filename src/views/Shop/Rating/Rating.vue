@@ -179,9 +179,9 @@
       infiniteScrollHandler($state) {
         debug && console.log('debug - exec infiniteScrollHandler')
         this.loadComments()
-          .then(method => {
+          .then((state) => {
             console.log('debug - infinite scroll loaded')
-            $state[method]()
+            $state(state)
           })
       },
       loadComments() {
@@ -193,16 +193,31 @@
           has_content: true,
           tag_name: tagName,
           offset
-        }).then(comments => {
-          debug && console.log('debug - get response of comments')
-          if (offset === 0) {
-            this.comments = comments
-          } else {
-            this.comments = this.comments.concat(comments)
-          }
-          this.offset = this.comments.length
-          return comments.length > 1 ? 'loaded' : 'complete'
         })
+          .then(comments => {
+
+            debug && console.log('debug - get response of comments')
+
+            if (offset === 0) {
+              this.comments = comments
+            } else {
+              this.comments = this.comments.concat(comments)
+            }
+            this.offset = this.comments.length
+            // return comments.length > 1 ? 'loaded' : 'complete'
+            let state
+            if (!this.offset) {
+              state = 'empty'
+            } else if (!comments.length) {
+              state = 'complete'
+            } else {
+              state = 'loaded'
+            }
+            return state
+          })
+          .catch(() => {
+            return 'loaded'
+          })
       },
       transformForViewer(items) {
         return (items || []).map(item => ({
