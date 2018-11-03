@@ -179,10 +179,26 @@
           .then(() => {
             if (!this.geohash || !this.locationName) {
               return this.locate()
-                .then(({ coords }) => {
+                .then((location) => {
+                  const { latitude, longitude } = location
+                  this.$store.commit('SAVE_LOCATION', {
+                    latitude,
+                    longitude,
+                    geohash: '',
+                  })
+
+                  return location
+                })
+                .then((coords) => {
                   // 识别地址
                   return this.reverseGeoCoding(coords)
                 })
+               // 接口
+               .catch(({ name }) => {
+                  if (name === 'INVALID_LAT_LON') {
+                    // 无效的经纬度坐标
+                  }
+               })
             } else {
               return this.location
             }

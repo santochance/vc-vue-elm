@@ -246,7 +246,7 @@
       <div class="p-select-address__current"
         @click="onBack"
       >
-        <span class="ellipsis">{{ locationName }}</span>
+        <span class="ellipsis">{{ locationName || '未知地址' }}</span>
         <span class="p-select-address__relocate"
           @click.stop="reLocate"
         >
