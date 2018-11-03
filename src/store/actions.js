@@ -67,6 +67,13 @@ export default {
     if ('geolocation' in navigator) {
       return new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject)
+        setTimeout(() => {
+          console.warn('[locate timeout]定位超时')
+          reject({
+            code: 'locate timeout',
+            message: '定位超时',
+          })
+        }, 6000)
       })
         .then((position) => {
           return position

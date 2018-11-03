@@ -179,26 +179,6 @@
           .then(() => {
             if (!this.geohash || !this.locationName) {
               return this.locate()
-                .then((location) => {
-                  const { latitude, longitude } = location
-                  this.$store.commit('SAVE_LOCATION', {
-                    latitude,
-                    longitude,
-                    geohash: '',
-                  })
-
-                  return location
-                })
-                .then((coords) => {
-                  // 识别地址
-                  return this.reverseGeoCoding(coords)
-                })
-               // 接口
-               .catch(({ name }) => {
-                  if (name === 'INVALID_LAT_LON') {
-                    // 无效的经纬度坐标
-                  }
-               })
             } else {
               return this.location
             }
@@ -228,7 +208,25 @@
         return this.getCurrentPosition()
           .then(({ coords }) => {
             this.locating = false
-            return coords
+
+            const { latitude, longitude } = coords
+            this.$store.commit('SAVE_LOCATION', {
+              latitude,
+              longitude,
+              geohash: '',
+            })
+
+            // 识别地址
+            return this.reverseGeoCoding(coords)
+             // 接口调用失败
+             .catch(({ name }) => {
+                if (name === 'INVALID_LAT_LON') {
+                  // 无效的经纬度坐标
+                }
+             })
+          })
+          .catch(() => {
+            this.locating = false
           })
       },
       fetchEntryList() {
