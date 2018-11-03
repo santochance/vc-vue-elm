@@ -4,6 +4,7 @@ import router from './router';
 import store from './store';
 
 import VueLazyload from 'vue-lazyload'
+import VeeValidate from 'vee-validate'
 
 import { parseImgHash } from '@/util/utils'
 import Sticker from '@/util/Sticker'
@@ -21,6 +22,7 @@ Vue.use(VueLazyload, {
   preload: 3,
   attempt: 5,
 })
+Vue.use(VeeValidate)
 Vue.use(HoldUpScroll)
 Vue.use(LazyLocalScroll)
 

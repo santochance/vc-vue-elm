@@ -2,13 +2,15 @@
   <page :title="mode === 'create' ? '添加地址' : '编辑地址'">
     <template v-if="address">
       <div class="address-form">
-        <div class="address-form__content">        
+        <div class="address-form__content">
           <div class="address-form__control">
             <div class="label-wrap">联系人</div>
             <div class="input-group-wrap">
               <div class="input-wrap">
                 <input type="text" v-model="address.name"
                   placeholder="你的姓名"
+                  name="name"
+                  v-validate="'required'"
                 >
               </div>
               <radio class="input-wrap"
@@ -23,6 +25,8 @@
             <div class="input-wrap">
               <input type="text" v-model="address.phone"
                 placeholder="你的手机号"
+                name="phone"
+                v-validate="{ required: true, regex: /^1\d{10}$/ }"
               >
             </div>
           </div>
@@ -34,15 +38,18 @@
             <div class="input-group-wrap">
               <div class="input-wrap">
                 <input type="text" v-model="address.address"
-                  placeholder="小区/写字楼/学校等" 
+                  placeholder="小区/写字楼/学校等"
+                  name="address"
+                  v-validate="'required'"
                 >
                 <svg><use xlink:href="#arrow-right"></use></svg>
               </div>
               <div class="input-wrap">
                 <textarea rows="2" maxlength="100"
                   placeholder="10号楼5层501室"
-                  v-model="address.address_detail"></textarea>
-                <svg><use xlink:href="#edit"></use></svg>
+                  v-model="address.address_detail"
+                ></textarea>
+                <svg style="visibility: hidden;"><use xlink:href="#edit"></use></svg>
               </div>
             </div>
           </div>
@@ -71,6 +78,9 @@
 
   import Page from '@/components/Page'
   import Radio from '@/components/Radio'
+  import Toast from '@/components/common/Toast'
+
+  const debug = true
 
   export default {
     name: 'AddressEdit',
@@ -85,6 +95,19 @@
       return {
         // address: null,
         // mode: '',
+
+        errorMsgs: {
+          name: {
+            required: '请输入联系人',
+          },
+          phone: {
+            required: '请输入正确的手机号',
+            regex: '请输入正确的手机号',
+          },
+          address: {
+            required: '请输入确定的小区/写字楼/学校等地址信息',
+          },
+        },
       }
     },
     computed: {
@@ -95,12 +118,30 @@
         return this.$store.state.editingAddress
       },
     },
+    created() {
+      debug && (window[this.$options.name] = this)
+
+    },
     methods: {
       /* events */
       onSave() {
-        this.$emit('save')
-        this.SAVE_ADDRESS(this.address)
-        this.$router.back()
+        return this.$validator.validate()
+          .then((valid) => {
+            if (valid) {
+              this.$emit('save')
+              this.SAVE_ADDRESS(this.address)
+              this.$router.back()
+            } else {
+              const error = this.errors.items[0]
+              if (error) {
+                const msg = this.errorMsgs[error.field] && this.errorMsgs[error.field][error.rule]
+                  Toast.open({
+                    content: msg,
+                    mask: false,
+                  })
+              }
+            }
+          })
       },
       ...mapMutations([
         'SAVE_ADDRESS',
