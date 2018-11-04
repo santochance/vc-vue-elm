@@ -39,6 +39,11 @@ export function initState(state) {
   }
   debug && console.log('init state with location:', location)
 
+  const locationName = persistence.getItem('LOCATION_NAME')
+  if (locationName != null && typeof locationName === 'string') {
+    initial.locationName = locationName
+  }
+
   return { ...state, ...initial }
 }
 
@@ -85,4 +90,11 @@ export function wrapPersistence(store) {
       persistence.setItem('LOCATION', mutation.payload)
     }
   })
+
+  store.watch(
+    (state) => state.locationName,
+    (value) => {
+      persistence.setItem('LOCATION_NAME', value, 'sessionStorage')
+    },
+  )
 }
