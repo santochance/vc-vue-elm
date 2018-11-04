@@ -35,7 +35,9 @@
         to=""
         class="b-entries__main-entry"
       >
-        <img :src="$getImage(mainEntry.image_hash, mainEntryImgParam)" alt="">
+        <div class="b-entries__main-entry-icon">
+          <img :src="$getImage(mainEntry.image_hash, mainEntryImgParam)" alt="">
+        </div>
         <p class="b-entries__main-entry-title">{{ mainEntry.name }}</p>
       </router-link>
     </div>
@@ -58,11 +60,17 @@
       background-color: #fff;
     }
     .b-entries__main-entry {
+      display: block;
       width: 20%;
       margin-top: 22px;
       img {
         display: inline-block;
       }
+    }
+    .b-entries__main-entry-icon {
+      width: 90px;
+      height: 90px;
+      margin: auto;
     }
     .b-entries__main-entry-title {
       display: block;

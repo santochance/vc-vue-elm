@@ -7,15 +7,15 @@
         :listLoaded="listLoaded"
       ></IndexSkeleton>
 
-      <template>
-        <IndexHeader
-          :location-name="location.locationName"
-          :locating="locating"
-          :detecting="!loaded"
-          @click:address="onClickHeaderAddress"
-        ></IndexHeader>
-        <IndexSearch></IndexSearch>
+      <IndexHeader
+        :location-name="location.locationName"
+        :locating="locating"
+        :detecting="!loaded"
+        @click:address="onClickHeaderAddress"
+      ></IndexHeader>
+      <IndexSearch></IndexSearch>
 
+      <template v-if="locState !== 3">
         <IndexMainEntries
           v-if="entryGroupMap.main"
           :entries="entryGroupMap.main.entries"
@@ -41,7 +41,6 @@
 
     </div>
 
-
     <transition name="slide-left">
       <SelectAddress
         class="p-index__select-address"
@@ -59,6 +58,14 @@
         <img src="@/assets/backtop.svg" alt="">
       </div>
     </transition>
+
+    <div class="p-index__locate-fail"
+      v-if="locState === 3"
+    >
+      <img src="./index-locate-fail.gif" alt="">
+      <h3>输入地址后才能订餐哦！</h3>
+      <button @click.stop.prevent="selectAddressVisible = true">手动选择地址</button>
+    </div>
   </div>
 </template>
 
@@ -76,8 +83,8 @@
   import IndexShopListItem from './IndexShopListItem'
   import InfiniteScroll from '@/components/common/InfiniteScroll'
   const importGeohash = () => import(/* webpackChunkName: "Geohash" */ 'ngeohash')
-  // import SelectAddress from '../SelectAddress'
-  const SelectAddress = () => import(/* webpackChunkName: "SelectAddress" */ '../SelectAddress')
+  import SelectAddress from '../SelectAddress'
+  // const SelectAddress = () => import(/* webpackChunkName: "SelectAddress" */ '../SelectAddress')
 
   const debug = true
 
@@ -107,7 +114,7 @@
 
         loaded: false,
         locating: false,
-        locState: 0,
+        locState: 2, // 0: 正在定位, 1: 正在识别, 2: 识别完成, 3: 定位失败
 
         offset: 0,
         rankId: '',
@@ -202,12 +209,14 @@
       },
       locate() {
         this.locating = true
+        this.locState = 0
 
         debug && console.log('正在定位地址...')
 
         return this.getCurrentPosition()
           .then(({ coords }) => {
             this.locating = false
+            this.locState = 1
 
             const { latitude, longitude } = coords
             this.$store.commit('SAVE_LOCATION', {
@@ -218,6 +227,9 @@
 
             // 识别地址
             return this.reverseGeoCoding(coords)
+            .then(() => {
+              this.locState = 2
+            })
              // 接口调用失败
              .catch(({ name }) => {
                 if (name === 'INVALID_LAT_LON') {
@@ -227,6 +239,9 @@
           })
           .catch(() => {
             this.locating = false
+            this.locState = 3
+            this.$store.commit('SET_LOCATION_NAME', '未能获取地址')
+            this.selectAddressVisible = true
           })
       },
       fetchEntryList() {
@@ -326,11 +341,14 @@
         this.fetchRestaurantList()
       },
       onChangeAddress() {
-        this.offset = 0
-        this.restaurantList = []
-        this.restaurantListState = 'loaded'
-        this.$refs.infinite.reset(false)
-        this.loadData()
+        this.locState = 2
+        this.$nextTick(() => {
+          this.offset = 0
+          this.restaurantList = []
+          this.restaurantListState = 'loaded'
+          this.$refs.infinite.reset(false)
+          this.loadData()
+        })
       },
       onBackTop() {
         document.documentElement.scrollTop = 0
@@ -466,4 +484,32 @@
     .fade-leave-to {
       opacity: 0;
     }
+
+  /* locate fail */
+  .p-index__locate-fail {
+    min-height: 1040px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    img {
+      display: block;
+      height: 400px;
+      width: 400px;
+    }
+    h3 {
+      font-size: 34px;
+      font-weight: normal;
+      margin: 25px 0;
+      color: #6a6a6a;
+    }
+    button {
+      padding: 20px;
+      min-width: 240px;
+      font-size: 28px;
+      color: #fff;
+      background-color: #56d176;
+    }
+  }
 </style>
