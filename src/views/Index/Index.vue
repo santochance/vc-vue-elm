@@ -148,7 +148,7 @@
       this.loadData()
         .then(() => {
           return new Promise((resolve) => {
-            setTimeout(resolve, 3000)
+            setTimeout(resolve, 500)
           })
         })
         .then(() => {
