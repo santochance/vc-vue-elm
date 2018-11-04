@@ -65,18 +65,19 @@ export default {
 
   getCurrentPosition() {
     if ('geolocation' in navigator) {
+      // let timeout
       return new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject)
-        setTimeout(() => {
-          console.warn('[locate timeout]定位超时')
-          reject({
-            code: 'locate timeout',
-            message: '定位超时',
-          })
-        }, 6000)
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+          timeout: 6000,
+        })
       })
         .then((position) => {
+          console.log('[locate success]定位成功:', position)
           return position
+        })
+        .catch((error) => {
+          console.error('[locate error]定位失败：', error)
+          throw error
         })
     } else {
       return Promise.reject({
