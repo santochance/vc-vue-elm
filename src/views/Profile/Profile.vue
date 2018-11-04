@@ -183,11 +183,11 @@
       Page,
     },
     props: {
-      
+
     },
     data() {
       return {
-        
+
       }
     },
     computed: {
@@ -241,7 +241,7 @@
       width: 120px;
       height: 120px;
       border-radius: 50%;
-      background-image: url('/sprite-avatar.png');
+      background-image: url('../../assets/sprite-avatar.png');
       background-size: 120px;
     }
     .profile__user-info {
@@ -267,7 +267,7 @@
     }
     .profile__user-right {
       svg {
-        fill: #fff; 
+        fill: #fff;
         width: 20px;
         height: 20px;
       }

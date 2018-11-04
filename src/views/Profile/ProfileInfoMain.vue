@@ -72,14 +72,14 @@
 <script>
   import { mapState, mapActions } from 'vuex'
   import { fetchExtraProfile } from '@/service/api'
-  
+
   export default {
     name: 'ProfileInfoMain',
     components: {
 
     },
     props: {
-      
+
     },
     data() {
       return {
@@ -111,7 +111,7 @@
           // .then((id) => {
           //   if (id) {
           //     this.fetchUser({ user_id: id })
-              
+
           //     fetchExtraProfile({ user_id: id })
           //       .then((extraProfile) => {
           //         this.extraProfile = extraProfile
@@ -187,7 +187,7 @@
       width: 120px;
       height: 120px;
       background-color: #ddd;
-      background-image: url('/sprite-avatar.png');
+      background-image: url('../../assets/sprite-avatar.png');
       background-size: 120px;
       border-radius: 50%;
     }
