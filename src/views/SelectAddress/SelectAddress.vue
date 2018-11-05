@@ -139,8 +139,9 @@
           debug && console.log('parse geohash to:', coords)
         }
 
-        this.$store.commit('SET_CITY_NAME', address.city || '')
-        this.$store.commit('SET_LOCATION_NAME', address.address)
+        // this.$store.commit('SET_CITY_NAME', address.city || '')
+        const locationName = ('st_geohash' in address) ? address.address : address.name
+        this.$store.commit('SET_LOCATION_NAME', locationName)
 
         this.$store.commit('SAVE_LOCATION', {
           latitude: address.latitude,
