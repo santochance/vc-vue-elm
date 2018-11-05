@@ -21,10 +21,33 @@
           v-if="entryGroupMap.main"
           :entries="entryGroupMap.main.entries"
         ></IndexMainEntries>
-        <div class="p-index__member"></div>
-        <IndexBanners
-          :banners="bannerList"
-        ></IndexBanners>
+
+        <div class="p-index__banner-mics-wrap">
+          <div class="p-index__activity-entries">
+            <div class="p-index__activity-entry"
+              :class="{ 'p-index__activity-entry_only': !favourEntries || !favourEntries.length }"
+            >
+              <h3 class="p-index__activity-entry-title">品质套餐</h3>
+              <div class="p-index__activity-entry-desc">搭配齐全吃得好</div>
+              <div class="p-index__activity-entry-go">立即抢购 ></div>
+              <img src="https://fuss10.elemecdn.com/d/d4/16ff085900d62b8d60fa7e9c6b65dpng.png?imageMogr/format/webp/thumbnail/!240x160r/gravity/Center/crop/240x160/" alt="">
+            </div>
+            <div class="p-index__activity-entry p-index__favour-entry"
+              v-for="favour in favourEntries"
+              :key="favour.id"
+            >
+              <h3 class="p-index__activity-entry-title">{{ favour.name }}</h3>
+              <div class="p-index__activity-entry-desc">{{ favour.description }}</div>
+              <div class="p-index__activity-entry-go">
+                <span class="p-index__activity-entry-population">{{ favour.population }}</span> 正在抢 >
+              </div>
+              <img :src="$getImage(favour.image_hash, favourImgParam)" alt="">
+            </div>
+          </div>
+          <IndexBanners
+            :banners="bannerList"
+          ></IndexBanners>
+        </div>
 
         <template v-if="listLoaded">
           <div class="p-index__shoplist-title">推荐商家</div>
@@ -135,6 +158,8 @@
         listLoaded: false,
 
         restaurantListState: 'loaded', // 0: init, 1: loading, 2: loaded, 3: complete, 4: empty
+
+        favourImgParam: '?imageMogr/format/webp/thumbnail/!240x160r/gravity/Center/crop/240x160/',
       }
     },
     computed: {
@@ -151,6 +176,19 @@
       ...mapState([
         'latitude', 'longitude', 'geohash', 'locationName',
       ]),
+      favourEntries() {
+        const entries = (this.entryGroupMap['优惠专区类型'] || {}).entries
+
+        if (!entries || !entries.length) return entries
+
+        return entries.map(entry => {
+          try {
+            entry.population = JSON.parse(entry.more).population
+          } catch(e) {/* do nothing */}
+
+          return entry
+        })
+      },
     },
     watch: {
 
@@ -431,6 +469,76 @@
       transform: translateX(100%)
     }
 
+  /* activity-entries */
+
+    .p-index__banner-mics-wrap {
+      padding: 0 20px;
+      margin-bottom: 16px;
+      background-color: #fff;
+    }
+    .p-index__activity-entries {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 6px;
+    }
+    .p-index__activity-entry {
+      box-sizing: border-box;
+      position: relative;
+      flex: 1;
+      height: 280px;
+      padding: 24px 0 0 30px;
+      background: linear-gradient(0deg,#f4f4f4 5%,#fafafa 95%);
+      margin-right: 6px;
+      &:last-child {
+        margin-right: 0;
+      }
+      img {
+        position: absolute;
+        right: 0;
+        bottom: -15px;
+        width: 240px;
+        height: 160px;
+      }
+
+      &_only {
+        height: 220px;
+        img {
+          top: 18px;
+          right: 28px;
+          bottom: auto;
+          width: 282px;
+          height: 188px;
+        }
+      }
+    }
+    .p-index__activity-entry-title {
+      font-size: 34px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #333;
+    }
+    .p-index__activity-entry-desc {
+      font-size: 26px;
+      margin-bottom: 18px;
+      color: #777;
+    }
+    .p-index__activity-entry-go {
+      font-size: 24px;
+      font-weight: 700;
+      color: #af8260;
+    }
+    .p-index__favour-entry {
+      .p-index__activity-entry-title {
+        color: #e81919;
+      }
+      .p-index__activity-entry-go {
+        color: #333;
+      }
+      .p-index__activity-entry-population {
+        color: #e81919;
+      }
+    }
+
   /* shoplist */
 
     .p-index__shoplist {
@@ -500,30 +608,30 @@
     }
 
   /* locate fail */
-  .p-index__locate-fail {
-    min-height: 1040px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: #fff;
-    img {
-      display: block;
-      height: 400px;
-      width: 400px;
+    .p-index__locate-fail {
+      min-height: 1040px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: #fff;
+      img {
+        display: block;
+        height: 400px;
+        width: 400px;
+      }
+      h3 {
+        font-size: 34px;
+        font-weight: normal;
+        margin: 25px 0;
+        color: #6a6a6a;
+      }
+      button {
+        padding: 20px;
+        min-width: 240px;
+        font-size: 28px;
+        color: #fff;
+        background-color: #56d176;
+      }
     }
-    h3 {
-      font-size: 34px;
-      font-weight: normal;
-      margin: 25px 0;
-      color: #6a6a6a;
-    }
-    button {
-      padding: 20px;
-      min-width: 240px;
-      font-size: 28px;
-      color: #fff;
-      background-color: #56d176;
-    }
-  }
 </style>
