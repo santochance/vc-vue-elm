@@ -268,14 +268,16 @@
         this.redirect()
       },
       loginByMobileRejected({ name, message }) {
+        this.code = ''
+        let content = message
         if (name === 'INVALID_VALIDATE_TOKEN') {
-          this.code = ''
-          return Toast.open({
-            content: message + '，请尝试重新获取验证码',
-            mask: false,
-            duration: 4,
-          })
+          content += '，请尝试重新获取验证码'
         }
+        return Toast.open({
+          content,
+          mask: false,
+          duration: 4,
+        })
       },
 
       redirect() {
