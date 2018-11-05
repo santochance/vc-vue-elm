@@ -4,7 +4,6 @@ const useMock = require('./src/service/mock/useMock')
 module.exports = {
   baseUrl: process.env.BASE_URL || '',
   devServer: {
-    https: true,
     before: useMock,
   },
   chainWebpack: config => {
