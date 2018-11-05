@@ -1,6 +1,6 @@
 <template>
   <div class="p-index">
-    <div v-show="!selectAddressVisible">
+    <div>
       <IndexSkeleton class="p-index__shell"
         :headerLoaded="headerLoaded"
         :entriesLoaded="entriesLoaded"
@@ -44,6 +44,7 @@
     <transition name="slide-left">
       <SelectAddress
         class="p-index__select-address"
+        v-show="selectAddressVisible"
         :visible="selectAddressVisible"
         @change="onChangeAddress"
         @back="selectAddressVisible = false"
