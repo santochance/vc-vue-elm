@@ -22,7 +22,9 @@
           :entries="entryGroupMap.main.entries"
         ></IndexMainEntries>
         <div class="p-index__member"></div>
-        <div class="p-index__banner"></div>
+        <IndexBanners
+          :banners="bannerList"
+        ></IndexBanners>
 
         <template v-if="listLoaded">
           <div class="p-index__shoplist-title">推荐商家</div>
@@ -81,6 +83,7 @@
   import IndexSearch from './IndexSearch'
   import IndexShopList from './IndexShopList'
   import IndexMainEntries from './IndexMainEntries'
+  import IndexBanners from './IndexBanners'
   import IndexShopListFilter from './IndexShopListFilter'
   import IndexShopListItem from './IndexShopListItem'
   import InfiniteScroll from '@/components/common/InfiniteScroll'
@@ -99,6 +102,7 @@
       IndexSearch,
       IndexShopList,
       IndexMainEntries,
+      IndexBanners,
       IndexShopListFilter,
       InfiniteScroll,
       IndexShopListItem,
