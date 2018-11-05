@@ -1,9 +1,11 @@
 <script>
+  import { Swipe, SwipeItem } from 'vue-swipe'
 
   export default {
     name: 'IndexMainentries',
     components: {
-
+      Swipe,
+      SwipeItem,
     },
     props: {
       entries: {
@@ -18,7 +20,23 @@
       }
     },
     computed: {
-
+      slicedEntries() {
+        const entries = this.entries
+        if (!entries || !entries.length) return entries
+        const len = entries.length
+        const size = 10
+        let i = 0
+        let result = []
+        let shard = []
+        while (i < len) {
+          shard.push(entries[i])
+          if (++i >= size) {
+            result.push(shard)
+            shard = []
+          }
+        }
+        return result
+      },
     },
     methods: {
 
@@ -27,20 +45,27 @@
 </script>
 
 <template>
-  <div class="b-entries b-entries__box">
-    <div
-      class="b-entries__main-entries">
-      <router-link v-for="mainEntry in entries"
-        :key="mainEntry.id"
-        to=""
-        class="b-entries__main-entry"
+  <div class="p-index__main-entries b-entries b-entries__box">
+    <swipe :auto="0" :showIndicators="slicedEntries.length > 1"
+      class="b-entries__swipe"
+    >
+      <swipe-item
+        v-for="(shard, idx) in slicedEntries" :key="idx"
       >
-        <div class="b-entries__main-entry-icon">
-          <img :src="$getImage(mainEntry.image_hash, mainEntryImgParam)" alt="">
+        <div class="b-entries__main-entries">
+          <router-link v-for="mainEntry in shard"
+            :key="mainEntry.id"
+            to=""
+            class="b-entries__main-entry"
+          >
+            <div class="b-entries__main-entry-icon">
+              <img :src="$getImage(mainEntry.image_hash, mainEntryImgParam)" alt="">
+            </div>
+            <p class="b-entries__main-entry-title">{{ mainEntry.name }}</p>
+          </router-link>
         </div>
-        <p class="b-entries__main-entry-title">{{ mainEntry.name }}</p>
-      </router-link>
-    </div>
+      </swipe-item>
+    </swipe>
   </div>
 </template>
 
@@ -51,11 +76,14 @@
 
     .b-entries__box {}
 
+    .b-entries__swipe {
+      height: 354px;
+    }
+
     .b-entries__main-entries {
       display: flex;
       flex-wrap: wrap;
       overflow: hidden;
-      height: 354px;
       text-align: center;
       background-color: #fff;
     }
@@ -79,4 +107,17 @@
       color: #666;
     }
 
+</style>
+
+<style lang="scss">
+  .p-index__main-entries {
+    .mint-swipe-indicator {
+      width: 18px;
+      height: 3px;
+      border-radius: 0;
+      &.is-active {
+        background-color: #00a6ff;
+      }
+    }
+  }
 </style>
