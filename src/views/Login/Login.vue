@@ -413,7 +413,7 @@
     }
     .b-login__about {
       text-align: center;
-      margin-top: 20px;
+      margin-top: 40px;
       font-size: 24px;
       color: #999;
     }
