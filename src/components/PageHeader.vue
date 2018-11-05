@@ -44,7 +44,7 @@
     position: relative;
     display: flex;
     align-items: center;
-    height: 88px;
+    height: 90px;
     font-size: 36px;
     background-image: linear-gradient(90deg, #0af, #0085ff);
     color: #fff;
