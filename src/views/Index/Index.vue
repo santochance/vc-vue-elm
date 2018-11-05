@@ -87,7 +87,7 @@
   import SelectAddress from '../SelectAddress'
   // const SelectAddress = () => import(/* webpackChunkName: "SelectAddress" */ '../SelectAddress')
   const importGeohash = () => import(/* webpackChunkName: "Geohash" */ 'ngeohash')
-  const importShopContainer = () => import(/* webpackChunkName: "Shop" */ '@/views/ShopContainer')
+  const importShopContainer = () => import(/* webpackChunkName: "ShopContainer" */ '@/views/ShopContainer')
 
   const debug = true
 

@@ -83,6 +83,8 @@
         this.loading = true
 
         return this.reverseGeoCoding()
+          // reverseGeoCoding rejected
+          .catch(() => {})
           .then(() => {
             return fetchBatchShop({
               user_id: this.userId,
@@ -90,18 +92,15 @@
               longitude: this.longitude,
               restaurantId: this.restaurantId,
             })
-          })
-          // reverseGeoCoding rejected
-          .catch(() => {})
-          .then(({ rst, menu }) => {
-            this.shopDetails = rst
-            this.menu = menu
-          })
-          .then(() => {
-            this.loading = false
-            this.$emit('loaded')
-          })
-          .catch((error) => {
+              .then(({ rst, menu }) => {
+                this.shopDetails = rst
+                this.menu = menu
+              })
+              .then(() => {
+                this.loading = false
+                this.$emit('loaded')
+              })
+          }, (error) => {
             this.$emit('error', error)
           })
       },

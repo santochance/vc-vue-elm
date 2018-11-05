@@ -38,7 +38,7 @@ export default new Router({
     /* shop */
     {
       path: '/shop',
-      component: () => import(/* webpackChunkName: "Shop" */ '@/views/ShopContainer'),
+      component: () => import(/* webpackChunkName: "ShopContainer" */ '@/views/ShopContainer'),
       // component: ShopContainer,
     },
 
