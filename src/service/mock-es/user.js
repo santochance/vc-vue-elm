@@ -126,7 +126,7 @@ export default {
   "gift_amount": 2, // 红包个数
   "is_email_valid": false,
   "is_mobile_valid": true,
-  "mobile": "13826047697",
+  "mobile": "13812345678",
   "point": 0, // 金币个数
   "real_point": 0,
   "supervip_status": 1,
