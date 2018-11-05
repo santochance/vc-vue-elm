@@ -2,6 +2,7 @@
   <div class="p-index">
     <div>
       <IndexSkeleton class="p-index__shell"
+        v-show="locState !== 3"
         :headerLoaded="headerLoaded"
         :entriesLoaded="entriesLoaded"
         :listLoaded="listLoaded"
@@ -83,9 +84,10 @@
   import IndexShopListFilter from './IndexShopListFilter'
   import IndexShopListItem from './IndexShopListItem'
   import InfiniteScroll from '@/components/common/InfiniteScroll'
-  const importGeohash = () => import(/* webpackChunkName: "Geohash" */ 'ngeohash')
   import SelectAddress from '../SelectAddress'
   // const SelectAddress = () => import(/* webpackChunkName: "SelectAddress" */ '../SelectAddress')
+  const importGeohash = () => import(/* webpackChunkName: "Geohash" */ 'ngeohash')
+  const importShopContainer = () => import(/* webpackChunkName: "Shop" */ '@/views/ShopContainer')
 
   const debug = true
 
@@ -153,47 +155,43 @@
       debug && (window[this.$options.name] = this)
 
       this.loaded = false
-      this.loadData()
+
+      return Promise.resolve()
         .then(() => {
-          return new Promise((resolve) => {
-            setTimeout(resolve, 500)
-          })
+          setTimeout(() => {
+            this.headerLoaded = true
+          }, 300)
+
+          if (!this.geohash || !this.locationName) {
+            return this.locate()
+          } else {
+            return this.loadData()
+          }
         })
+        // 到这里时可能识别地址完成，也可能定位失败
+        .then(() => new Promise(resolve => setTimeout(resolve, 500)))
         .then(() => {
           this.loaded = true
           this.$emit('load')
-        })
-        .catch(() => {
+        }, () => {
           this.loaded = true
           this.$emit('load')
         })
-    },
-    activated() {
-      this.loadData()
+        .then(() => {
+          // 预加载 Geohash
+          importGeohash()
+          // 预加载 ShopContainer
+          importShopContainer()
+        })
     },
     mounted() {
-      importGeohash()
-
       window.addEventListener('scroll', debounce(() => {
         this.backTopVisible = window.scrollY > 1800
       }), 100)
     },
     methods: {
       loadData() {
-        // this.loaded = false
-
-        // 如果 items 为空，会显示无商家反馈视图
         return Promise.resolve()
-          .then(() => {
-            if (!this.geohash || !this.locationName) {
-              return this.locate()
-            } else {
-              return this.location
-            }
-          })
-          .then(() => {
-            this.headerLoaded = true
-          })
           .then(() => {
             // 查询接口
             this.fetchEntryList()
@@ -215,35 +213,45 @@
         debug && console.log('正在定位地址...')
 
         return this.getCurrentPosition()
-          .then(({ coords }) => {
-            this.locating = false
-            this.locState = 1
+          .then(
+            // 定位成功
+            ({ coords }) => {
+              this.locating = false
+              this.locState = 1
 
-            const { latitude, longitude } = coords
-            this.$store.commit('SAVE_LOCATION', {
-              latitude,
-              longitude,
-              geohash: '',
-            })
+              const { latitude, longitude } = coords
+              this.$store.commit('SAVE_LOCATION', {
+                latitude,
+                longitude,
+                geohash: '',
+              })
 
-            // 识别地址
-            return this.reverseGeoCoding(coords)
-            .then(() => {
-              this.locState = 2
-            })
-             // 接口调用失败
-             .catch(({ name }) => {
-                if (name === 'INVALID_LAT_LON') {
-                  // 无效的经纬度坐标
-                }
-             })
-          })
-          .catch(() => {
-            this.locating = false
-            this.locState = 3
-            this.$store.commit('SET_LOCATION_NAME', '未能获取地址')
-            this.selectAddressVisible = true
-          })
+              // 识别地址
+              return this.reverseGeoCoding(coords)
+                // 接口无论调用是否成功， 都表示解析完成
+                .then(
+                  () => { this.locState = 2 },
+                  () => { this.locState = 2 }
+                )
+                .then(() => this.loadData())
+            },
+            // 定位失败
+            () => {
+              importGeohash()
+
+              return Promise.resolve()
+                .then(() => new Promise(resolve => setTimeout(resolve, 1200)))
+                .then(() => {
+                  this.selectAddressVisible = true
+                  this.$store.commit('SET_LOCATION_NAME', '未能获取地址')
+                })
+                .then(() => new Promise(resolve => setTimeout(resolve, 600)))
+                .then(() => {
+                  this.locating = false
+                  this.locState = 3
+                })
+            }
+          )
       },
       fetchEntryList() {
         return fetchEntryList({
@@ -342,14 +350,15 @@
         this.fetchRestaurantList()
       },
       onChangeAddress() {
-        this.locState = 2
-        this.$nextTick(() => {
-          this.offset = 0
-          this.restaurantList = []
-          this.restaurantListState = 'loaded'
-          this.$refs.infinite.reset(false)
-          this.loadData()
-        })
+        if (this.locState === 3) {
+          this.locState = 2
+          return this.loadData()
+        }
+        this.offset = 0
+        this.restaurantList = []
+        this.restaurantListState = 'loaded'
+        this.$refs.infinite.reset(false)
+        this.loadData()
       },
       onBackTop() {
         document.documentElement.scrollTop = 0
