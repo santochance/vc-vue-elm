@@ -219,7 +219,7 @@
   >
     <div class="p-select-address__search-bar">
       <div class="p-select-address__city-btn"
-        @click="chooseCity"
+        @click.stop="chooseCity"
       >
         <span class="p-select-address__city-name ellipsis">{{ cityName }}</span>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 8" class="">
@@ -244,7 +244,7 @@
     >
       <h4>当前地址</h4>
       <div class="p-select-address__current"
-        @click="onBack"
+        @click.stop="onBack"
       >
         <span class="ellipsis">{{ locationName || '未知地址' }}</span>
         <span class="p-select-address__relocate"
@@ -267,7 +267,7 @@
       <div class="p-select-address__address-list">
         <div class="p-select-address__address-item"
           v-for="address in addressList" :key="address.id"
-          @click="select(address)"
+          @click.stop="select(address)"
         >
           <div class="p-select-address__address-line">
             <span class="p-select-address__address-name"
@@ -286,7 +286,7 @@
     >
       <div class="p-select-address__result-item"
         v-for="result in results" :key="result.id"
-        @click="select(result)"
+        @click.stop="select(result)"
       >
         <div class="p-select-address__result-info">
           <div class="p-select-address__result-name"
