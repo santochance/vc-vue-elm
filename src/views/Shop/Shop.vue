@@ -92,15 +92,15 @@
               longitude: this.longitude,
               restaurantId: this.restaurantId,
             })
-              .then(({ rst, menu }) => {
-                this.shopDetails = rst
-                this.menu = menu
-              })
-              .then(() => {
-                this.loading = false
-                this.$emit('loaded')
-              })
+          })
+          .then(({ rst, menu }) => {
+            this.shopDetails = rst
+            this.menu = menu
+
+            this.loading = false
+            this.$emit('loaded')
           }, (error) => {
+            this.loading = false
             this.$emit('error', error)
           })
       },
