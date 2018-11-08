@@ -31,7 +31,7 @@
           <span class="imc__promotion-text">公告</span>
         </div>
       </div>
-      <div class="imc__promotion">{{ shopDetails.promotion_info }}</div>
+      <div class="imc__promotion">{{ shopDetails.promotion_info || defaultPromotion }}</div>
     </div>
   </div>
 </template>
@@ -40,6 +40,11 @@
   export default {
     props: {
       shopDetails: Object,
+    },
+    data () {
+      return {
+        defaultPromotion: '欢迎光临，用餐高峰期请提前下单，谢谢。'
+      }
     },
     filters: {
       formatDistance(value) {
