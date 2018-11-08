@@ -62,6 +62,12 @@
         document.body.appendChild(viewerModal.$el)
       }
     },
+    beforeDestroy() {
+      if (modalMounted) {
+        modalMounted = false
+        document.body.removeChild(viewerModal.$el)
+      }
+    },
     methods: {
       open(idx) {
         this.modal.items = this.items
