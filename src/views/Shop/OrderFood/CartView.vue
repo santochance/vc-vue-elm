@@ -143,7 +143,7 @@
 
 .cartview {
   position: relative;
-  z-index: 9999;
+  z-index: 999;
 }
 .cartview__mask {
   position: fixed;
