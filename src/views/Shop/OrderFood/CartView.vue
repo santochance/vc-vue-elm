@@ -46,12 +46,14 @@
     </div>
 
     <div class="cartbar">
-      <a v-show="entities.length > 0" class="cartbar__btn-toggle-panel" href="javascript:"
+      <a class="cartbar__btn-toggle-panel" href="javascript:"
         @click.stop.prevent="toggleShow"
       >
         <span v-show="entities.length" class="cartbar__badge">{{ total.quantity }}</span>
       </a>
-      <a v-show="entities.length <= 0" class="cartbar__btn-toggle-panel cartbar__btn-toggle-panel_empty" href="javascript:"></a>
+      <a class="cartbar__btn-toggle-panel cartbar__btn-toggle-panel_empty"
+        :style="{ visibility: entities.length <= 0 ? 'visible' : 'hidden' }"
+       href="javascript:"></a>
 
       <div class="cartbar__total-price">&#xA5;{{ total.price }}
         <div class="cartbar__delivery-fee">另需配送费8元</div>
@@ -312,6 +314,7 @@
   }
 }
 .cartbar__btn-toggle-panel_empty {
+  background-color: #363636;
   background-image: radial-gradient(circle,#363636 6.266667vw,#444 0);
   &:before {
     background-image: url(./cart-empty.svg);
