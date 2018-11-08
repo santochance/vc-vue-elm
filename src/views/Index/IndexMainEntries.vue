@@ -93,6 +93,7 @@
       margin-top: 22px;
       img {
         display: inline-block;
+        width: 100%;
       }
     }
     .b-entries__main-entry-icon {
