@@ -78,6 +78,7 @@
 
 <style lang="scss" scoped>
   .specs__container {
+    overflow: hidden;
     border-radius: 8px;
     background-color: #fff;
   }
