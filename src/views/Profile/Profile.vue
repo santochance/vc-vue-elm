@@ -350,6 +350,7 @@
       flex-grow: 1;
       display: flex;
       justify-content: space-between;
+      align-items: center;
       padding: 28px 20px;
       font-size: 32px;
       border-bottom: 1px solid #eee; /*no*/
