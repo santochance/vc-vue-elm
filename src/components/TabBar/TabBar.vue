@@ -1,7 +1,7 @@
 <template>
   <div class="tabbar">
     <router-link v-for="(tab, idx) in tabs" :key="tab.key"
-     :to="tab.path"
+     :to="tab.path" replace
      class="tabbar__tab"
      :class="{ tabbar__tab_active: currentTabKey === idx }"
      @click="currentTabKey = idx">
@@ -20,7 +20,7 @@
   export default {
     name: 'TabBar',
     components: {
-      
+
     },
     props: {
       currentTab: {
@@ -55,7 +55,7 @@
           activeIconId: '#profile',
           path: '/profile',
         }],
-        currentTabKey: '', 
+        currentTabKey: '',
       }
     },
     created() {
