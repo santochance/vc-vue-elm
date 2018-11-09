@@ -1,4 +1,3 @@
-
 let lastTouchY = 0
 let maybePrevent = false
 let passiveSupported = false
@@ -62,7 +61,6 @@ const getElement = elem => {
   } else {
     target = window
   }
-  console.log('pull to refresh target:', target)
   return target
 }
 
@@ -79,5 +77,3 @@ export const resumePullToRefresh = elem => {
   target.removeEventListener('touchmove', onTouchMove, passiveSupported ? { passive: false } : false)
 
 }
-
-console.log('prevent pull fresh loaded')
