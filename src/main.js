@@ -10,6 +10,7 @@ import { parseImgHash } from '@/util/utils'
 import Sticker from '@/util/Sticker'
 // import ScrollLocker from '@/util/ScrollLocker'
 import { HoldUpScroll, LazyLocalScroll } from '@/util/VuePlugins'
+import { preventPullToRefresh } from '@/util/togglePullToRefresh'
 import persistence from '@/util/persistence'
 
 import '@/util/flexible';
@@ -25,6 +26,9 @@ Vue.use(VueLazyload, {
 Vue.use(VeeValidate)
 Vue.use(HoldUpScroll)
 Vue.use(LazyLocalScroll)
+
+// 应用范围内阻止下拉刷新
+preventPullToRefresh()
 
 Vue.prototype.$persistence = persistence
 
