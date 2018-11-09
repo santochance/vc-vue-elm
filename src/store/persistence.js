@@ -3,7 +3,7 @@ import {
   SAVE_LOCATION
 } from './mutation-types'
 
-const debug = true
+const debug = false
 
 export function initState(state) {
   let initial = {}

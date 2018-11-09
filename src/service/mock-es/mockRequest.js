@@ -3,8 +3,8 @@ import { parse } from 'qs'
 import mockApis from './index'
 
 // 响应延迟
+const debug = false
 const delay = 500
-const debug = true
 
 export default function mockRequest(url, options) {
 

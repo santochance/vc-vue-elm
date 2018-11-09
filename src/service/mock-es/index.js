@@ -16,7 +16,7 @@ import remarkList from './remarkList'
 import user from './user'
 import extraProfile from './extra_profile.js'
 
-import persistence from '@/util/persistence'
+// import persistence from '@/util/persistence'
 
 import newUserCheck from './index/new_user_check'
 // import restaurants from './index/restaurants'
@@ -41,7 +41,7 @@ const tagMap = {
 
 // let loginedUser = { ...persistence.getItem('USER') }
 
-console.log('persistence:', persistence)
+// console.log('persistence:', persistence)
 
 export default {
 

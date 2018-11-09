@@ -7,6 +7,8 @@ import {
 
 import persistence from '@/util/persistence'
 
+const debug = false
+
 export default {
 
   fetchCurrentUser({ commit, dispatch }) {
@@ -72,11 +74,11 @@ export default {
         })
       })
         .then((position) => {
-          console.log('[locate success]定位成功:', position)
+          debug && console.log('[locate success]定位成功:', position)
           return position
         })
         .catch((error) => {
-          console.error('[locate error]定位失败：', error)
+          debug && console.error('[locate error]定位失败：', error)
           throw error
         })
     } else {

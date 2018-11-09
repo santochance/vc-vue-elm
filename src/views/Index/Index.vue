@@ -115,7 +115,7 @@
   const importGeohash = () => import(/* webpackChunkName: "Geohash" */ 'ngeohash')
   const importShopContainer = () => import(/* webpackChunkName: "ShopContainer" */ '@/views/ShopContainer')
 
-  const debug = true
+  const debug = false
 
   export default {
     name: 'Index',

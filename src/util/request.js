@@ -2,7 +2,7 @@ import ('es6-promise/auto')
 import fetch from 'isomorphic-fetch'
 import mockRequest from '../service/mock-es/mockRequest'
 
-const debug = true
+const debug = false
 const proxyServer = process.env.PROXY_SERVER || 'https://cors-proxy.leanapp.cn'
 
 const request = function (url, options) {
@@ -121,12 +121,12 @@ const request = function (url, options) {
 
 // 是否使用代理
 const noProxy = process.env.NO_PROXY === 'true'
-console.warn('[mock service] 当前正在使用 mock service')
+debug && console.warn('[mock service] 当前正在使用 mock service')
 
 const mockRequestWrapper = (url, options) =>
   mockRequest(url, options)
     .catch((err) => {
-      console.warn('[mock service]尝试通过 network 请求...')
+      debug && console.warn('[mock service]尝试通过 network 请求...')
       throw err
     })
     .catch(() => request(url, options))
