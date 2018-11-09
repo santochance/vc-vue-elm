@@ -14,7 +14,9 @@ const tabPageWrapper = (tabKey, component) =>
     injectedComponent: component,
   })
 
-export default new Router({
+import injectDemoRoutes from '@/demos/injectDemoRoutes'
+
+export default new Router(injectDemoRoutes({
   routes: [
     /* tabbar */
     {
@@ -99,4 +101,4 @@ export default new Router({
       component: () => import(/* webpackChunkName: "login" */ '@/views/Login'),
     }
   ],
-});
+}));
