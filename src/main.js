@@ -13,6 +13,9 @@ import { HoldUpScroll, LazyLocalScroll } from '@/util/VuePlugins'
 import { preventPullToRefresh } from '@/util/togglePullToRefresh'
 import persistence from '@/util/persistence'
 
+// 检测 vpHeight
+import '@/util/detectVpHeight'
+
 import '@/util/flexible';
 import '@/assets/styles/base.scss';
 import '@/assets/styles/util.scss';
@@ -26,6 +29,7 @@ Vue.use(VueLazyload, {
 Vue.use(VeeValidate)
 Vue.use(HoldUpScroll)
 Vue.use(LazyLocalScroll)
+
 
 // 应用范围内阻止下拉刷新
 preventPullToRefresh()
