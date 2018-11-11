@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <keep-alive>
-      <router-view :include="['Index']" />
+    <keep-alive :include="['TabPage']">
+      <router-view />
     </keep-alive>
   </div>
 </template>

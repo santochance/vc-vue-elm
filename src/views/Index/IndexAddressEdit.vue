@@ -3,7 +3,7 @@
   const debug = false
 
   export default {
-    name: 'IndexPage',
+    name: 'IndexAddressEdit',
     components: {
 
     },
@@ -16,14 +16,11 @@
       }
     },
     computed: {
-      eventBus() {
-        return this
-      },
+
     },
     created() {
       debug && (window[this.$options.name] = this)
 
-      debug && console.log('<IndexPage> created')
     },
     methods: {
 
@@ -32,7 +29,9 @@
 </script>
 
 <template>
-  <router-view></router-view>
+  <div class="b-namespace b-namespace__box">
+    <span>IndexAddressEdit</span>
+  </div>
 </template>
 
 
