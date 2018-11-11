@@ -288,7 +288,9 @@ export const fetchBannerList = ({ latitude, longitude }) =>
  * 获取城市列表
  */
 export const fetchCityList = () =>
-  request(`https://shadow.elemecdn.com/lib/city-list@0.0.3/city_list.json`)
+  request(`https://shadow.elemecdn.com/lib/city-list@0.0.3/city_list.json`, {
+    credentials: 'omit',
+  })
 
 /**
  * 搜索附近 POI
