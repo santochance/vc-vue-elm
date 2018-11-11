@@ -57,14 +57,17 @@
   }
 
   const isMobile = window.navigator.userAgent.search(/mobile/i) !== -1
+  const isFirefox = window.navigator.userAgent.search(/firefox/i) !== -1
 
   if (isMobile) {
 
     debug && console.log('将会检测 viewport height')
 
-    window.addEventListener('load', detectVpHeight)
+    if (!isFirefox) {
+      window.addEventListener('load', detectVpHeight)
 
-    // 修复 fixed 底栏贴底异常
-    document.body.style.height = 'calc(100% + 1px)'
+      // 修复 fixed 底栏贴底异常
+      document.body.style.height = 'calc(100% + 1px)'
+    }
   }
 }());
