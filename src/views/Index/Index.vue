@@ -12,7 +12,7 @@
         :location-name="location.locationName"
         :locating="locating"
         :detecting="!loaded"
-        @click:address="onClickHeaderAddress"
+        @click:address="chooseAddress"
       ></IndexHeader>
       <IndexSearch></IndexSearch>
 
@@ -67,15 +67,15 @@
 
     </div>
 
-    <transition name="slide-left">
-      <SelectAddress
+<!--     <transition name="slide-left">
+      <IndexSelectAddress
         class="p-index__select-address"
         v-show="selectAddressVisible"
         :visible="selectAddressVisible"
         @change="onChangeAddress"
-        @back="selectAddressVisible = false"
-      ></SelectAddress>
-    </transition>
+        @back="closeSelectAddress"
+      ></IndexSelectAddress>
+    </transition> -->
 
     <transition name="fade">
       <div class="p-index__back-top"
@@ -91,7 +91,7 @@
     >
       <img src="./index-locate-fail.gif" alt="">
       <h3>输入地址后才能订餐哦！</h3>
-      <button @click.stop.prevent="selectAddressVisible = true">手动选择地址</button>
+      <button @click.stop.prevent="chooseAddress">手动选择地址</button>
     </div>
   </div>
 </template>
@@ -110,12 +110,12 @@
   import IndexShopListFilter from './IndexShopListFilter'
   import IndexShopListItem from './IndexShopListItem'
   import InfiniteScroll from '@/components/common/InfiniteScroll'
-  import SelectAddress from '../SelectAddress'
+  import IndexSelectAddress from './IndexSelectAddress'
   // const SelectAddress = () => import(/* webpackChunkName: "SelectAddress" */ '../SelectAddress')
   const importGeohash = () => import(/* webpackChunkName: "Geohash" */ 'ngeohash')
   const importShopContainer = () => import(/* webpackChunkName: "ShopContainer" */ '@/views/ShopContainer')
 
-  const debug = false
+  const debug = true
 
   export default {
     name: 'Index',
@@ -129,7 +129,7 @@
       IndexShopListFilter,
       InfiniteScroll,
       IndexShopListItem,
-      SelectAddress,
+      IndexSelectAddress,
     },
     props: {
 
@@ -160,6 +160,8 @@
         restaurantListState: 'loaded', // 0: init, 1: loading, 2: loaded, 3: complete, 4: empty
 
         favourImgParam: '?imageMogr/format/webp/thumbnail/!240x160r/gravity/Center/crop/240x160/',
+
+        geohashChanged: false,
       }
     },
     computed: {
@@ -191,10 +193,15 @@
       },
     },
     watch: {
-
+      geohash(value, oldValue) {
+        if (value !== oldValue) {
+          this.geohashChanged = true
+        }
+      },
     },
     created() {
       debug && (window[this.$options.name] = this)
+      debug && console.log('<Index> created')
 
       this.loaded = false
 
@@ -226,6 +233,14 @@
           importShopContainer()
         })
     },
+    activated() {
+      debug && console.log('<Index> activated')
+
+      if (this.geohashChanged) {
+        this.geohashChanged = false
+        this.onChangeAddress()
+      }
+    },
     mounted() {
       window.addEventListener('scroll', debounce(() => {
         this.backTopVisible = window.scrollY > 1800
@@ -251,8 +266,6 @@
       locate() {
         this.locating = true
         this.locState = 0
-
-        debug && console.log('正在定位地址...')
 
         return this.getCurrentPosition()
           .then(
@@ -340,8 +353,6 @@
         })
           .then(({ items, rank_id }) => {
 
-            debug && console.log('debug - get response of comments')
-
             if (this.offset === 0) {
               // 重置列表数据
               this.restaurantList = items;
@@ -374,8 +385,9 @@
       ]),
 
       /* event handlers */
-      onClickHeaderAddress() {
-        this.selectAddressVisible = true
+      chooseAddress() {
+        this.$router.push('/index/address')
+        // this.selectAddressVisible = true
       },
 
       onSubmitFilters(options) {
@@ -401,6 +413,10 @@
         this.restaurantListState = 'loaded'
         this.$refs.infinite.reset(false)
         this.loadData()
+      },
+      closeSelectAddress() {
+        this.$router.back()
+        // this.selectAddressVisible = false
       },
       onBackTop() {
         document.documentElement.scrollTop = 0

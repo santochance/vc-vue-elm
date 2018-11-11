@@ -27,6 +27,8 @@ import {
   SET_CITY_LIST,
   SET_CITY_NAME,
   SET_LOCATION_NAME,
+  SET_CITY_ID,
+  SET_DISTRICT_ID,
 } from './mutation-types'
 
 
@@ -190,6 +192,12 @@ export default {
   },
   [SET_LOCATION_NAME]: function (state, locationName) {
     state.locationName = locationName
+  },
+  [SET_CITY_ID]: function (state, cityId) {
+    state.cityId = cityId
+  },
+  [SET_DISTRICT_ID]: function (state, districtId) {
+    state.districtId = districtId
   },
 }
 

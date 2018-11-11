@@ -3,6 +3,7 @@ import Router from 'vue-router';
 
 import Index from '@/views/Index'
 // import ShopContainer from '@/views/ShopContainer'
+import IndexPage from '@/views/Index/IndexPage'
 
 Vue.use(Router);
 
@@ -25,9 +26,23 @@ export default new Router(injectDemoRoutes({
       component: tabPageWrapper('index', Index),
     },
     {
-      path: '/select-address',
-      component: () => import(/* webpackChunkName: "index" */ '@/views/SelectAddress')
+      path: '/index',
+      component: IndexPage,
+      children: [{
+        path: '',
+        redirect: '/',
+      }, {
+        path: 'address',
+        component: () => import(/* webpackChunkName: 'IndexSelectAddress' */ '@/views/Index/IndexSelectAddress'),
+      }, {
+      //   path: 'address/city',
+      //   component: () => import(/* webpackChunkName: 'IndexSelectCity' */ '@/views/Index/IndexSelectCity'),
+      // }, {
+        path: 'address/create',
+        component: () => import(/* webpackChunkName: 'IndexAddressEdit' */ '@/views/Index/IndexAddressEdit'),
+      }]
     },
+
     {
       path: '/discover',
       component: tabPageWrapper('discover', () => import(/* webpackChunkName: "discover" */ '@/views/Discover')),
