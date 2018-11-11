@@ -1,5 +1,6 @@
 import Demo from '@/demos/Demo'
 import AdjustedPage from '@/demos/AdjustedPage'
+import AutoBlurInput from '@/demos/AutoBlurInput'
 
 
 export default function (config) {
@@ -9,6 +10,9 @@ export default function (config) {
     children: [{
       path: 'adjust-page',
       component: AdjustedPage,
+    }, {
+      path: 'auto-blur-input',
+      component: AutoBlurInput,
     }],
   }]
 

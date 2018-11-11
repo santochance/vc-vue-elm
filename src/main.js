@@ -11,6 +11,7 @@ import Sticker from '@/util/Sticker'
 // import ScrollLocker from '@/util/ScrollLocker'
 import { HoldUpScroll, LazyLocalScroll } from '@/util/VuePlugins'
 import { preventPullToRefresh } from '@/util/togglePullToRefresh'
+import '@/util/autoBlurInput'
 import persistence from '@/util/persistence'
 
 // 检测 vpHeight
