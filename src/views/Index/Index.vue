@@ -297,10 +297,12 @@
               return Promise.resolve()
                 .then(() => new Promise(resolve => setTimeout(resolve, 1200)))
                 .then(() => {
-                  this.selectAddressVisible = true
-                  this.$store.commit('SET_LOCATION_NAME', '未能获取地址')
+                  if (!this.geohash) {
+                    return Promise.resolve()
+                      .then(() => this.chooseAddress())
+                      .then(() => new Promise(resolve => setTimeout(resolve, 600)))
+                  }
                 })
-                .then(() => new Promise(resolve => setTimeout(resolve, 600)))
                 .then(() => {
                   this.locating = false
                   this.locState = 3

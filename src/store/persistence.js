@@ -39,7 +39,7 @@ export function initState(state) {
   }
   debug && console.log('init state with location:', location)
 
-  const locationName = persistence.getItem('LOCATION_NAME')
+  const locationName = persistence.getItem('LOCATION_NAME', 'sessionStorage')
   if (locationName != null && typeof locationName === 'string') {
     initial.locationName = locationName
   }
