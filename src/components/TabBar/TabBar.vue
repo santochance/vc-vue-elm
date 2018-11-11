@@ -104,7 +104,7 @@
     display: flex;
     align-items: center;
     height: 100px;
-    padding-top: 9px;
+    padding-top: 10px;
     box-shadow: 0 -2px 4px rgba(0, 0, 0, .1);
     background-color: #fff;
   }
