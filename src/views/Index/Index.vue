@@ -627,7 +627,6 @@
 
   /* locate fail */
     .p-index__locate-fail {
-      min-height: 1030px;
       display: flex;
       flex-direction: column;
       justify-content: center;
