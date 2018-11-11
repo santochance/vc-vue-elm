@@ -625,11 +625,13 @@
 
   /* locate fail */
     .p-index__locate-fail {
-      min-height: 1040px;
+      min-height: 1030px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      flex: 1;
+      margin-bottom: 110px;
       background-color: #fff;
       img {
         display: block;
