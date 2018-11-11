@@ -102,6 +102,7 @@
       debug && (window[this.$options.name] = this)
       this.cityNameResolved = false
 
+      this.getCityList()
       this.fetchAddressList()
       this.reverseGeoCoding(this.currentCity)
         .then(({ city }) => {
@@ -245,7 +246,6 @@
         this.query && this.search(this.query)
       },
       chooseCity() {
-        this.getCityList()
         this.$router.push(this.$route.path + '#city')
       },
       onBack() {
