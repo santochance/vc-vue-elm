@@ -23,6 +23,8 @@
   import Rating from './Rating'
   import Seller from './Seller'
 
+  const debug = true
+
   export default {
     name: 'Shop',
     components: {
@@ -75,6 +77,7 @@
       },
     },
     created() {
+      debug && (window[this.$options.name] = this)
 
       this.loadData()
     },
@@ -82,14 +85,17 @@
       loadData() {
         this.loading = true
 
-        return this.reverseGeoCoding()
+        const coords = {
+          latitude: this.latitude,
+          longitude: this.longitude
+        }
+        return this.reverseGeoCoding(coords)
           // reverseGeoCoding rejected
-          .catch(() => {})
+          .then(v => v, e => e) // finally
           .then(() => {
             return fetchBatchShop({
+              ...coords,
               user_id: this.userId,
-              latitude: this.latitude,
-              longitude: this.longitude,
               restaurantId: this.restaurantId,
             })
           })
