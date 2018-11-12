@@ -1,5 +1,5 @@
 <template>
-  <div class="tabpage">
+  <div class="tabpage" :style="{ height: shouldFixBottomBar ? docElHeight + 1 + 'px' : '' }">
     <header class="tabpage__header"></header>
     <template v-if="!injectedComponent">
       <div class="tabpage__body">
@@ -24,6 +24,19 @@
 <script>
   import TabBar from './TabBar'
 
+  const debug = true
+
+  var isAndroid = window.navigator.userAgent.search(/android/i) !== -1
+  var maybeChrome = window.chrome || window.navigator.userAgent.search(/chrome/i) !== -1
+  var shouldFix = false
+
+  if (isAndroid && maybeChrome) {
+    shouldFix = true
+    debug && console.warn('[fix TabBar] should do')
+  } else {
+    debug && console.warn('[fix TabBar] no need')
+  }
+
   export default {
     name: 'TabPage',
     components: {
@@ -45,7 +58,13 @@
       },
       injectedTabKey() {
         return this.$options.injectedTabKey
-      }
+      },
+      docElHeight() {
+        return document.documentElement.offsetHeight
+      },
+      shouldFixBottomBar() {
+        return shouldFix
+      },
     },
   }
 </script>
