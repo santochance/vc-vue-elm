@@ -41,7 +41,7 @@
     setBodyFontSize()
     setRemUnit()
     detectHairlines()
-    lockVpHeight()
+    // lockVpHeight()
   }
 
   function setScale() {
@@ -94,12 +94,12 @@
     and 100% is the min viewport height, which keep same as the height of ICB.
     See: https://developers.google.com/web/updates/2016/12/url-bar-resizing
    */
-  function lockVpHeight() {
-    // fallback for browser not support 100vh
-    docEl.style.height = '100%'
-    docEl.style.height = '100vh'
-    debug && console.log('html offsetHeight:', docEl.offsetHeight)
-    debug && console.log('html clientHeight:', docEl.clientHeight)
-    docEl.style.height = docEl.offsetHeight + 'px'
-  }
+  // function lockVpHeight() {
+  //   // fallback for browser not support 100vh
+  //   docEl.style.height = '100%'
+  //   docEl.style.height = '100vh'
+  //   debug && console.log('html offsetHeight:', docEl.offsetHeight)
+  //   debug && console.log('html clientHeight:', docEl.clientHeight)
+  //   docEl.style.height = docEl.offsetHeight + 'px'
+  // }
 }(window, document))

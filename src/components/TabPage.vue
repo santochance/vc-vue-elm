@@ -24,18 +24,18 @@
 <script>
   import TabBar from './TabBar'
 
-  const debug = false
+  // const debug = false
 
-  var isAndroid = window.navigator.userAgent.search(/android/i) !== -1
-  var maybeChrome = window.chrome || window.navigator.userAgent.search(/chrome/i) !== -1
-  var shouldFix = false
+  // var isAndroid = window.navigator.userAgent.search(/android/i) !== -1
+  // var maybeChrome = window.chrome || window.navigator.userAgent.search(/chrome/i) !== -1
+  // var shouldFix = false
 
-  if (isAndroid && maybeChrome) {
-    shouldFix = true
-    debug && console.warn('[fix TabBar] should do')
-  } else {
-    debug && console.warn('[fix TabBar] no need')
-  }
+  // if (isAndroid && maybeChrome) {
+  //   shouldFix = true
+  //   debug && console.warn('[fix TabBar] should do')
+  // } else {
+  //   debug && console.warn('[fix TabBar] no need')
+  // }
 
   export default {
     name: 'TabPage',
@@ -63,7 +63,8 @@
         return document.documentElement.offsetHeight
       },
       shouldFixBottomBar() {
-        return shouldFix
+        // return shouldFix
+        return false
       },
     },
   }
