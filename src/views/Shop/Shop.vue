@@ -80,6 +80,8 @@
       debug && (window[this.$options.name] = this)
 
       this.loadData()
+        .then(() => { window.scrollTo(0, 0) })
+
     },
     methods: {
       loadData() {
