@@ -118,5 +118,6 @@
     }
     .b-index-shoplist__infinite {
       padding: 16px 0;
+      background-color: #fff;
     }
 </style>
