@@ -14,9 +14,6 @@ import { preventPullToRefresh } from '@/util/togglePullToRefresh'
 import '@/util/autoBlurInput'
 import persistence from '@/util/persistence'
 
-// 检测 vpHeight
-import '@/util/detectVpHeight'
-
 import '@/util/flexible';
 import '@/assets/styles/base.scss';
 import '@/assets/styles/util.scss';

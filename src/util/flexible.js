@@ -1,4 +1,7 @@
 (function flexible (window, document) {
+
+  var debug = false
+
   // 是否使用根据 dpr 缩放
   var useScale = true
   // rem 自适应的最大 viewport width unit
@@ -38,6 +41,7 @@
     setBodyFontSize()
     setRemUnit()
     detectHairlines()
+    lockVpHeight()
   }
 
   function setScale() {
@@ -82,5 +86,20 @@
       }
       docEl.removeChild(fakeBody)
     }
+  }
+
+  // lock vp height to 100vh or 100%
+  /*
+    Android Chrome from version 56, 100vh is changed to the max viewport height,
+    and 100% is the min viewport height, which keep same as the height of ICB.
+    See: https://developers.google.com/web/updates/2016/12/url-bar-resizing
+   */
+  function lockVpHeight() {
+    // fallback for browser not support 100vh
+    docEl.style.height = '100%'
+    docEl.style.height = '100vh'
+    debug && console.log('html offsetHeight:', docEl.offsetHeight)
+    debug && console.log('html clientHeight:', docEl.clientHeight)
+    docEl.style.height = docEl.offsetHeight + 'px'
   }
 }(window, document))
