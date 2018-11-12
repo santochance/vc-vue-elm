@@ -35,7 +35,7 @@
         results: [],
 
         currentAddress: {
-          name: '',
+          name: '正在定位...',
           latitude: null,
           longitude: null,
           geohash: '',
@@ -100,26 +100,38 @@
     // activated, deactivated, beforeDestroy, destroyed
     created() {
       debug && (window[this.$options.name] = this)
-      this.cityNameResolved = false
 
-      this.getCityList()
-      this.fetchAddressList()
-      this.reverseGeoCoding(this.currentCity)
-        .then(({ city }) => {
-          this.$store.commit('SET_CITY_NAME', city)
-        }, () => {})
-        .then(() => {
-          this.cityNameResolved = true
-        }, () => {
-          this.cityNameResolved = false
-        })
-      this.reLocate()
+      this.init()
     },
-    beforeRouteEnter(to, from, next) {
-      console.log('come from:', from.fullPath)
-      next()
+    activated() {
+      this.init()
     },
     methods: {
+      init() {
+        this.cityNameResolved = false
+
+        return Promise.resolve()
+          .then(() => {
+            this.fetchAddressList()
+          })
+          .then(() => new Promise(resolve => setTimeout(resolve, 300)))
+          .then(() => {
+            this.reverseGeoCoding(this.currentCity)
+              .then(({ city }) => {
+                this.$store.commit('SET_CITY_NAME', city)
+              }, () => {})
+              .then(() => {
+                this.cityNameResolved = true
+              }, () => {
+                this.cityNameResolved = false
+              })
+            this.reLocate()
+          })
+          .then(() => new Promise(resolve => setTimeout(resolve, 300)))
+          .then(() => {
+            this.getCityList()
+          })
+      },
       fetchAddressList() {
         this.loaded = false
         return fetchAddressList()

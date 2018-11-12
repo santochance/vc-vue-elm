@@ -49,7 +49,7 @@
 <template>
   <div class="p-index-wrap">
     <transition :name="transitionName" :mode="transitionMode">
-      <keep-alive :include="['TabPage']">
+      <keep-alive :include="['TabPage', 'IndexSelectAddress']">
         <router-view></router-view>
       </keep-alive>
     </transition>
@@ -80,22 +80,22 @@
   }
 
   .slide-left-enter-active {
-    transition: all .3s ease-out;
+    transition: all .3s;
     z-index: 10000;
   }
   .slide-left-enter {
     transform: translateX(100%);
   }
   .slide-left-leave {
-    visibility: hidden;
+    opacity: 0;
   }
 
   .slide-right-leave-active {
-    transition: all .3s ease-out;
+    transition: all .3s;
     z-index: 10000;
   }
   .slide-right-enter {
-    visibility: hidden;
+    opacity: 0;
   }
   .slide-right-leave-to {
     transform: translateX(100%);

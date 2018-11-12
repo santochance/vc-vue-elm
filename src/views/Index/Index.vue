@@ -306,7 +306,7 @@
             return Promise.resolve()
               .then(() => new Promise(resolve => setTimeout(resolve, 2000)))  // delay
               .then(() => this.chooseAddress())
-              .then(() => new Promise(resolve => setTimeout(resolve, 600))) // delay
+              .then(() => new Promise(resolve => setTimeout(resolve, 2000))) // delay
               .then(() => { this.locState = 3 })
             }
           )
