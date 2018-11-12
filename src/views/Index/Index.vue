@@ -306,7 +306,7 @@
             return Promise.resolve()
               .then(() => new Promise(resolve => setTimeout(resolve, 2000)))  // delay
               .then(() => this.chooseAddress())
-              .then(() => new Promise(resolve => setTimeout(resolve, 2000))) // delay
+              .then(() => new Promise(resolve => setTimeout(resolve, 800))) // delay
               .then(() => { this.locState = 3 })
             }
           )
@@ -408,14 +408,11 @@
         this.fetchRestaurantList()
       },
       onChangeAddress() {
-        if (this.locState === 3) {
-          this.locState = 2
-          return this.loadData()
-        }
         this.offset = 0
         this.restaurantList = []
         this.restaurantListState = 'loaded'
-        this.$refs.infinite.reset(false)
+        // 如果是 locState 为 3，即定位失败后选择了地址，这时 inifnite 还没有加载
+        this.$refs.infinite && this.$refs.infinite.reset(false)
         this.loadData()
       },
       closeSelectAddress() {

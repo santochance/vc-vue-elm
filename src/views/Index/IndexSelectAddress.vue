@@ -5,7 +5,7 @@
   import IndexSelectCity from './IndexSelectCity'
   let Geohash = import('ngeohash').then((module) => { Geohash = module })
 
-  const debug = true
+  const debug = false
 
   export default {
     name: 'IndexSelectAddress',
