@@ -257,6 +257,9 @@
       padding-bottom: 40px;
       background-color: #fff;
     }
+    .menu__list-item {
+      overflow: hidden;
+    }
     .menu__list-title-wrap {
       margin-left: 2.6666667vw;
       padding: 2vw 8vw 2vw 0;
@@ -372,7 +375,7 @@
       bottom: 0;
     }
   }}
-  
+
   .lazy-img-fadein[lazy=loaded] {
     animation: fadeIn 1s;
     animtaion-fill-mode: both;
