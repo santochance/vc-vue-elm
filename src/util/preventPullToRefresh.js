@@ -1,6 +1,6 @@
 !(function preventPullToRefresh(window, document) {
 
-  var debug = true
+  var debug = false
 
   var isAndroid = window.navigator.userAgent.search(/android/i) !== -1
   var maybeChrome = window.chrome || window.navigator.userAgent.search(/chrome/i) !== -1
