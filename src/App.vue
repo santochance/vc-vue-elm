@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <keep-alive :include="['TabPage']">
+    <keep-alive :include="['TabPage', 'IndexPage']">
       <router-view />
     </keep-alive>
   </div>

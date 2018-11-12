@@ -23,15 +23,16 @@ export default new Router(injectDemoRoutes({
     {
       path: '/',
       // component: tabPageWrapper('index', () => import(/* webpackChunkName: "index" */ '@/views/Index')),
-      component: tabPageWrapper('index', Index),
+      component: IndexPage,
+      children: [{
+        path: '',
+        component: tabPageWrapper('index', Index),
+      }]
     },
     {
       path: '/index',
       component: IndexPage,
       children: [{
-        path: '',
-        redirect: '/',
-      }, {
         path: 'address',
         component: () => import(/* webpackChunkName: 'IndexSelectAddress' */ '@/views/Index/IndexSelectAddress'),
       }, {
