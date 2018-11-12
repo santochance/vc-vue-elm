@@ -10,11 +10,11 @@ import { parseImgHash } from '@/util/utils'
 import Sticker from '@/util/Sticker'
 // import ScrollLocker from '@/util/ScrollLocker'
 import { HoldUpScroll, LazyLocalScroll } from '@/util/VuePlugins'
-import { preventPullToRefresh } from '@/util/togglePullToRefresh'
 import '@/util/autoBlurInput'
 import persistence from '@/util/persistence'
 
 import '@/util/flexible';
+import '@/util/preventPullToRefresh';
 import '@/assets/styles/base.scss';
 import '@/assets/styles/util.scss';
 
@@ -27,10 +27,6 @@ Vue.use(VueLazyload, {
 Vue.use(VeeValidate)
 Vue.use(HoldUpScroll)
 Vue.use(LazyLocalScroll)
-
-
-// 应用范围内阻止下拉刷新
-preventPullToRefresh()
 
 // 应用页面卸载前询问
 // window.addEventListener('beforeunload', (ev) => {
