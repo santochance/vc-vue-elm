@@ -36,11 +36,11 @@ Vue.use(LazyLocalScroll)
 preventPullToRefresh()
 
 // 应用页面卸载前询问
-window.addEventListener('beforeunload', (ev) => {
-  console.log('beforeunload')
-  ev.preventDefault()
-  return (ev.returnValue = '')
-})
+// window.addEventListener('beforeunload', (ev) => {
+//   console.log('beforeunload')
+//   ev.preventDefault()
+//   return (ev.returnValue = '')
+// })
 
 Vue.prototype.$persistence = persistence
 
