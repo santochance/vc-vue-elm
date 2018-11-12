@@ -10,8 +10,8 @@
 
       <IndexHeader
         :location-name="location.locationName"
-        :locating="locating"
-        :detecting="!loaded"
+        :locating="locState === 0"
+        :detecting="locState === 1"
         @click:address="chooseAddress"
       ></IndexHeader>
       <IndexSearch></IndexSearch>
@@ -143,7 +143,6 @@
         restaurantList: [],
 
         loaded: false,
-        locating: false,
         locState: 2, // 0: 正在定位, 1: 正在识别, 2: 识别完成, 3: 定位失败
 
         offset: 0,
@@ -211,14 +210,22 @@
             this.headerLoaded = true
           }, 300)
 
-          if (!this.geohash || !this.locationName) {
+          if (!this.geohash) {
             return this.locate()
+          } else if (!this.locationName) {
+            return this.callPoi({
+              latitude: this.latitude,
+              longitude: this.longitude,
+            })
           } else {
-            return this.loadData()
+            return Promise.resolve()
+              .then(() => { this.locState = 1 })
+              .then(() => new Promise(resolve => setTimeout(resolve, 2000)))  // delay
+              .then(() => this.loadData())
           }
         })
         // 到这里时可能识别地址完成，也可能定位失败
-        .then(() => new Promise(resolve => setTimeout(resolve, 500)))
+        .then(() => new Promise(resolve => setTimeout(resolve, 1000)))
         .then(() => {
           this.loaded = true
           this.$emit('load')
@@ -248,6 +255,8 @@
     },
     methods: {
       loadData() {
+        this.locState = 2
+
         return Promise.resolve()
           .then(() => {
             // 查询接口
@@ -263,53 +272,46 @@
             this.fetchBannerList()
           })
       },
+      callPoi(coords) {
+        this.locState = 1
+
+        return this.reverseGeoCoding(coords)
+          // 这里 reverseGeoCoding 成功时会自动设置 location 和 locationName
+          // 接口无论调用是否成功， 都表示解析完成
+          .then(v => v, e => e) // finally
+          .then(() => this.loadData())
+
+      },
       locate() {
-        this.locating = true
         this.locState = 0
 
         return this.getCurrentPosition()
-          .then(
             // 定位成功
-            ({ coords }) => {
-              this.locating = false
-              this.locState = 1
+          .then(({ coords }) => {
+            const { latitude, longitude } = coords
+            this.$store.commit('SAVE_LOCATION', {
+              latitude,
+              longitude,
+              geohash: '',
+            })
+            // 识别地址
+            return this.callPoi(coords)
+          })
+          // 定位失败
+          .catch(() => {
+            importGeohash()
 
-              const { latitude, longitude } = coords
-              this.$store.commit('SAVE_LOCATION', {
-                latitude,
-                longitude,
-                geohash: '',
-              })
+            this.$store.commit('SET_LOCATION_NAME', '未能获取地址')
 
-              // 识别地址
-              return this.reverseGeoCoding(coords)
-                // 接口无论调用是否成功， 都表示解析完成
-                .then(
-                  () => { this.locState = 2 },
-                  () => { this.locState = 2 }
-                )
-                .then(() => this.loadData())
-            },
-            // 定位失败
-            () => {
-              importGeohash()
-
-              return Promise.resolve()
-                .then(() => new Promise(resolve => setTimeout(resolve, 1200)))
-                .then(() => {
-                  if (!this.geohash) {
-                    return Promise.resolve()
-                      .then(() => this.chooseAddress())
-                      .then(() => new Promise(resolve => setTimeout(resolve, 600)))
-                  }
-                })
-                .then(() => {
-                  this.locating = false
-                  this.locState = 3
-                })
+            return Promise.resolve()
+              .then(() => new Promise(resolve => setTimeout(resolve, 2000)))  // delay
+              .then(() => this.chooseAddress())
+              .then(() => new Promise(resolve => setTimeout(resolve, 600))) // delay
+              .then(() => { this.locState = 3 })
             }
           )
       },
+
       fetchEntryList() {
         return fetchEntryList({
           latitude: this.latitude,

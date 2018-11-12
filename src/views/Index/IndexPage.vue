@@ -49,7 +49,7 @@
 <template>
   <div class="p-index-wrap">
     <transition :name="transitionName" :mode="transitionMode">
-      <keep-alive>
+      <keep-alive :include="['TabPage']">
         <router-view></router-view>
       </keep-alive>
     </transition>
