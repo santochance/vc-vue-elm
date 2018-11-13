@@ -101,4 +101,12 @@ img, svg {
   color: #bbb;
 }
 
+/* Firefox */
+:focus {
+  outline: none; // for <a>
+}
+::-moz-focus-inner { // for <button>
+  border: 0;
+}
+
 /* file: base.scss */
