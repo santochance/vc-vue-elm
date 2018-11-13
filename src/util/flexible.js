@@ -1,6 +1,7 @@
+/* eslint no-unused-vars: off */
 (function flexible (window, document) {
 
-  var debug = false
+  // var debug = false
 
   // 是否使用根据 dpr 缩放
   var useScale = true
@@ -10,6 +11,9 @@
   var dpr
   var scale
   var vpWidth
+  var deviceWidth
+  var screenWidth
+  var resetTimeout
 
   var docEl = document.documentElement;
   var metaEl = document.querySelector('meta[name="viewport"]')
@@ -32,24 +36,62 @@
   refresh()
 
   function refresh() {
-  // dpr 和 scale 会改变
-    dpr = window.devicePixelRatio || 1
-    vpWidth = window.innerWidth
-    scale = useScale ? (1 / dpr) : 1
+    if (resetTimeout) {
+      clearTimeout(resetTimeout)
+      resetTimeout = null
+    }
 
-    setScale()
+    if (dpr !== window.devicePixelRatio || screenWidth !== window.screen.width) {
+      // 屏幕变化，更新相关参数
+      dpr = window.devicePixelRatio || 1
+      screenWidth = window.screen.width
+      detectHairlines()
+
+      // 当前 window.innerWidth 可能不是屏幕独立像素宽度
+      deviceWidth = null
+    }
+
+    if (!deviceWidth) {
+      var metaVp = parseMetaVp()
+      if (!(metaVp.width === 'device-width' && Number(metaVp['initial-scale']) === 1)) {
+        metaEl.setAttribute('content', 'width=device-width,initial-scale=1.0')
+      }
+      deviceWidth = window.innerWidth
+
+      if (useScale) {
+        scale = 1 / dpr
+        vpWidth = deviceWidth * dpr
+        setScale()
+      }
+
+      // 不支持 initial-scale 或 不使用 scale
+      if (vpWidth !== window.innerWidth || !useScale) {
+        scale = 1
+        vpWidth = deviceWidth
+        setScale()
+      }
+    } else {
+      vpWidth = window.innerWidth
+    }
+
+    // 设置viewport, 进行缩放(目的是实现1px border)
+    // 设置时可能会触发一次 resize 事件
     setBodyFontSize()
     setRemUnit()
-    detectHairlines()
-    // lockVpHeight()
+  }
+
+  function parseMetaVp() {
+    if (metaEl && metaEl.content) {
+      return metaEl.content.split(/\s*,\s*/).reduce((rst, pair) => {
+        var p = pair.split(/\s*=\s*/)
+        rst[p[0]] = p[1]
+        return rst
+      }, {})
+    }
   }
 
   function setScale() {
-    if (useScale) {
-      // 设置viewport, 进行缩放(目的是实现1px border)
-      // 设置时可能会触发一次 resize 事件
-      metaEl.setAttribute('content', 'initial-scale=' + scale + ',maximum-scale=' + scale + ', minimum-scale=' + scale + ',user-scalable=no');
-    }
+    metaEl.setAttribute('content', 'initial-scale=' + scale + ',maximum-scale=' + scale + ', minimum-scale=' + scale + ',user-scalable=no');
   }
 
   // adjust body font size
