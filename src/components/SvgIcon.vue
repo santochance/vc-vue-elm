@@ -1,5 +1,5 @@
 <template>
-  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="position:absolute;width:0;height:0;visibility:hidden;">
+  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="position:absolute;width:0;height:0;visibility:hidden;" id="sprite">
     <defs>
 
       <symbol viewBox="0 0 44 44" id="cart-add"><path fill="none" d="M0 0h44v44H0z"></path><path fill-rule="evenodd" d="M22 0C9.8 0 0 9.8 0 22s9.8 22 22 22 22-9.8 22-22S34.2 0 22 0zm10 24h-8v8c0 1.1-.9 2-2 2s-2-.9-2-2v-8h-8c-1.1 0-2-.9-2-2s.9-2 2-2h8v-8c0-1.1.9-2 2-2s2 .9 2 2v8h8c1.1 0 2 .9 2 2s-.9 2-2 2z" clip-rule="evenodd"></path></symbol>
@@ -103,5 +103,28 @@
 </template>
 
 <script>
-  export default {}
+
+  const debug = false
+
+  export default {
+    mounted() {
+      const isFirefox = window.navigator.userAgent.search(/firefox/i) !== -1
+      if (!isFirefox) return
+
+      debug && console.warn('[svg] fix up svg for Firefox')
+
+      this.$nextTick(() => {
+        var sprite = document.querySelector('#sprite')
+        if (sprite) {
+          var symbols = sprite.querySelectorAll('symbol')
+          symbols.forEach(symbol => {
+            var foundEl = symbol.querySelector('linearGradient')
+            if (foundEl) {
+              sprite.appendChild(foundEl.parentElement)
+            }
+          })
+        }
+      })
+    },
+  }
 </script>
