@@ -311,6 +311,7 @@
   .b-login {@at-root{
 
     .b-login__block {
+      box-sizing: border-box;
       flex: 1 0 auto;
       padding-top: 80px;
       min-height: 100%;
@@ -331,6 +332,10 @@
     .b-login__logo {
       width: 280px;
       height: 112px;
+      svg {
+        width: 100%;
+        width: 100%;
+      }
     }
     .b-login__header-title {
       display: flex;
