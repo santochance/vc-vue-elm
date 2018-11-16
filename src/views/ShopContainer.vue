@@ -17,7 +17,7 @@
 
 <script>
   import ShopSkeleton from '@/components/ShopSkeleton'
-  const Shop = () => import(/* webpackChunkName: "shop" */ './Shop/Shop')
+  const Shop = () => import(/* webpackChunkName: "Shop" */ './Shop/Shop')
 
   export default {
     name: 'ShopContainer',

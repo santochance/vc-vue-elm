@@ -3,7 +3,7 @@
   import { fetchAddressList, searchNearby, reverseGeoCoding } from '@/service/api'
   import Page from '@/components/Page'
   import IndexSelectCity from './IndexSelectCity'
-  let Geohash = import('ngeohash').then((module) => { Geohash = module })
+  let Geohash = import(/* webpackChunkName: "Geohash" */ 'ngeohash').then(module => { Geohash = module })
 
   const debug = false
 

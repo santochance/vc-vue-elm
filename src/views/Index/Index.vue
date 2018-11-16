@@ -111,9 +111,10 @@
   import IndexShopListItem from './IndexShopListItem'
   import InfiniteScroll from '@/components/common/InfiniteScroll'
   import IndexSelectAddress from './IndexSelectAddress'
-  // const SelectAddress = () => import(/* webpackChunkName: "SelectAddress" */ '../SelectAddress')
+
   const importGeohash = () => import(/* webpackChunkName: "Geohash" */ 'ngeohash')
   const importShopContainer = () => import(/* webpackChunkName: "ShopContainer" */ '@/views/ShopContainer')
+
 
   const debug = false
 
