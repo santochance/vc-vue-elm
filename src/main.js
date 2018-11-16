@@ -6,10 +6,8 @@ import store from './store';
 
 import { parseImgHash } from '@/util/utils'
 import Sticker from '@/util/Sticker'
-// import ScrollLocker from '@/util/ScrollLocker'
 import { HoldUpScroll, LazyLocalScroll } from '@/util/VuePlugins'
 import '@/util/autoBlurInput'
-import persistence from '@/util/persistence'
 
 import '@/util/flexible';
 import '@/util/preventPullToRefresh';
@@ -20,15 +18,6 @@ Vue.config.productionTip = false;
 
 Vue.use(HoldUpScroll)
 Vue.use(LazyLocalScroll)
-
-// 应用页面卸载前询问
-// window.addEventListener('beforeunload', (ev) => {
-//   console.log('beforeunload')
-//   ev.preventDefault()
-//   return (ev.returnValue = '')
-// })
-
-Vue.prototype.$persistence = persistence
 
 const host = '//fuss10.elemecdn.com'
 Vue.prototype.$getImage = function (hash, param) {
