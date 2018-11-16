@@ -5,6 +5,7 @@ import store from './store';
 
 
 import { parseImgHash } from '@/util/utils'
+import checkWebFeature from '@/util/checkWebpFeature'
 import Sticker from '@/util/Sticker'
 import { HoldUpScroll, LazyLocalScroll } from '@/util/VuePlugins'
 import '@/util/autoBlurInput'
@@ -19,11 +20,19 @@ Vue.config.productionTip = false;
 Vue.use(HoldUpScroll)
 Vue.use(LazyLocalScroll)
 
-const host = '//fuss10.elemecdn.com'
+let host = '//fuss10.elemecdn.com'
+let webpSupported = false
+checkWebFeature('lossy', function (feature, result) {
+  webpSupported = result
+})
 Vue.prototype.$getImage = function (hash, param) {
   if (!hash) return ''
+  if (!webpSupported) {
+    param = param.replace(/\/format\/webp/, '')
+  }
   return host + parseImgHash(hash) + (param || '')
 }
+
 Vue.prototype.$toRem = function (px) {
   if (!px) return 0
   return px / 750 * 10  + 'rem'

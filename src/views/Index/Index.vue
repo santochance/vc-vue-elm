@@ -30,7 +30,7 @@
               <h3 class="p-index__activity-entry-title">品质套餐</h3>
               <div class="p-index__activity-entry-desc">搭配齐全吃得好</div>
               <div class="p-index__activity-entry-go">立即抢购 ></div>
-              <img src="https://fuss10.elemecdn.com/d/d4/16ff085900d62b8d60fa7e9c6b65dpng.png?imageMogr/format/webp/thumbnail/!240x160r/gravity/Center/crop/240x160/" alt="">
+              <img :src="$getImage('dd416ff085900d62b8d60fa7e9c6b65dpng', '?imageMogr/format/webp/thumbnail/!240x160r/gravity/Center/crop/240x160/')" alt="">
             </div>
             <div class="p-index__activity-entry p-index__favour-entry"
               v-for="favour in favourEntries"
