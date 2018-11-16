@@ -21,7 +21,7 @@ module.exports = {
     const types = ['vue-modules', 'vue', 'normal-modules', 'normal']
         types.forEach(type => addStyleResource(config.module.rule('scss').oneOf(type)))
 
-    if (process.env.NODE_ENV === 'production') {
+    if (process.env.NODE_ENV === 'production' && process.env.ANALYZE === 'true') {
       config.plugin('webpack-report')
         .use(BundleAnalyzerPlugin, [{
           analyzerPort: 9999
