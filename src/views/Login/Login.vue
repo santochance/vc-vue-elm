@@ -96,6 +96,9 @@
   import { mapActions } from 'vuex'
   import { Modal, Toast } from '@/components/common'
   import { fetchMobileCode, fetchCaptcha } from '@/service/api'
+  import Vue from 'vue'
+  import(/* webpackChunkName: 'vee-validate' */ 'vee-validate')
+    .then(VeeValidate => Vue.use(VeeValidate))
 
   const debug = true
   debug && console.warn('[Debug] Login debug is activating')

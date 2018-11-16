@@ -1,8 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-import Index from '@/views/Index'
-// import ShopContainer from '@/views/ShopContainer'
 import IndexPage from '@/views/Index/IndexPage'
 
 Vue.use(Router);
@@ -22,11 +20,10 @@ export default new Router(injectDemoRoutes({
     /* tabbar */
     {
       path: '/',
-      // component: tabPageWrapper('index', () => import(/* webpackChunkName: "index" */ '@/views/Index')),
       component: IndexPage,
       children: [{
         path: '',
-        component: tabPageWrapper('index', Index),
+        component: tabPageWrapper('index', () => import(/* webpackChunkName: 'Index' */ '@/views/Index')),
       }]
     },
     {

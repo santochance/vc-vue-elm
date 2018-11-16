@@ -86,6 +86,12 @@
 <script>
   import { Tag } from '@/components/common'
   import CartButton from './CartButton'
+  import Vue from 'vue'
+  import(/* webpackChunkName: 'vue-lazy-load' */ 'vue-lazyload')
+    .then(VueLazyload => Vue.use(VueLazyload, {
+      preload: 3,
+      attempt: 5,
+    }))
 
   export default {
     name: 'FoodMenu',

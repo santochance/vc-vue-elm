@@ -79,6 +79,10 @@
   import Page from '@/components/Page'
   import Radio from '@/components/Radio'
   import Toast from '@/components/common/Toast'
+  import Vue from 'vue'
+  import(/* webpackChunkName: 'vee-validate' */ 'vee-validate')
+    .then(VeeValidate => Vue.use(VeeValidate))
+
 
   const debug = true
 
