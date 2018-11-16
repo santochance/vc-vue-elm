@@ -6,6 +6,14 @@ module.exports = {
   baseUrl: process.env.BASE_URL || '',
   devServer: {
     before: useMock,
+    quiet: false,
+    stats: {
+      colors: true,
+      assets: false,
+      children: false,
+      // chunks: false,
+      modules: false,
+    }
   },
   chainWebpack: config => {
     // automatic imports style assets
