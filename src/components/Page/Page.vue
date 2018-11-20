@@ -14,7 +14,7 @@
 
 <script>
   import PageHeader from './PageHeader'
-  import LoadingImage from './LoadingImage'
+  import LoadingImage from '../LoadingImage'
 
   export default {
     name: 'Page',
