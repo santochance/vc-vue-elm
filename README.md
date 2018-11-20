@@ -1,18 +1,27 @@
-基于 vue 编写仿饿了么WebApp（电商类单页面应用）
+基于 vue 系列技术栈编写的 Web App，高度还原饿了么
+
+[在线演示地址](https://santochance.github.io/vc-vue-elm/)
+
+![二维码](./docs/demo_qrcode.png)
 
 ## 前言
 
 做这个项目的基本目的之一想通过实践来加深对 vue 系列技术栈的学习。其次，鉴于之前的学习 react 系列技术栈的时候做了一个简单的 PC 端电商类 SPA，购物车部分虽然实现了交互逻辑，但使用的数据是由自己虚构的，数据模型相对简单，也没有考虑到后端接口调用，所以这次依然选择购物车项目来深入学习前后端数据交互。最后，随着移动互联网的快速发展，移动端Web网页或应用可以说是大势所趋，也是需要加深学习的。
 
-综合“vue 技术栈”、“购物车项目”和“移动端”等关键词，最终的选择就是饿了么的点餐和下单功能模块。
-
-- 移动端
-- 购物车项目
-- vue 系列技术栈
+综合“vue 技术栈”、“购物车项目”和“移动端”等关键词，最终的选择就是仿饿了么编写一个 WebApp。
 
 ## 技术栈
 
-vue2.5 + vuex + vue-router + vue-cli3(webpack) + fetch + ES2015
+vue2.5 + vuex + vue-router + vue-cli3(webpack) + Node.js
+
+## 项目启动
+
+```
+git clone https://github.com/santochance/vc-vue-elm.git
+cd vc-vue-elm
+npm install
+npm run serve
+```
 
 ## 项目功能
 
@@ -32,6 +41,7 @@ vue2.5 + vuex + vue-router + vue-cli3(webpack) + fetch + ES2015
 - [x] 个人中心
 - [x] 账户信息
 
+<!--
 ## 演示截图
 
 首页
@@ -43,7 +53,12 @@ vue2.5 + vuex + vue-router + vue-cli3(webpack) + fetch + ES2015
 购物车
 登录注册
 个人中心
+-->
 
+## 开发过程中的问题与解决
+
+
+<!--
 ## 实现的组件或插件
 
 Modal
@@ -53,4 +68,5 @@ ImageViewer
 InfiniteScroll
 Sticker?
 TabBar
+-->
 
