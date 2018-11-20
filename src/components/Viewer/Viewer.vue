@@ -14,7 +14,7 @@
   import Vue from 'vue'
   import ViewerModal from './ViewerModal'
 
-  const viewerModal = new (Vue.extend(ViewerModal))()
+  let viewerModal
   let modalMounted = false
 
   export default {
@@ -33,11 +33,13 @@
     },
     data() {
       return {
-        modal: viewerModal,
         clickLocking: false,
       }
     },
     computed: {
+      modal() {
+        return viewerModal
+      },
       usedItems() {
         if (!this.thumbnailIndex) return this.items
 
@@ -57,15 +59,19 @@
     },
     mounted() {
       if (!modalMounted) {
+        console.log('[viewer] mounted')
         modalMounted = true
+        viewerModal = new (Vue.extend(ViewerModal))()
         viewerModal.$mount()
         document.body.appendChild(viewerModal.$el)
       }
     },
     beforeDestroy() {
       if (modalMounted) {
+        console.log('[viewer] beforeDestroy')
         modalMounted = false
         document.body.removeChild(viewerModal.$el)
+        viewerModal = null
       }
     },
     methods: {
