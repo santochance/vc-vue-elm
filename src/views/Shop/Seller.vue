@@ -27,7 +27,9 @@
         </div>
       </div>
     </div>
-    <div class="seller__item">
+    <div class="seller__item"
+      v-if="shopDetails.albums.length"
+    >
       <div class="seller__item-head"><span>商家实景</span></div>
       <div class="album__content">
         <a v-for="(album, index) in shopDetails.albums" :key="album.name + index"
