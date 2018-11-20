@@ -61,10 +61,10 @@
                     <span>好评率{{ item.satisfy_rate }}%</span>
                   </div>
                   <strong class="food__price">
-                    <span>{{ item.specfoods[0].price }}</span>
+                    <span>{{ item.specfoods[0].price | toPrice(2, false) }}</span>
                     <del v-if="item.specfoods[0].original_price"
                       class="food__original-price"
-                      >￥{{ item.specfoods[0].original_price }}</del>
+                      >￥{{ item.specfoods[0].original_price | toPrice(2, false) }}</del>
                   </strong>
 
                   <cart-button class="food__btns"
@@ -98,6 +98,12 @@
     components: {
       Tag,
       CartButton,
+    },
+    filters: {
+      toPrice(value, num, keepTrailing) {
+        const output = (value || 0).toFixed(num || 2)
+        return keepTrailing ? output : String(Number(output))
+      },
     },
     props: {
       shopDetails: {
