@@ -6,7 +6,7 @@ import store from './store';
 import imageHash from '@/util/imageHash'
 
 import Sticker from '@/util/Sticker'
-import { HoldUpScroll, LazyLocalScroll } from '@/util/VuePlugins'
+import { HoldUpScroll, LazyLocalScroll } from '@/util/scrollHelpers'
 import '@/util/autoBlurInput'
 
 import '@/util/flexible';
