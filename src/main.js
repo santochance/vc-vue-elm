@@ -6,6 +6,7 @@ import store from './store';
 import '@/util/flexible';
 import '@/util/preventPullToRefresh';
 import '@/assets/styles/base.scss';
+// import '@/assets/styles/util.scss';
 
 import imageHash from '@/util/imageHash'
 
