@@ -1,6 +1,6 @@
-import ('es6-promise/auto')
-import fetch from 'isomorphic-fetch'
-import mockRequest from '../service/mock-es/mockRequest'
+// import ('es6-promise/auto')
+// import fetch from 'isomorphic-fetch'
+// import mockRequest from '../service/mock-es/mockRequest'
 
 const debug = false
 const proxyServer = process.env.PROXY_SERVER || 'https://cors-proxy.leanapp.cn'
@@ -120,18 +120,18 @@ const request = function (url, options) {
 }
 
 // 是否使用代理
-const noProxy = process.env.NO_PROXY === 'true'
-debug && console.warn('[mock service] 当前正在使用 mock service')
+// const noProxy = process.env.NO_PROXY === 'true'
+// debug && console.warn('[mock service] 当前正在使用 mock service')
 
-const mockRequestWrapper = (url, options) =>
-  mockRequest(url, options)
-    .catch((err) => {
-      debug && console.warn('[mock service]尝试通过 network 请求...')
-      throw err
-    })
-    .catch(() => request(url, options))
+// const mockRequestWrapper = (url, options) =>
+//   mockRequest(url, options)
+//     .catch((err) => {
+//       debug && console.warn('[mock service]尝试通过 network 请求...')
+//       throw err
+//     })
+//     .catch(() => request(url, options))
 
-const usedRequest = noProxy ? request : mockRequestWrapper
-debug && (window['request'] = usedRequest)
+// const usedRequest = noProxy ? request : mockRequestWrapper
+// debug && (window['request'] = usedRequest)
 
-export default usedRequest
+export default request
