@@ -7,7 +7,6 @@
 </template>
 
 <script>
-  import SvgIcon from '@/components/SvgIcon'
   import Vue from 'vue'
 
   export default {
@@ -30,9 +29,13 @@
     },
     methods: {
       mountSvgIcon() {
-        const icons = new (Vue.extend(SvgIcon))()
-        icons.$mount()
-        document.body.appendChild(icons.$el)
+        import(/* webpackChunkName: "SvgIcon" */ '@/components/SvgIcon')
+          .then((module) => {
+            const SvgIcon = module.default || module
+            const icons = new (Vue.extend(SvgIcon))()
+            icons.$mount()
+            document.body.appendChild(icons.$el)
+          })
       }
     }
   }
