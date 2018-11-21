@@ -9,7 +9,9 @@ module.exports = {
     quiet: false,
     stats: {
       colors: true,
-      assets: false,
+      assets: true,
+      excludeAssets: /\.(jpe?g|png|gif|svg)$/,
+      assetsSort: '!size', // 以 size 字段降序排序
       children: false,
       // chunks: false,
       modules: false,
