@@ -13,105 +13,103 @@ const tabPageWrapper = (tabKey, component) =>
     injectedComponent: component,
   })
 
-import injectDemoRoutes from '@/demos/injectDemoRoutes'
+const Index = tabPageWrapper('index', () => import(/* webpackChunkName: 'Index' */ '@/views/Index'))
+const Discover = tabPageWrapper('discover', () => import(/* webpackChunkName: "Discover" */'@/views/Discover'))
+const Order = tabPageWrapper('order', () => import(/* webpackChunkName: "Order" */ '@/views/Order'))
+const Profile = tabPageWrapper('profile', () => import(/* webpackChunkName: "Profile" */ '@/views/Profile'))
 
-export default new Router(injectDemoRoutes({
-  routes: [
-    /* tabbar */
-    {
-      path: '/',
-      component: IndexPage,
-      children: [{
-        path: '',
-        component: tabPageWrapper('index', () => import(/* webpackChunkName: 'Index' */ '@/views/Index')),
-      }]
-    },
-    {
-      path: '/index',
-      component: IndexPage,
-      children: [{
-        path: 'address',
-        component: () => import(/* webpackChunkName: 'IndexSelectAddress' */ '@/views/Index/IndexSelectAddress'),
-      }, {
-      //   path: 'address/city',
-      //   component: () => import(/* webpackChunkName: 'IndexSelectCity' */ '@/views/Index/IndexSelectCity'),
-      // }, {
-        path: 'address/create',
-        component: () => import(/* webpackChunkName: 'IndexAddressEdit' */ '@/views/Index/IndexAddressEdit'),
-      }]
-    },
+const IndexSelectAddress = () => import(/* webpackChunkName: 'IndexSelectAddress' */ '@/views/Index/IndexSelectAddress')
+const IndexAddressEdit = () => import(/* webpackChunkName: 'IndexAddressEdit' */ '@/views/Index/IndexAddressEdit')
 
-    {
-      path: '/discover',
-      component: tabPageWrapper('discover', () => import(/* webpackChunkName: "discover" */ '@/views/Discover')),
-    },
-    {
-      path: '/order',
-      component: tabPageWrapper('order', () => import(/* webpackChunkName: "order" */ '@/views/Order')),
-    },
+const Login = () => import(/* webpackChunkName: "login" */ '@/views/Login')
+const Shop = () => import(/* webpackChunkName: "ShopContainer" */ '@/views/ShopContainer')
 
-    /* shop */
-    {
-      path: '/shop',
-      component: () => import(/* webpackChunkName: "ShopContainer" */ '@/views/ShopContainer'),
-      // component: ShopContainer,
-    },
+const Checkout = () => import(/* webpackChunkName: "checkout" */ '@/views/Checkout')
+const CheckoutConfirmOrder = () => import(/* webpackChunkName: "confirm-order" */ '@/views/Checkout/ConfirmOrder')
+const CheckoutAddress = () => import(/* webpackChunkName: "checkout-address" */ '@/views/Checkout/CheckoutAddress')
+const CheckoutAddressEdit = () => import(/* webpackChunkName: "checkout-address-edit" */ '@/views/Checkout/CheckoutAddressEdit')
+const CheckoutRemark = () => import(/* webpackChunkName: "remark" */ '@/views/Checkout/Remark')
 
-    /* checkout */
-    {
-      path: '/checkout',
-      component: () => import(/* webpackChunkName: "checkout" */ '@/views/Checkout'),
-      children: [{
-        path: '',
-        component: () => import(/* webpackChunkName: "confirm-order" */ '@/views/Checkout/ConfirmOrder'),
-      }, {
-        path: 'address',
-        component: () => import(/* webpackChunkName: "checkout-address" */ '@/views/Checkout/CheckoutAddress'),
-      }, {
-        path: 'address/(edit|create)',
-        component: () => import(/* webpackChunkName: "checkout-address-edit" */ '@/views/Checkout/CheckoutAddressEdit'),
-      }, {
-        path: 'remark',
-        component: () => import(/* webpackChunkName: "remark" */ '@/views/Checkout/Remark'),
-      }]
-    },
+const ProfileInfo = () => import(/* webpackChunkName: "profile-info" */ '@/views/Profile/ProfileInfo')
+const ProfileInfoMain = () => import(/* webpackChunkName: "profile-info-main" */ '@/views/Profile/ProfileInfoMain')
+const ProfileInfoUsername = () => import(/* webpackChunkName: "profile-info-username" */ '@/views/Profile/ProfileInfoUsername')
+const ProfileInfoPassword = () => import(/* webpackChunkName: "profile-info-password" */ '@/views/Profile/ProfileInfoPassword')
+const ProfileRebindMobile = () => import(/* webpackChunkName: "profile-rebind-mobile" */ '@/views/Profile/ProfileRebindMobile')
+const ProfileAddress = () => import(/* webpackChunkName: "profile-address" */ '@/views/Profile/ProfileAddress')
+const ProfileAddressEdit = () => import(/* webpackChunkName: "profile-address-edit" */ '@/views/Profile/ProfileAddressEdit')
 
-    /* profile */
-    {
-      path: '/profile',
-      component: tabPageWrapper('profile', () => import(/* webpackChunkName: "profile" */ '@/views/Profile')),
-    },
-    {
-      path: '/profile/info',
-      component: () => import(/* webpackChunkName: "profile-info" */ '@/views/Profile/ProfileInfo'),
-      children: [{
-        path: '',
-        component: () => import(/* webpackChunkName: "profile-info-main" */ '@/views/Profile/ProfileInfoMain'),
-      }, {
-        path: 'username',
-        component: () => import(/* webpackChunkName: "profile-info-username" */ '@/views/Profile/ProfileInfoUsername'),
-      }, {
-        path: 'password',
-        component: () => import(/* webpackChunkName: "profile-info-password" */ '@/views/Profile/ProfileInfoPassword'),
-      }],
-    },
-    {
-      path: '/profile/rebind',
-      component: () => import(/* webpackChunkName: "profile-rebind-mobile" */ '@/views/Profile/ProfileRebindMobile'),
-    },
-    {
-      path: '/profile/address',
-      component: () => import(/* webpackChunkName: "profile-address" */ '@/views/Profile/ProfileAddress'),
-    },
-    {
-      path: '/profile/address/(edit|create)',
-      component: () => import(/* webpackChunkName: "profile-address-edit" */ '@/views/Profile/ProfileAddressEdit'),
-    },
+const router = new Router({
+  routes: [{
+    path: '/',
+    component: IndexPage,
+    children: [{
+      path: '',
+      component: Index,
+    }]
+  }, {
+    path: '/index',
+    component: IndexPage,
+    children: [{
+      path: 'address',
+      component: IndexSelectAddress,
+    }, {
+      path: 'address/create',
+      component: IndexAddressEdit,
+    }]
+  }, {
+    path: '/discover',
+    component: Discover,
+  }, {
+    path: '/order',
+    component: Order,
+  }, {
+    path: '/profile',
+    component: Profile,
+  }, {
+    path: '/profile/info',
+    component: ProfileInfo,
+    children: [{
+      path: '',
+      component: ProfileInfoMain,
+    }, {
+      path: 'username',
+      component: ProfileInfoUsername,
+    }, {
+      path: 'password',
+      component: ProfileInfoPassword,
+    }]
+  }, {
+    path: '/profile/rebind',
+    component: ProfileRebindMobile,
+  }, {
+    path: '/profile/address',
+    component: ProfileAddress,
+  }, {
+    path: '/profile/address/(edit|create)',
+    component: ProfileAddressEdit,
+  }, {
+    path: '/login',
+    component: Login,
+  }, {
+    path: '/shop',
+    component: Shop,
+  }, {
+    path: '/checkout',
+    component: Checkout,
+    children: [{
+      path: '',
+      component: CheckoutConfirmOrder,
+    }, {
+      path: 'address',
+      component: CheckoutAddress,
+    }, {
+      path: 'address/(edit|create)',
+      component: CheckoutAddressEdit,
+    }, {
+      path: 'remark',
+      component: CheckoutRemark,
+    }]
+  }]
+})
 
-    /* login */
-    {
-      path: '/login',
-      component: () => import(/* webpackChunkName: "login" */ '@/views/Login'),
-    }
-  ],
-}));
+export default router
