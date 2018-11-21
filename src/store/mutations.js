@@ -1,4 +1,4 @@
-import isEqual from 'lodash-es/isEqual'
+import isEqual from '@/util/isEqual'
 import { Toast } from '@/components/common'
 
 import {
