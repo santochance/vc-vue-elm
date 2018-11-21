@@ -3,16 +3,16 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 
+import '@/util/flexible';
+import '@/util/preventPullToRefresh';
+import '@/assets/styles/base.scss';
+
 import imageHash from '@/util/imageHash'
 
 import Sticker from '@/util/Sticker'
 import { HoldUpScroll, LazyLocalScroll } from '@/util/scrollHelpers'
 import '@/util/autoBlurInput'
 
-import '@/util/flexible';
-import '@/util/preventPullToRefresh';
-import '@/assets/styles/base.scss';
-import '@/assets/styles/util.scss';
 
 Vue.config.productionTip = false;
 
