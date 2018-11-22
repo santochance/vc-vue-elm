@@ -1,11 +1,12 @@
 <script>
+  import IndexSkeleton from './IndexSkeleton'
 
   const debug = false
 
   export default {
     name: 'IndexPage',
     components: {
-
+      IndexSkeleton,
     },
     props: {
 
@@ -14,12 +15,22 @@
       return {
         transitionName: '',
         transitionMode: '',
+
+        // data of <Index />
+        index: {}
       }
     },
     computed: {
       eventBus() {
         return this
       },
+      routePath() {
+        return this.$route.path
+      },
+      isIndexRoute() {
+        const  path = this.$route.path
+        return path === '/' || path === '/index'
+      }
     },
     watch: {
       '$route'(to, from) {
@@ -41,16 +52,27 @@
       debug && console.log('<IndexPage> created')
     },
     methods: {
-
+      onIndexUpdated(data) {
+        this.index = data
+      }
     },
   }
 </script>
 
 <template>
-  <div class="p-index-wrap">
+  <div class="p-index__view">
     <transition :name="transitionName" :mode="transitionMode">
       <keep-alive :include="['TabPage', 'IndexSelectAddress']">
-        <router-view></router-view>
+        <div class="p-index__view">
+          <IndexSkeleton class="p-index__loading"
+            v-if="isIndexRoute"
+            v-show="index.locState !== 3"
+            :headerLoaded="index.locState > 0"
+            :entriesLoaded="index.entriesLoaded"
+            :listLoaded="index.listLoaded"
+          ></IndexSkeleton>
+          <router-view @updated:index="onIndexUpdated"></router-view>
+        </div>
       </keep-alive>
     </transition>
   </div>
@@ -58,10 +80,20 @@
 
 
 <style lang="scss" scoped>
-  .p-index-wrap {
+  .p-index__view {
     flex: 1;
     display: flex;
     flex-direction: column;
+    background-color: #fff;
+  }
+
+  .p-index__loading {
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
   }
 
   .v-enter-active,

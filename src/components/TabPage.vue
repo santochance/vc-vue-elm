@@ -12,7 +12,7 @@
     </template>
     <template v-else>
       <div class="tabpage__body">
-        <component :is="injectedComponent"></component>
+        <component :is="injectedComponent" v-on="$listeners"></component>
       </div>
       <footer class="=tabpage__footer">
         <TabBar :current-tab="injectedTabKey"></TabBar>

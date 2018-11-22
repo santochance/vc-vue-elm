@@ -1,13 +1,6 @@
 <template>
   <div class="p-index">
     <div>
-      <IndexSkeleton class="p-index__shell"
-        v-show="locState !== 3"
-        :headerLoaded="headerLoaded"
-        :entriesLoaded="entriesLoaded"
-        :listLoaded="listLoaded"
-      ></IndexSkeleton>
-
       <IndexHeader
         :location-name="location.locationName"
         :locating="locState === 0"
@@ -141,7 +134,6 @@
         selectAddressVisible: false,
         backTopVisible: false,
 
-        headerLoaded: false,
         entriesLoaded: false,
         listLoaded: false,
 
@@ -195,10 +187,6 @@
 
       return Promise.resolve()
         .then(() => {
-          setTimeout(() => {
-            this.headerLoaded = true
-          }, 300)
-
           if (!this.geohash) {
             return this.locate()
           } else if (!this.locationName) {
@@ -241,6 +229,9 @@
       window.addEventListener('scroll', debounce(() => {
         this.backTopVisible = window.scrollY > 1800
       }), 100)
+    },
+    updated() {
+      this.$emit('updated:index', this.$data)
     },
     methods: {
       loadData() {
