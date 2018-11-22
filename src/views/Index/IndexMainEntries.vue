@@ -27,13 +27,10 @@
         const size = 10
         let i = 0
         let result = []
-        let shard = []
+        let shard
         while (i < len) {
-          shard.push(entries[i])
-          if (++i >= size) {
-            result.push(shard)
-            shard = []
-          }
+          (i % size === 0) && result.push(shard = [])
+          shard.push(entries[i++])
         }
         return result
       },
