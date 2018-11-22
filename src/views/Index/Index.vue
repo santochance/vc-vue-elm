@@ -67,16 +67,6 @@
 
     </div>
 
-<!--     <transition name="slide-left">
-      <IndexSelectAddress
-        class="p-index__select-address"
-        v-show="selectAddressVisible"
-        :visible="selectAddressVisible"
-        @change="onChangeAddress"
-        @back="closeSelectAddress"
-      ></IndexSelectAddress>
-    </transition> -->
-
     <transition name="fade">
       <div class="p-index__back-top"
         v-show="backTopVisible"
@@ -110,7 +100,6 @@
   import IndexShopListFilter from './IndexShopListFilter'
   import IndexShopListItem from './IndexShopListItem'
   import InfiniteScroll from '@/components/common/InfiniteScroll'
-  import IndexSelectAddress from './IndexSelectAddress'
 
   const importGeohash = () => import(/* webpackChunkName: "Geohash" */ 'ngeohash')
   const importShopContainer = () => import(/* webpackChunkName: "ShopContainer" */ '@/views/ShopContainer')
@@ -130,7 +119,6 @@
       IndexShopListFilter,
       InfiniteScroll,
       IndexShopListItem,
-      IndexSelectAddress,
     },
     props: {
 
