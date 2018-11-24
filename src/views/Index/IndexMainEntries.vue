@@ -71,10 +71,12 @@
 
   .b-entries {}
 
-    .b-entries__box {}
+    .b-entries__box {
+      height: 354px;
+    }
 
     .b-entries__swipe {
-      height: 354px;
+      height: 100%;
     }
 
     .b-entries__main-entries {
