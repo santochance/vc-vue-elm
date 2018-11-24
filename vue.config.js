@@ -1,4 +1,7 @@
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin
+const PrerenderSPAPlugin = require('prerender-spa-plugin')
+const Renderer = PrerenderSPAPlugin.PuppeteerRenderer
+
 const path = require('path')
 const useMock = require('./src/service/mock/useMock')
 
@@ -29,6 +32,21 @@ module.exports = {
           analyzerPort: 9999
         }])
     }
+
+    // 删除 code splitting 自动生成的 prefetch
+    config.plugins.delete('prefetch')
+
+    // 使用 prerender
+    config.plugin('prerender-spa')
+      .use(PrerenderSPAPlugin, [{
+        staticDir: path.join(__dirname, '/dist'),
+        routes: ['/', '/discover', '/order', '/profile'],
+        renderer: new Renderer({
+          // headless: false,
+        })
+
+      }])
+
   }
 }
 
