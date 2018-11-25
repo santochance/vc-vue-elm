@@ -175,12 +175,10 @@
 <script>
   import { mapState, mapActions } from 'vuex'
 
-  import Page from '@/components/Page'
-
   export default {
     name: 'Profile',
     components: {
-      Page,
+
     },
     props: {
 

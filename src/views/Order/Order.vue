@@ -15,13 +15,11 @@
 
 <script>
   import { mapState } from 'vuex'
-  import Page from '@/components/Page'
   import NoDataTip from '@/components/NoDataTip'
 
   export default {
     name: 'Order',
     components: {
-      Page,
       NoDataTip,
     },
     props: {

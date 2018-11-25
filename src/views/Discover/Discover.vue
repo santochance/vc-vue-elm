@@ -8,13 +8,11 @@
 </template>
 
 <script>
-  import Page from '@/components/Page'
   import NoDataTip from '@/components/NoDataTip'
 
   export default {
     name: 'Discover',
     components: {
-      Page,
       NoDataTip,
     },
     props: {
