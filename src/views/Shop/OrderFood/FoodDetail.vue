@@ -18,6 +18,9 @@
             <span class="food-detail__price">{{ food.specfoods[0].price }}</span>
             <cart-button class="food-detail__cart-btns"
               :item="food"
+              :quantity="quantity"
+              @add="onAdd"
+              @reduce="onReduce"
               @showspec="onShowSpec" />
           </div>
           <div class="food-detail__description">{{ food.description }}</div>
@@ -46,7 +49,12 @@
         type: Boolean,
         default: false,
       },
-      food: Object,
+      food: {
+        type: Object,
+      },
+      quantity: {
+        type: Number,
+      }
     },
     data() {
       return {
@@ -57,6 +65,12 @@
       /* event */
       onClose() {
         this.$emit('close')
+      },
+      onAdd($event) {
+        this.$emit('add', $event)
+      },
+      onReduce($event) {
+        this.$emit('reduce', $event)
       },
       onShowSpec($event) {
         this.$emit('showspec', $event)
