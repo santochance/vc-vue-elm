@@ -118,6 +118,9 @@
         type: Array,
         required: true,
       },
+      selectedNums: {
+        type: Object,
+      }
     },
     data() {
       return {
@@ -134,15 +137,15 @@
       }
     },
     computed: {
-      selectedNums() {
-        return this.entities.reduce((rst, ent) => {
-          const itemId = ent.item_id
-          const categoryId = ent.category_id
-          rst.item[itemId] = (rst.item[itemId] || 0) + ent.quantity
-          rst.category[categoryId] = (rst.category[categoryId] || 0) + ent.quantity
-          return rst
-        }, { item: {}, category: {} })
-      },
+      // selectedNums() {
+      //   return this.entities.reduce((rst, ent) => {
+      //     const itemId = ent.item_id
+      //     const categoryId = ent.category_id
+      //     rst.item[itemId] = (rst.item[itemId] || 0) + ent.quantity
+      //     rst.category[categoryId] = (rst.category[categoryId] || 0) + ent.quantity
+      //     return rst
+      //   }, { item: {}, category: {} })
+      // },
       menuHeight() {
         // 根据所在视口情况动态设置 local scroll 容器高度
         // 顶部 tab 导航高度是80px, 下面 cartbar 高度是96px

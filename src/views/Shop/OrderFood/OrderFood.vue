@@ -3,6 +3,7 @@
     <FoodMenu :menu="menu"
       :shopDetails="shopDetails"
       :entities="entities"
+      :selectedNums="selectedNums"
       @add="addCart"
       @reduce="reduceCart"
       @showspec="openSpecPanel"
@@ -21,6 +22,7 @@
     </modal>
     <FoodDetail :visible="foodDetailVisible"
       :food="showingFood"
+      :quantity="selectedNums.item[showingFood && showingFood.item_id]"
       @close="closeFoodDetail"
       @add="addCart"
       @reduce="reduceCart"
@@ -71,6 +73,15 @@
         } catch(e) {
           return []
         }
+      },
+      selectedNums() {
+        return this.entities.reduce((rst, ent) => {
+          const itemId = ent.item_id
+          const categoryId = ent.category_id
+          rst.item[itemId] = (rst.item[itemId] || 0) + ent.quantity
+          rst.category[categoryId] = (rst.category[categoryId] || 0) + ent.quantity
+          return rst
+        }, { item: {}, category: {} })
       },
     },
     methods: {
