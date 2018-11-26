@@ -9,8 +9,19 @@
       v-if="error"
     >
       <img src="../assets/unauthorized.png" alt="">
-      <h3>登陆后查看商家信息</h3>
-      <button @click="toLogin">立即登录</button>
+      <template v-if="error.name === 'UNAUTHORIZED_RESTAURANT_ERROR'">
+        <h3>{{ error.message }}</h3>
+        <button @click="toLogin">立即登录</button>
+      </template>
+      <template v-else-if="error.name === 'SOA_INVOKE_ERROR'">
+        <h3>{{ error.message }}</h3>
+        <p>请重试</p>
+        <button @click="reload">重试</button>
+      </template>
+      <template v-else>
+        <h3>{{ error.message }}</h3>
+        <button @click="$router.push('/')">返回首页</button>
+      </template>
     </div>
   </div>
 </template>
@@ -31,7 +42,7 @@
     data() {
       return {
         loaded: false,
-        error: false,
+        error: null,
       }
     },
     created() {
@@ -40,14 +51,17 @@
       shopLoaded() {
         this.loaded = true
       },
-      onError() {
-        this.error = true
+      onError(error) {
+        this.error = error
       },
       toLogin() {
         this.$router.push({
           path: '/login',
           query: { redirect: this.$route.fullPath },
         })
+      },
+      reload() {
+        window.location.reload()
       }
     },
   }
@@ -75,6 +89,10 @@
       font-weight: normal;
       margin: 25px 0;
       color: #6a6a6a;
+    }
+    p {
+      color: #888;
+      margin-bottom: 25px;
     }
     button {
       padding: 20px;
