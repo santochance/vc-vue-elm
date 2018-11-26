@@ -80,14 +80,14 @@
       ]),
       addCart(entity) {
         this.ADD_CART({
-          restaurant_id: this.shopDetails.id,
           ...entity,
+          restaurant_id: this.shopDetails.id,
         })
       },
       reduceCart(entity) {
         this.REDUCE_CART({
-          restaurant_id: this.shopDetails.id,
           ...entity,
+          restaurant_id: this.shopDetails.id,
         })
       },
       clearCart() {
