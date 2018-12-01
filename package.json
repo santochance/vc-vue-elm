@@ -7,8 +7,8 @@
     "build": "cross-env ANALYZE=false vue-cli-service build",
     "analyze": "cross-env ANALYZE=true vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "prod": "start cmd /K \"browser-sync start -s dist -f dist\"",
-    "gh-pages": "cp -r dist/* gh-pages && git -C ./gh-pages add -A && git -C ./gh-pages commit -m 'publish' && git -C ./gh-pages push || echo nothing to push"
+    "preview": "start cmd /K \"browser-sync start -s dist -f dist\"",
+    "publish": "cp -r dist/* gh-pages && git -C ./gh-pages add -A && git -C ./gh-pages commit -m 'publish' && git -C ./gh-pages push || echo nothing to push"
   },
   "dependencies": {
     "es6-promise": "^4.2.4",
