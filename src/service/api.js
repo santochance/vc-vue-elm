@@ -273,3 +273,34 @@ export const searchNearby = ({ keyword, latitude, longitude }) =>
     offset: 0,
     limit: 20,
   })}`)
+
+
+/* discover */
+
+/**
+ * 查询发现页 banner
+ */
+export const fetchDiscoveryBanner = ({ latitude, longitude, params }) =>
+  request(`https://h5.ele.me/restapi/shopping/v1/sale_list_index` + `?${stringify({
+    type: 'special_food',
+    latitude,
+    longitude,
+    params,
+  })}`)
+
+/**
+ * 查询发现页入口
+ */
+export const fetchDiscoverEntries = ({ latitude, longitude }) =>
+  request(`https://h5.ele.me/restapi/member/v1/discover` + `?${stringify({
+    platform: 1,
+    block_index: 0,
+    latitude,
+    longitude,
+  })}`)
+
+/**
+ * 查询发现页活动版块
+ */
+export const fetchDiscoverSuggestion = () =>
+  request(`https://h5.ele.me/restapi/member/gifts/suggest`)
