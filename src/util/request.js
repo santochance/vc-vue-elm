@@ -2,8 +2,10 @@
 // import fetch from 'isomorphic-fetch'
 // import mockRequest from '../service/mock-es/mockRequest'
 
+import config from '@/config'
+
 const debug = false
-const proxyServer = process.env.PROXY_SERVER || 'https://cors-proxy.leanapp.cn'
+const proxyServer = process.env.PROXY_SERVER || config.proxyServer
 
 const request = function (url, options) {
   // fetch 默认不发送 cookie
