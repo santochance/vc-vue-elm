@@ -1,10 +1,12 @@
 <template>
-  <div class="cartview">
+  <div class="cartview"
+    v-if="cartClient"
+  >
     <transition name="fade">
       <div v-show="show" class="cartview__mask" @click="hideCart"></div>
     </transition>
     <div class="cartview__panel">
-      <div class="cartview__discount-tip">新用户下单立减17元</div>
+      <div class="cartview__discount-tip">{{ cart.agent_fee_tip }}</div>
       <collapse-transition>
         <div v-show="show" class="cartview__content">
           <div class="cartview__header">
@@ -56,14 +58,16 @@
        href="javascript:"></a>
 
       <div class="cartbar__total-price">&#xA5;{{ total.price }}
-        <div class="cartbar__delivery-fee">另需配送费8元</div>
+        <div class="cartbar__delivery-fee">{{ cart.agent_fee_tip }}</div>
       </div>
       <a class="cartbar__btn-checkout" href="javascript:"
-        :class="{ 'cartbar__btn-checkout_disabled': diffAmount > 0 }"
+        :class="{ 'cartbar__btn-checkout_disabled': checkoutButton.action === 'forbidden' }"
+        v-if="checkoutButton"
       >
-        <span v-if="diffAmount <= 0" @click.stop.prevent="toCheckout">去结算</span>
-        <small v-else-if="diffAmount >= 10">还差 ¥{{ diffAmount }} 起送</small>
-        <span v-else>还差 ¥{{ diffAmount }} 起送</span>
+        <span v-if="checkoutButton.action === 'checkout'" @click.stop.prevent="toCheckout">{{ checkoutButton.text }}</span>
+        <span v-if="checkoutButton.action === 'forbidden'">{{ checkoutButton.forbidden_reason.content }}</span>
+<!--         <small v-else-if="diffAmount >= 10">还差 ¥{{ diffAmount }} 起送</small>
+        <span v-else>还差 ¥{{ diffAmount }} 起送</span> -->
       </a>
     </div>
   </div>
@@ -85,6 +89,9 @@
         type: Number,
         default: 0
       },
+      cartClient: {
+        type: Object,
+      }
     },
     data () {
       return {
@@ -108,6 +115,12 @@
       },
       diffAmount() {
         return this.minAmount - this.total.price
+      },
+      cart() {
+        return this.cartClient && this.cartClient.cart || {}
+      },
+      checkoutButton() {
+        return this.cartClient && this.cartClient.checkout_button_v2
       }
     },
     methods: {

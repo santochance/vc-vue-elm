@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="cartClient">
     <FoodMenu :menu="menu"
       :shopDetails="shopDetails"
       :entities="entities"
@@ -11,6 +11,7 @@
      />
     <CartView :entities="entities"
       :minAmount="shopDetails && shopDetails.float_minimum_order_amount"
+      :cartClient="cartClient"
       @addcart="addCart"
       @reducecart="reduceCart"
       @clearcart="clearCart"
@@ -35,7 +36,7 @@
   import { updateCart } from '@/service/api'
   import { mapState, mapMutations } from 'vuex'
 
-  import { Modal } from '@/components/common'
+  import { Modal, Toast } from '@/components/common'
 
   import FoodMenu from './FoodMenu'
   import CartView from './CartView'
@@ -88,6 +89,9 @@
         }, { item: {}, category: {} })
       },
     },
+    created() {
+      this.updateRemoteCart()
+    },
     methods: {
       /* Cart */
       ...mapMutations([
@@ -114,6 +118,7 @@
         this.updateRemoteCart([])
       },
       updateRemoteCart(sku_ids) {
+        sku_ids = sku_ids || []
         var payload = {
           geohash: this.geohash,
           user_id: this.userId,
@@ -129,9 +134,12 @@
 
         updateCart(payload).then((res) => {
           // 更新本地购物车
-          console.log(res)
+          this.cartClient = res
         }).catch((err) => {
-          console.error(err)
+          Toast.open({
+            content: err.message,
+            mask: false,
+          })
         })
       },
       pick(obj, props) {

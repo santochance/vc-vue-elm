@@ -105,8 +105,11 @@
             this.shopDetails = rst
             this.menu = menu
 
-            this.loading = false
-            this.$emit('loaded')
+            return new Promise(resolve => setTimeout(resolve, 500))
+              .then(() => {
+                this.loading = false
+                this.$emit('loaded')
+              })
           }, (error) => {
             this.loading = false
             this.$emit('error', error)
