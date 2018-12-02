@@ -66,7 +66,6 @@
         <div class="p-index__view">
           <IndexSkeleton class="p-index__loading"
             v-if="isIndexRoute"
-            v-show="index.locState !== 3"
             :headerLoaded="index.locState > 0"
             :entriesLoaded="index.entriesLoaded"
             :listLoaded="index.listLoaded"
@@ -94,6 +93,10 @@
     left: 0;
     width: 100%;
     height: 100%;
+    visibility: hidden;
+    > * {
+      visibility: visible;
+    }
   }
 
   .v-enter-active,
