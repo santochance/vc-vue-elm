@@ -31,7 +31,7 @@
     </div>
     <div class="specs__result">
       <div class="specs__price">{{ item.specfoods[selectedSpecFoodIdx].price }}
-        <del class="specs__original-price">¥{{ item.specfoods[selectedSpecFoodIdx].original_price }}</del>
+        <!-- <del class="specs__original-price">&yen;{{ item.specfoods[selectedSpecFoodIdx].original_price }}</del> -->
       </div>
       <a class="specs__btn-add-cart" href="javascript"
         @click.stop.prevent="ok">选好了</a>
