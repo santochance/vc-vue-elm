@@ -136,6 +136,37 @@ export const fetchRatings = ({ restaurantId, has_content, tag_name, offset  }) =
       limit: 20,
   })}`)
 
+/**
+ * 更新购物车
+ */
+export const updateCart = ({ geohash, user_id, restaurant_id, entities, sku_ids }) =>
+  request(`https://h5.ele.me/restapi/booking/v1/cart_client`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'text/plain;chartset=utf-8'
+    },
+    body: {
+      "sub_channel": "",
+      "geohash": geohash,
+      "user_id": user_id,
+      "add_on_type": 0,
+      "restaurant_id": restaurant_id,
+      "come_from": "mobile",
+      "additional_actions": [],
+      "entities": [entities],
+      "entities_with_ingredient": [
+        []
+      ],
+      "operating_sku_ids": sku_ids,
+      "tying_sku_entities": [
+        []
+      ],
+      "packages": [
+        []
+      ]
+    }
+  })
+
 
 /**
  * 结算购物车

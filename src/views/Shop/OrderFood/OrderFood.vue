@@ -32,7 +32,8 @@
 </template>
 
 <script>
-  import { mapMutations } from 'vuex'
+  import { updateCart } from '@/service/api'
+  import { mapState, mapMutations } from 'vuex'
 
   import { Modal } from '@/components/common'
 
@@ -63,9 +64,12 @@
         /* 食品明细面板 */
         showingFood: null,
         foodDetailVisible: false,
+
+        cartClient: null,
       }
     },
     computed: {
+      ...mapState(['geohash', 'userId']),
       entities() {
         const state = this.$store.state
         try {
@@ -94,17 +98,60 @@
           ...entity,
           restaurant_id: this.shopDetails.id,
         })
+        this.updateRemoteCart([entity.sku_id])
       },
       reduceCart(entity) {
         this.REDUCE_CART({
           ...entity,
           restaurant_id: this.shopDetails.id,
         })
+        this.updateRemoteCart([entity.sku_id])
       },
       clearCart() {
         this.CLEAR_CART({
           restaurant_id: this.shopDetails.id,
         })
+        this.updateRemoteCart([])
+      },
+      updateRemoteCart(sku_ids) {
+        var payload = {
+          geohash: this.geohash,
+          user_id: this.userId,
+          restaurant_id: this.shopDetails.id,
+          entities: this.entities.map(entity => {
+            let e = this.pick(entity, ['id', 'sku_id', 'quantity', 'new_specs', 'attrs', 'specs'])
+            e.new_specs = e.specs
+            delete e.specs
+            return e
+          }),
+          sku_ids,
+        }
+
+        updateCart(payload).then((res) => {
+          // 更新本地购物车
+          console.log(res)
+        }).catch((err) => {
+          console.error(err)
+        })
+      },
+      pick(obj, props) {
+        // non-object
+        if (!obj || typeof obj !== 'object' && typeof obj !== 'function') {
+          return obj
+        }
+
+        // null, undefined, [] or ''
+        if (!props || !props.length) {
+          return obj
+        }
+
+        props = Array.isArray(props) ? props : [props]
+        return props.reduce((rst, prop) => {
+          if (prop in obj) {
+            rst[prop] = obj[prop]
+          }
+          return rst
+        }, {})
       },
       toCheckout() {
         this.SAVE_CURRENT_RESTAURANT_ID(this.shopDetails.id)
