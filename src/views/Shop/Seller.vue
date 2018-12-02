@@ -15,7 +15,9 @@
         <p><span>配送费 &yen; {{ shopDetails.piecewise_agent_fee.rules[0].fee }}</span></p>
       </div>
     </div>
-    <div class="seller__item">
+    <div class="seller__item"
+      v-if="shopDetails.activities && shopDetails.activities.length"
+    >
       <div class="seller__item-head"><span>活动与服务</span></div>
       <div class="seller__item-content activity">
         <div v-for="activity in shopDetails.activities" :key="activity.id"
