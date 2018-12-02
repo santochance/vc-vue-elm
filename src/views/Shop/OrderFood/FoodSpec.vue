@@ -81,6 +81,8 @@
     overflow: hidden;
     border-radius: 8px;
     background-color: #fff;
+    max-width: 96%;
+    margin: auto;
   }
   .specs__title {
     margin: 0;
@@ -103,12 +105,14 @@
   }
   .specs__attr-options {
     display: flex;
+    flex-wrap: wrap;
+    margin-right: -30px;
   }
   .specs__attr-option {
-    box-sizing: content-box;
+    box-sizing: border-box;
     white-space: nowrap;
     padding: 0 18px;
-    min-width: 100px;
+    min-width: 200px;
     height: 48px;
     margin: 13px 30px 0 0;
     line-height: 48px;

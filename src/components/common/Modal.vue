@@ -124,6 +124,7 @@
     z-index: 1;
     &_center {
       max-height: 80%;
+      max-width: 100%;
     }
     &_bottom {
       width: 100%;
