@@ -7,7 +7,9 @@
     <div class="p-discover__banner">
       <img :src="top.image" alt="">
     </div>
-    <section class="p-discover__section">
+    <section class="p-discover__section"
+      v-if="entries[1] && entries[1].length"
+    >
       <div class="p-discover__entries m-list-3">
         <router-link to=""
           class="b-entry"
@@ -22,29 +24,42 @@
         </router-link>
       </div>
     </section>
-    <div class="p-discover__activities">
-      <div class="b-activity__header">
-        <h3>限时好礼</h3>
-        <p>金几换豪礼</p>
-      </div>
-      <div class="b-activity__body">
-        <router-link to=""
-          v-for="(item, index) in suggestion.slice(0, 3)" :key="index"
-        >
-          <div class="b-activity-item">
-            <img class="b-activity-item__img" src="" alt="">
-            <span class="b-activity-item__corner">限时优惠</span>
-            <div class="">
-              <p class="b-activity-item__title">3元饿了么红包</p>
+    <section class="p-discover__section"
+      v-if="suggestion && suggestion.length"
+    >
+      <div class="p-discover__activity">
+        <div class="b-activity__header">
+          <div class="b-activity__title ellipsis">
+            <span class="line left"></span>
+            <svg class="icon"><use xlink:href="#alarm"></use></svg>
+            <span class="text">限时好礼</span>
+            <span class="line right"></span>
+          </div>
+          <p class="b-activity__subtitle ellipsis">金几换豪礼</p>
+        </div>
+        <div class="b-activity__body">
+          <router-link to=""
+            v-for="(item, index) in suggestion.slice(0, 3)" :key="index"
+          >
+            <div class="b-activity-item">
+              <img class="b-activity-item__img" :src="$getImage(item.image_hash, '?imageMogr/format/webp')" alt="">
+              <span class="b-activity-item__corner">{{ item.corner_marker }}</span>
               <div class="">
-                <span class="b-activity-item__price">90金币</span>
-                <span class="b-activity-item__original-price">&yen;3</span>
+                <p class="b-activity-item__title">{{ item.title }}</p>
+                <div class="">
+                  <span class="b-activity-item__price">{{ item.points_required }}金币</span>
+                  <del class="b-activity-item__original-price">&yen;{{ item.original_price }}</del>
+                </div>
               </div>
             </div>
-          </div>
-        </router-link>
+          </router-link>
+        </div>
+        <p class="b-activity__more">
+          <span>查看更多</span>
+          <svg class="b-activity__more-icon"><use xlink:href="#tab_found_next_page"></use></svg>
+        </p>
       </div>
-    </div>
+    </section>
   </Page>
 </template>
 
@@ -117,7 +132,6 @@
     }
   }
   .p-discover__section {
-    background-color: #fff;
     margin-bottom: 21px;
     border-top: 1px solid #eee;
   }
@@ -175,8 +189,68 @@
     }
   }
 
-  .p-discover__activities {
+  .p-discover__activity {
     background-color: #fff;
+    margin-bottom: 140px;
+  }
+  .b-activity__header {
+    text-align: center;
+  }
+  .b-activity__title {
+    padding-top: 39px;
+    padding-bottom: 10px;
+    font-size: 36px;
+    font-weight: 700;
+    color: #333;
+
+    .icon {
+      position: relative;
+      top: 4px;
+      width: 33px;
+      height: 33px;
+      margin-right: 10px;
+      margin-left: 8px;
+      fill: #f94843;
+    }
+    .text {
+      margin-right: 8px;
+    }
+
+    .line {
+      position: relative;
+      display: inline-block;
+      width: 28px;
+      height: 0;
+      border: 1px solid #333; /*no*/
+      margin: 16px 7px 13px;
+      &:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: #000;
+      }
+    }
+    .left {
+      &:after {
+        right: -10px;
+      }
+    }
+    .right {
+      &:after {
+        left: -10px;
+      }
+    }
+
+  }
+  .b-activity__subtitle {
+    padding-bottom: 12px  ;
+    font-size: 22px;
+    color: #999;
   }
   .b-activity__body {
     display: flex;
@@ -191,17 +265,52 @@
     width: 222px;
   }
     .b-activity-item__img {
+      display: inline-block;
       width: 222px;
       height: 220px;
       margin-bottom: 19px;
     }
     .b-activity-item__corner {
-
+      position: absolute;
+      left: 0;
+      top: 0;
+      font-size: 22px;
+      padding: 5px;
+      background-color: #000;
+      color: #fff;
     }
     .b-activity-item__title {
-
+      font-size: 26px;
+      font-weight: 400;
+      margin-bottom: 10px;
+    }
+    .b-activity-item__price {
+      display: inline-block;
+      vertical-align: middle;
+      max-width: 100px;
+      font-size: 26px;
+      line-height: 36px;
+      color: #ff5339;
+      margin-right: 7px;
     }
     .b-activity-item__original-price {
-
+      display: inline-block;
+      vertical-align: middle;
+      max-width: 80px;
+      font-size: 22px;
+      color: #aaa;
+      text-decoration: line-through;
     }
+    .b-activity__more {
+      padding: 36px;
+      text-align: center;
+      font-size: 26px;
+      color: #999;
+    }
+    .b-activity__more-icon {
+      width: 10px;
+      height: 18px;
+      margin-left: 11px;
+    }
+
 </style>
