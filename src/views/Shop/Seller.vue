@@ -30,7 +30,7 @@
       </div>
     </div>
     <div class="seller__item"
-      v-if="shopDetails.albums && shopDetails.album.length"
+      v-if="shopDetails.albums && shopDetails.albums.length"
     >
       <div class="seller__item-head"><span>商家实景</span></div>
       <div class="album__content">
