@@ -13,7 +13,7 @@
           @click.stop.prevent="mode === 'select' ? selectAddr(address) : null">
           <div  v-if="mode === 'select'"
             class="address__select">
-            <img v-if="selectedAddress && address.id === selectedAddress.id" src="./checked.png" alt="">
+            <img v-if="address.id === selectedAddressId" src="./checked.png" alt="">
           </div>
           <div class="address__body">
             <div class="address__title ellipsis">
@@ -33,7 +33,7 @@
           <!-- <button class="" @click.stop.prevent="openConfirm(address)">删除</button> -->
         </li>
       </ul>
-      <!-- 
+      <!--
       <div v-if="editorShow && editingEntity" class="editor">
         <form action="">
           <input type="text" v-model="editingEntity.location">
@@ -42,7 +42,7 @@
         </form>
       </div>
        -->
-      <!-- 
+      <!--
       <div v-if="confirmShow && confirmingEntity" class="confirm">
         <h2>删除地址</h2>
         <p>确定删除该收货地址？</p>
@@ -71,8 +71,7 @@
 </template>
 
 <script>
-  import { mapState, mapGetters, mapMutations } from 'vuex'
-  import { fetchAddressList } from '@/service/api'
+  import { mapMutations } from 'vuex'
   import Page from '@/components/Page'
   import { Modal } from '@/components/common'
 
@@ -90,6 +89,13 @@
       mode: {
         type: String,
         default: 'normal',
+      },
+      // 当前选中的地址项 id
+      selectedAddressId: {
+        type: Number,
+      },
+      addressList: {
+        type: Array,
       }
     },
     data () {
@@ -100,33 +106,12 @@
         confirmingEntity: null,
       }
     },
-    created() {
-      fetchAddressList().then(addrList => {
-        this.SAVE_ADDRESS_LIST(addrList)
-      })
-    },
-    // beforeRouteEnter(to, from, next) {
-    //   if (!from.path.match('/checkout')) {
-    //     return next('/checkout')
-    //   }
-    //   next()
-    // },
     computed: {
-      ...mapState([
-        'addressList',
-        'selectedAddressId',
-      ]),
-      ...mapGetters([
-        'selectedAddress',
-      ]),
+
     },
     methods: {
       ...mapMutations([
-        'SAVE_ADDRESS_LIST', 
-        'ADD_ADDRESS', 
-        'SAVE_ADDRESS', 
-        'REMOVE_ADDRESS', 
-        'SAVE_SELECTED_ADDRESS', 
+        'REMOVE_ADDRESS',
         'SAVE_EDITING_ADDRESS',
       ]),
       getUid: (function () {
@@ -136,20 +121,7 @@
         }
       })(),
       selectAddr(address) {
-        this.SAVE_SELECTED_ADDRESS(address)
-        this.$router.go(-1)
-      },
-      addAddr(address) {
-        const newAddr = {
-          id: this.getUid(),
-          location: address.location,
-          name: '家',
-          phone: '13812345678'
-        }
-        this.ADD_ADDRESS(newAddr)
-      },
-      saveAddr(address) {
-        this.SAVE_ADDRESS(address)
+        this.$emit('select', address)
       },
       removeAddr(address) {
         this.REMOVE_ADDRESS(address)
@@ -165,18 +137,18 @@
           this.$router.push(`${this.$route.path}/create`)
         }
       },
-      closeEditor() {
-        this.editingEntity = null
-        this.editorShow = false
-      },
-      saveEditor(entity) {
-        if (entity.id == null) {
-          this.addAddr(entity)
-        } else {
-          this.saveAddr(entity)
-        }
-        this.closeEditor()
-      },
+      // closeEditor() {
+      //   this.editingEntity = null
+      //   this.editorShow = false
+      // },
+      // saveEditor(entity) {
+      //   if (entity.id == null) {
+      //     this.addAddr(entity)
+      //   } else {
+      //     this.saveAddr(entity)
+      //   }
+      //   this.closeEditor()
+      // },
       openConfirm(entity) {
         console.log('debug - openConfirm')
         this.confirmingEntity = {...entity} || {}

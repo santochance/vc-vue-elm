@@ -1,9 +1,15 @@
 <template>
-  <Address title="我的地址" mode="normal"></Address>
+  <Address
+    title="我的地址"
+    mode="normal"
+    :addressList="addressList"
+  ></Address>
 </template>
 
 <script>
   import Address from '@/components/Address/Address'
+  import { fetchAddressList } from '@/service/api'
+
 
   export default {
     name: 'ProfileAddress',
@@ -11,11 +17,11 @@
       Address,
     },
     props: {
-      
+
     },
     data() {
       return {
-        
+        addressList: [],
       }
     },
     beforeRouteEnter(to, from, next) {
@@ -23,7 +29,13 @@
         return next('/profile')
       }
       next()
-    }
+    },
+    created() {
+      fetchAddressList().then(addressList => {
+        this.addressList = addressList
+        this.SAVE_ADDRESS_LIST(addressList)
+      })
+    },
   }
 </script>
 
