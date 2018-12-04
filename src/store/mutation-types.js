@@ -9,6 +9,7 @@ export const REDUCE_CART = 'REDUCE_CART'
 export const CLEAR_CART = 'CLEAR_CART'
 export const INIT_CART = 'INIT_CART'
 export const SAVE_CURRENT_RESTAURANT_ID = 'SAVE_CURRENT_RESTAURANT_ID'
+export const SAVE_SIG = 'SAVE_SIG'
 
 /* address */
 export const SAVE_ADDRESS_LIST = 'SAVE_ADDRESS_LIST'

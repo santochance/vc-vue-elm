@@ -265,9 +265,10 @@
         // mockTotalPrice() {
         //   return this.entities.reduce((rst, ent) => rst += ent.price * ent.quantity, 0)
         // },
+         'addressList': 'addressList',
       }),
       ...mapGetters([
-        'selectedAddress', 'remarkText', 'addressList'
+        'selectedAddress', 'remarkText',
       ]),
       delivery_type() {
         let value
@@ -329,6 +330,7 @@
           userId,
           selectedAddressId,
           geohash,
+          sig,
         } = this.$store.state
 
         // request payload
@@ -341,13 +343,16 @@
           tableware: this.selectedTableware,
           remark: this.remarkText,
           geohash,
+          sig,
         }
         console.log('payload:', payload)
 
         this.loading = true
         return submitCart(payload).then(checkout => {
+          this.$store.commit('SAVE_SIG', checkout.cart && checkout.cart.sig)
           this.checkout = checkout
           this.loading = false
+
         }, err => {
           Toast.open({
             content: err.message

@@ -170,7 +170,7 @@ export const updateCart = ({ geohash, user_id, restaurant_id, entities, sku_ids 
 /**
  * 结算购物车
  */
-export const submitCart = ({ userId, restaurantId, addressId, deliverTime, entities, tableware, remark, geohash } = {}) =>
+export const submitCart = ({ userId, restaurantId, addressId, deliverTime, entities, tableware, remark, geohash, sig } = {}) =>
   request(`https://h5.ele.me/restapi/booking/v1/carts/checkout`, {
     method: 'POST',
     body: {
@@ -190,7 +190,7 @@ export const submitCart = ({ userId, restaurantId, addressId, deliverTime, entit
       "paymethod_id": -1,
       "address_id": addressId,
       "address_select_by": "user",
-      "sig": "",
+      "sig": sig,
       "hongbao_sn": "",
       "hongbao_action": 0,
       "merchant_coupon_action": 1,

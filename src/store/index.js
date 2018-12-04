@@ -12,12 +12,13 @@ Vue.use(Vuex);
     user: null, // 用户信息
 
     cartMap: {}, // 店铺购物车集合
-    currentRestaurantId: '', // 当前结算餐厅 id
 
     addressList: null, // ?Array, 地址列表
     selectedAddressId: '', // 选择的地址
     editingAddress: '', // 正在编辑的地址
 
+    currentRestaurantId: '', // 当前结算餐厅 id
+    sig: '', // 确认订单页cart数据检验签名
     remarkList: null, // ?Array, 订单备注选择列表
     usedRemark: null, // ?Object, 使用的订单备注
 
