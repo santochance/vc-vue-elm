@@ -186,7 +186,7 @@ export const submitCart = ({ userId, restaurantId, addressId, deliverTime, entit
       ],
       "geohash": geohash,
       "come_from": "mobile",
-      "deliver_time": "",
+      "deliver_time": deliverTime,
       "paymethod_id": -1,
       "address_id": addressId,
       "address_select_by": "user",
@@ -199,7 +199,17 @@ export const submitCart = ({ userId, restaurantId, addressId, deliverTime, entit
       "tying_entities": [],
       "is_ant_diamond_vip": 0,
       "is_pintuan": null,
-      "sub_channel": ""
+      "sub_channel": "",
+
+      // cancel_disposable_tableware: 0, // Optional, 是否取消餐具
+      // number_of_meals: 2份, // Optional，餐具份数不为 0 时显示
+      ...(tableware ? (
+        tableware === '0' ? { cancel_disposable_tableware: 1, is_ninja: 1 }
+        : { cancel_disposable_tableware: 0, number_of_meals: tableware }
+      ) : undefined),
+
+      // description: '不要香菜', // Optional, 有备注信息是显示
+      ...(remark ? { description: remark } : undefined),
     }
 })
 
