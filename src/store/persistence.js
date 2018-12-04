@@ -24,7 +24,7 @@ export function initState(state) {
   }
 
   const currentRestaurantId = persistence.getItem('CURRENT_RESTAURANT_ID')
-  if (currentRestaurantId != null && typeof currentRestaurantId === 'number') {
+  if (currentRestaurantId != null && typeof currentRestaurantId === 'string') {
     initial.currentRestaurantId = currentRestaurantId
   }
 

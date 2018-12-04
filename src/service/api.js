@@ -167,34 +167,40 @@ export const updateCart = ({ geohash, user_id, restaurant_id, entities, sku_ids 
     }
   })
 
-
 /**
  * 结算购物车
  */
-export const submitCart = ({ userId, restaurantId, addressId, deliverTime, entities, sig, tableware, remark } = {}) =>
-  request(`/checkout`, {
+export const submitCart = ({ userId, restaurantId, addressId, deliverTime, entities, tableware, remark, geohash } = {}) =>
+  request(`https://h5.ele.me/restapi/booking/v1/carts/checkout`, {
     method: 'POST',
     body: {
-      user_id: userId,
-      restaurant_id: restaurantId,
-      address_id: addressId,
-      deliver_time: deliverTime,
-      paymethod_id: -1,
-      entities,
-      sig,
-      come_from: 'mobile',
-      // geohash,
-
-      // cancel_disposable_tableware: 0, // Optional, 是否取消餐具
-      // number_of_meals: 2份, // Optional，餐具份数不为 0 时显示
-      ...(tableware ? (
-        tableware === '0' ? { cancel_disposable_tableware: 1 }
-        : { cancel_disposable_tableware: 0, number_of_meals: tableware }
-      ) : undefined),
-
-      // description: '不要香菜', // Optional, 有备注信息是显示
-      ...(remark ? { description: remark } : undefined),
-  }
+      "restaurant_id": restaurantId,
+      "entities": [
+        entities
+      ],
+      "entities_with_ingredient": [
+        []
+      ],
+      "packages": [
+        []
+      ],
+      "geohash": geohash,
+      "come_from": "mobile",
+      "deliver_time": "",
+      "paymethod_id": -1,
+      "address_id": addressId,
+      "address_select_by": "user",
+      "sig": "",
+      "hongbao_sn": "",
+      "hongbao_action": 0,
+      "merchant_coupon_action": 1,
+      "merchant_coupon_id": "",
+      "user_id": userId,
+      "tying_entities": [],
+      "is_ant_diamond_vip": 0,
+      "is_pintuan": null,
+      "sub_channel": ""
+    }
 })
 
 /**

@@ -1,196 +1,216 @@
 <template>
   <page title="确认订单" :loading="loading">
-     <div v-if="checkout"
-      class="checkout-body">
-       <section class="cart-address"
+    <div class="checkout-body"
+      v-if="checkout"
+    >
+      <section class="cart-address"
         @click="selectAddr">
-         <div v-if="selectedAddress" class="cart-address__item">
-           <div class="cart-address__title">
-             <span>订单配送至</span>
-             <span v-if="selectedAddress.tag_type" class="cart-address__address-tag">{{ { 1: '家', 2: '公司', 3: '学校' }[selectedAddress.tag_type] }}</span>
-           </div>
-           <div class="cart-address__address-detail">
-             <span class="ellipsis">{{ selectedAddress.address + selectedAddress.address_detail }}</span>
-             <svg><use xlink:href="#arrow-right-bold"></use></svg>
-           </div>
-           <div class="cart-address__address-name">
-             <span>{{ selectedAddress.name }}</span>
-             <span>({{ selectedAddress.sex === 1 ? '先生' : '女士' }})</span>
-             <span class="cart-address__address-phone">{{ selectedAddress.phone }}</span>
-           </div>
-         </div>
-         <div v-else class="cart-address__item">
-           <div class="cart-address__title">
-             <span>订单配送至</span>
-           </div>
-           <div class="cart-address__address-detail">
-             <span class="ellipsis">马上选择地址</span>
-             <svg><use xlink:href="#arrow-right-bold"></use></svg>
-           </div>
-         </div>
-       </section>
+        <div v-if="selectedAddress" class="cart-address__item">
+          <div class="cart-address__title">
+            <span>订单配送至</span>
+            <span v-if="selectedAddress.tag_type" class="cart-address__address-tag">{{ { 1: '家', 2: '公司', 3: '学校' }[selectedAddress.tag_type] }}</span>
+          </div>
+          <div class="cart-address__address-detail">
+            <span class="ellipsis">{{ selectedAddress.address + selectedAddress.address_detail }}</span>
+            <svg><use xlink:href="#arrow-right-bold"></use></svg>
+          </div>
+          <div class="cart-address__address-name">
+            <span>{{ selectedAddress.name }}</span>
+            <span>({{ selectedAddress.sex === 1 ? '先生' : '女士' }})</span>
+            <span class="cart-address__address-phone">{{ selectedAddress.phone }}</span>
+          </div>
+        </div>
+        <div v-else class="cart-address__item">
+          <div class="cart-address__title">
+            <span>订单配送至</span>
+          </div>
+          <div class="cart-address__address-detail">
+            <span class="ellipsis">马上选择地址</span>
+            <svg><use xlink:href="#arrow-right-bold"></use></svg>
+          </div>
+        </div>
+      </section>
 
-       <section class="checkout-section">
-         <div class="checkout-item delivery">
-           <div class="delivery__left">
-             <div class="checkout-item__title"><span>送达时间</span></div>
-             <div class="delivery__delivery-type">
-               <span>{{ checkout.cart && checkout.cart.restaurant && checkout.cart.restaurant.delivery_type.name }}</span>
-             </div>
-           </div>
-           <div class="delivery__right">
-             <div class="delivery__select">
-               <span @click.stop.prevent="deliverTimesVisible = true">
-                 {{ selectedDeliverDateTime === '' ? '选择送达时间' : selectedDeliverDateTime }}
-               </span>
-               <svg><use xlink:href="#arrow-right"></use></svg>
-             </div>
-           </div>
-         </div>
-         <div class="checkout-item pay-method">
-           <div class="checkout-item__title"><span>支付方式</span></div>
-           <div class="pay-method__text"><span>{{ checkout.pay_methods[0].name }}</span></div>
-         </div>
-       </section>
+      <section class="checkout-section">
+        <div class="checkout-item delivery">
+          <div class="delivery__left">
+            <div class="checkout-item__title"><span>送达时间</span></div>
+            <div class="delivery__delivery-type"
+              v-if="delivery_type"
+            >
+              <span>{{ delivery_type && delivery_type.name }}</span>
+            </div>
+          </div>
+          <div class="delivery__right">
+            <div class="delivery__select">
+              <template v-if="deliver_times">
+                <span @click.stop.prevent="deliverTimesVisible = true">
+                  {{ selectedDeliverDateTime === '' ? '选择送达时间' : selectedDeliverDateTime }}
+                </span>
+                <svg><use xlink:href="#arrow-right"></use></svg>
+              </template>
+              <template v-else>
+                <span>尽快送达({{ checkout.delivery_reach_time }}送达)</span>
+              </template>
+            </div>
+          </div>
+        </div>
+        <div class="checkout-item pay-method">
+          <div class="checkout-item__title"><span>支付方式</span></div>
+          <div class="pay-method__text"><span>{{ checkout.pay_methods[0].name }}</span></div>
+        </div>
+      </section>
 
-       <section class="checkout-section cart-group">
-         <div class="cart-group__header">
-           <span class="cart-group__shop-name">{{ shopName.split(/[()（）]/)[0] }}</span>
-           <span class="cart-group__branch-name">({{ shopName.split(/[()（）]/)[1] }})</span>
-         </div>
-         <ul class="cart-group__list">
-           <li v-for="food in entities /* checkout.cart.group[0] */" :key="food.id + food.attrs" class="checkout-item food-item">
-             <div class="food-item__img">
-               <img :src="$getImage(food.image_hash, foodImgParam)" alt="">
-             </div>
-             <div class="food-item__info">
-               <div class="food-item__name ellipsis">{{ food.name }}</div>
-               <div class="food-item__attr"><span v-for="(attr, idx) in food.attrs" :key="idx">{{ attr.value }}</span></div>
-             </div>
-             <div class="food-item__quantity">× {{ food.quantity }}</div>
-             <div class="food-item__price">{{ food.quantity * food.price | toPrice }}</div>
-           </li>
-         </ul>
-         <div class="checkout-item cart-group__item">
-           <div>
-             <span class="cart-group__tag cart-group__packing-fee">{{ checkout.cart.extra.packing_fee.icon.name }}</span>
-             <span class="cart-group__item-title ellipsis">{{ checkout.cart.extra.packing_fee.name }}</span>
-           </div>
-           <div class="cart-group__price">{{ checkout.cart.extra.packing_fee.price | toPrice }}</div>
-         </div>
-         <div class="checkout-item cart-group__item">
-           <div>
-             <span class="cart-group__tag cart-group__agent-fee">{{ checkout.cart.extra.agent_fee.icon.name }}</span>
-             <span class="cart-group__item-title ellipsis">{{ checkout.cart.extra.agent_fee.name }}</span>
-           </div>
-           <div class="cart-group__price">{{ checkout.cart.extra.agent_fee.price | toPrice}}</div>
-         </div>
-         <div class="checkout-item cart-group__discount">新用户立减与其他优惠不能同享</div>
-         <div class="checkout-item cart-group__item">
-           <div class="cart-group__item-title">红包</div>
-           <div class="cart-group__hongbao">
-             <svg><use xlink:href="#red-packet"></use></svg>
-             <span>{{ checkout.hongbao_info.status_text }}</span>
-           </div>
-         </div>
-         <div class="checkout-item cart-group__footer">
-           <a href="javascript:" class="cart-group__discount-intro">
-             <span>优惠说明</span>
-             <svg><use xlink:href="#tip"></use></svg>
-           </a>
-           <div class="cart-group__total-price-wrap">
-             <span>小计 &#xA5;</span>
-             <span class="cart-group__total-price">{{ /* checkout.cart.original_total */ mockTotalPrice | toPrice }}</span>
-           </div>
-         </div>
-       </section>
+      <section class="checkout-section cart-group"
+        v-if="true"
+      >
+        <div class="cart-group__header">
+          <span class="cart-group__shop-name">{{ shopNames[0] }}</span>
+          <span class="cart-group__branch-name">{{ shopNames[1] ? `(${shopNames[1]})` : '' }}</span>
+        </div>
+        <ul class="cart-group__list">
+          <li v-for="food in checkout.cart.group[0]" :key="food.id + food.attrs"
+            class="checkout-item food-item"
+          >
+            <div class="food-item__img">
+              <img :src="$getImage(food.image_hash, foodImgParam)" alt="">
+            </div>
+            <div class="food-item__info">
+              <div class="food-item__name ellipsis">{{ food.name }}</div>
+              <div class="food-item__attr"><span v-for="(attr, idx) in food.attrs" :key="idx">{{ attr.value }}</span></div>
+            </div>
+            <div class="food-item__quantity">× {{ food.quantity }}</div>
+            <div class="food-item__price">{{ food.quantity * food.price | toPrice }}</div>
+          </li>
+        </ul>
+        <div class="checkout-item cart-group__item"
+          v-if="packing_fee"
+        >
+          <div>
+            <span class="cart-group__tag cart-group__packing-fee">{{ packing_fee.icon.name }}</span>
+            <span class="cart-group__item-title ellipsis">{{ packing_fee.name }}</span>
+          </div>
+          <div class="cart-group__price">{{ packing_fee.price | toPrice }}</div>
+        </div>
+        <div class="checkout-item cart-group__item"
+          v-if="agent_fee"
+        >
+          <div>
+            <span class="cart-group__tag cart-group__agent-fee">{{ agent_fee.icon.name }}</span>
+            <span class="cart-group__item-title ellipsis">{{ agent_fee.name }}</span>
+          </div>
+          <div class="cart-group__price">{{ agent_fee.price | toPrice }}</div>
+        </div>
+        <div class="checkout-item cart-group__discount">新用户立减与其他优惠不能同享</div>
+        <div class="checkout-item cart-group__item"
+          v-if="checkout.hongbao_info"
+        >
+          <div class="cart-group__item-title">红包</div>
+          <div class="cart-group__hongbao">
+            <svg><use xlink:href="#red-packet"></use></svg>
+            <span>{{ checkout.hongbao_info.status_text || '暂时只在饿了么 APP 中支持' }}</span>
+          </div>
+        </div>
+        <div class="checkout-item cart-group__footer">
+          <a href="javascript:" class="cart-group__discount-intro">
+            <span>优惠说明</span>
+            <svg><use xlink:href="#tip"></use></svg>
+          </a>
+          <div class="cart-group__total-price-wrap">
+            <span>小计 &#xA5;</span>
+            <span class="cart-group__total-price">{{ checkout.cart.original_total | toPrice }}</span>
+          </div>
+        </div>
+      </section>
 
-       <section class="checkout-section checkout-misc">
-         <div class="checkout-item checkout-misc__tableware"
-           @click.stop.prevent="tablewareVisible = true">
-           <span>餐具份数</span>
-           <a class="checkout-misc__content" href="javascript:">
-             <span v-if="selectedTableware === ''"
-               class="checkout-misc__tableware_unselected">
-               未选择</span>
-             <span v-else-if="selectedTableware === '0'"
-               class="checkout-misc__tableware_selected">
-               无需餐具</span>
-             <span v-else
-               class="checkout-misc__tableware_selected">
-               {{ selectedTableware }}餐具</span>
-             <svg><use xlink:href="#arrow-right"></use></svg>
-           </a>
-           <div class="checkout-misc__slogan">
-             <img src="./environ.png" alt="">
-             <span>马上助力环保</span>
-           </div>
-         </div>
-         <div class="checkout-item" @click.stop.prevent="inputRemark">
-           <span v-if="!remarkText">订单备注</span>
-           <span v-else class="checkout-misc__remark">{{ remarkText }}</span>
-           <a class="checkout-misc__content" href="javascript:">
-             <span v-if="!remarkText">口味、偏好</span>
-             <svg><use xlink:href="#arrow-right"></use></svg>
-           </a>
-         </div>
-         <div class="checkout-item">
-           <span>发票信息</span>
-           <span class="checkout-misc__content">商家不支持开发票</span>
-         </div>
-       </section>
-     </div>
+      <section class="checkout-section checkout-misc">
+        <div class="checkout-item checkout-misc__tableware"
+          @click.stop.prevent="tablewareVisible = true">
+          <span>餐具份数</span>
+          <a class="checkout-misc__content" href="javascript:">
+            <span v-if="selectedTableware === ''"
+              class="checkout-misc__tableware_unselected">
+              未选择</span>
+            <span v-else-if="selectedTableware === '0'"
+              class="checkout-misc__tableware_selected">
+              无需餐具</span>
+            <span v-else
+              class="checkout-misc__tableware_selected">
+              {{ selectedTableware }}餐具</span>
+            <svg><use xlink:href="#arrow-right"></use></svg>
+          </a>
+          <div class="checkout-misc__slogan">
+            <img src="./environ.png" alt="">
+            <span>马上助力环保</span>
+          </div>
+        </div>
+        <div class="checkout-item" @click.stop.prevent="inputRemark">
+          <span v-if="!remarkText">订单备注</span>
+          <span v-else class="checkout-misc__remark">{{ remarkText }}</span>
+          <a class="checkout-misc__content" href="javascript:">
+            <span v-if="!remarkText">口味、偏好</span>
+            <svg><use xlink:href="#arrow-right"></use></svg>
+          </a>
+        </div>
+        <div class="checkout-item">
+          <span>发票信息</span>
+          <span class="checkout-misc__content">商家不支持开发票</span>
+        </div>
+      </section>
+    </div>
 
-     <footer class="action-bar">
-       <span class="action-bar__total-price">&#xA5;{{ /* checkout.cart.original_total */ mockTotalPrice | toPrice }}</span>
-       <!-- <span class="action-bar__verify-feedback">{{ verifyFailedMsg }}</span> -->
-       <a href="javascript:" class="action-bar__submit-btn" @click.stop.prevent="submit">去支付</a>
-     </footer>
+    <footer class="action-bar"
+      v-if="checkout"
+    >
+      <span class="action-bar__total-price">&#xA5;{{ checkout.cart.original_total | toPrice }}</span>
+      <!-- <span class="action-bar__verify-feedback">{{ verifyFailedMsg }}</span> -->
+      <a href="javascript:" class="action-bar__submit-btn" @click.stop.prevent="submit">去支付</a>
+    </footer>
 
-     <modal :visible="deliverTimesVisible" panel="bottom" :closable="false" @close="deliverTimesVisible = false">
-       <div v-if="checkout" class="deliver-times__container">
-         <h3 class="deliver-times__head">选择送达时间</h3>
-         <div class="deliver-times__content">
-           <nav class="deliver-times__tabs">
-             <div v-for="(day, idx) in checkout.deliver_times" :key="day.tab"
-               class="deliver-times__tab"
-               :class="{ 'deliver-times__tab_active': activeDeliverDayIdx === idx }"
-               @click.stop.prevent="activeDeliverDayIdx = idx"
-             >{{ day.tab }}</div>
-           </nav>
-           <ul class="deliver-times__panels">
-             <template v-for="(day, i) in checkout.deliver_times" v-if="activeDeliverDayIdx === i">
-               <li v-for="time in day.time_points" :key="time.time"
-                 class="deliver-times__panel"
-                 @click.stop.prevent="selectDeliverTime(day, time)"
-               >
-                 <span class="deliver-times__time">{{ time.time }}</span>
-                 <span class="deliver-times__description">（{{ time.delivery_fee_description }}）</span>
-                 <svg v-if="selectedDeliverDateTime === day.tab + time.time"><use xlink:href="#select"></use></svg>
-               </li>
-             </template>
-           </ul>
+    <modal :visible="deliverTimesVisible" panel="bottom" :closable="false" @close="deliverTimesVisible = false">
+      <div v-if="checkout" class="deliver-times__container">
+        <h3 class="deliver-times__head">选择送达时间</h3>
+        <div class="deliver-times__content">
+          <nav class="deliver-times__tabs">
+            <div v-for="(day, idx) in checkout.deliver_times" :key="day.tab"
+              class="deliver-times__tab"
+              :class="{ 'deliver-times__tab_active': activeDeliverDayIdx === idx }"
+              @click.stop.prevent="activeDeliverDayIdx = idx"
+            >{{ day.tab }}</div>
+          </nav>
+          <ul class="deliver-times__panels">
+            <template v-for="(day, i) in checkout.deliver_times" v-if="activeDeliverDayIdx === i">
+              <li v-for="time in day.time_points" :key="time.time"
+                class="deliver-times__panel"
+                @click.stop.prevent="selectDeliverTime(day, time)"
+              >
+                <span class="deliver-times__time">{{ time.time }}</span>
+                <span class="deliver-times__description">（{{ time.delivery_fee_description }}）</span>
+                <svg v-if="selectedDeliverDateTime === day.tab + time.time"><use xlink:href="#select"></use></svg>
+              </li>
+            </template>
+          </ul>
 
-         </div>
-       </div>
-     </modal>
+        </div>
+      </div>
+    </modal>
 
-     <modal :visible="tablewareVisible" panel="bottom" @close="tablewareVisible = false">
-       <div class="tableware__container">
-         <h2 class="tableware__head">餐具份数</h2>
-         <ul class="tableware__list">
-           <li class="tableware__item" :key="0" @click.stop.prevent="selectTableware('0')">
-             <img src="./environ.png" alt="">
-             <span>无需餐具</span>
-           </li>
-           <li v-for="n in 10" :key="n"
-             class="tableware__item" @click.stop.prevent="selectTableware(n + '份')"
-           >{{ n }}
-           </li>
-           <li class="tableware__item" :key="11" @click.stop.prevent="selectTableware('10份以上')">10份以上</li>
-         </ul>
-       </div>
-     </modal>
+    <modal :visible="tablewareVisible" panel="bottom" @close="tablewareVisible = false">
+      <div class="tableware__container">
+        <h2 class="tableware__head">餐具份数</h2>
+        <ul class="tableware__list">
+          <li class="tableware__item" :key="0" @click.stop.prevent="selectTableware('0')">
+            <img src="./environ.png" alt="">
+            <span>无需餐具</span>
+          </li>
+          <li v-for="n in 10" :key="n"
+            class="tableware__item" @click.stop.prevent="selectTableware(n + '份')"
+          >{{ n }}
+          </li>
+          <li class="tableware__item" :key="11" @click.stop.prevent="selectTableware('10份以上')">10份以上</li>
+        </ul>
+      </div>
+    </modal>
   </page>
 </template>
 
@@ -213,8 +233,8 @@
 
     },
     filters: {
-      toPrice(value) {
-        return (value || 0).toFixed(1)
+      toPrice(value, num) {
+        return Number((value || 0).toFixed(num || 2))
       },
     },
     data() {
@@ -242,20 +262,64 @@
         entities(state) {
           return (state.cartMap[this.restaurantId] || {}).entities || []
         },
-        mockTotalPrice() {
-          return this.entities.reduce((rst, ent) => rst += ent.price * ent.quantity, 0)
-        },
+        // mockTotalPrice() {
+        //   return this.entities.reduce((rst, ent) => rst += ent.price * ent.quantity, 0)
+        // },
       }),
       ...mapGetters([
-        'selectedAddress', 'remarkText'
+        'selectedAddress', 'remarkText', 'addressList'
       ]),
-      shopName() {
-        const checkout = this.checkout
-        return checkout.cart && checkout.cart.restaurant && checkout.cart.restaurant.name || ''
+      delivery_type() {
+        let value
+        try {
+          value = this.checkout.cart.restaurant.delivery_type
+        } catch(e) {/* empty */}
+        return value
       },
+      shopNames() {
+        const checkout = this.checkout
+        const name = checkout.cart && checkout.cart.restaurant && checkout.cart.restaurant.name || ''
+        return name.split(/[()（）]/)
+      },
+      packing_fee() {
+        let value
+        try {
+          value = this.checkout.cart.extra.packing_fee
+        } catch(e) {/* empty */}
+        return value
+      },
+      agent_fee() {
+        let value
+        try {
+          value = this.checkout.cart.extra.agent_fee
+        } catch(e) {/* empty */}
+        return value
+      },
+      deliver_times() {
+        let value
+        try {
+          value = this.checkout.cart.extra.agent_fee
+        } catch(e) {/* empty */}
+
+        // 不可以指定派送时间
+        if (!value || !value.length || value[0] && !value[0].time_points.length) {
+          value = null
+        }
+        return value
+      }
     },
     created() {
-      if (!this.restaurantId || !this.entities.length) return this.$router.replace('/shop')
+      if (!this.restaurantId) {
+        Toast.open({
+          content: '当前还没有任何下单信息',
+          duration: 4,
+        })
+        return this.$router.replace('/')
+      }
+
+      if (!this.addressList) {
+        this.$store.dispatch('fetchAddressList')
+      }
 
       this.doCheckout()
     },
@@ -264,6 +328,7 @@
         const {
           userId,
           selectedAddressId,
+          geohash,
         } = this.$store.state
 
         // request payload
@@ -275,12 +340,21 @@
           deliverTime: this.selectedDeliverDateTime,
           tableware: this.selectedTableware,
           remark: this.remarkText,
+          geohash,
         }
+        console.log('payload:', payload)
 
         this.loading = true
         return submitCart(payload).then(checkout => {
           this.checkout = checkout
           this.loading = false
+        }, err => {
+          Toast.open({
+            content: err.message
+          })
+          if (err.name === 'NOT_AVAILABLE_ENTITIES') {
+            return this.$router.replace('/')
+          }
         })
       },
       submit() {
