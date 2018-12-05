@@ -214,18 +214,26 @@ export const submitCart = ({ userId, restaurantId, addressId, deliverTime, entit
 })
 
 /**
- * 查询地址列表
+ * 查询购物车地址列表
  */
-export const fetchAddressList = (userId) =>
-  request(`/addresses?user_id=${userId}`)
+export const fetchCartAddresses = ({ userId, cartId, sig, restaurantId }) => {
+  return request(`https://h5.ele.me/restapi/booking/v1/users/${userId}/carts/${cartId}/addresses?sig=${sig}`, {
+    headers: {
+      "x-shard": `shopid=${restaurantId}`
+    }
+  })
+}
 
 /**
  * 获取备注选项列表
  */
-export const fetchRemarkList = (restaurantId) =>
-  request(`/restaurant/${restaurantId}/remarks`)
-
-
+export const fetchRemarkList = ({ cartId, sig, restaurantId }) => {
+  return request(`https://h5.ele.me/restapi/v1/carts/${cartId}/remarks?sig=${sig}`, {
+    headers: {
+      "x-shard": `shopid=${restaurantId}`
+    }
+  })
+}
 
 /* index */
 
@@ -351,3 +359,10 @@ export const fetchDiscoverEntries = ({ latitude, longitude }) =>
  */
 export const fetchDiscoverSuggestion = () =>
   request(`https://h5.ele.me/restapi/member/gifts/suggest`)
+
+
+/**
+ * 查询用户地址列表
+ */
+export const fetchAddressList = (userId) =>
+  request(`/addresses?user_id=${userId}`)

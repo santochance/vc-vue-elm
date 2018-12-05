@@ -31,6 +31,7 @@
         'userId',
         'cartId',
         'sig',
+        'currentRestaurantId',
         'selectedAddressId',
       ]),
     },
@@ -45,6 +46,7 @@
         userId: this.userId,
         cartId: this.cartId,
         sig: this.sig,
+        restaurantId: this.currentRestaurantId,
       }
       fetchCartAddresses(payload)
         .then(addressList => {

@@ -37,12 +37,21 @@
     },
     computed: {
       ...mapState([
-        'remarkList', 'usedRemark',
+        'remarkList',
+        'usedRemark',
+        'cartId',
+        'sig',
+        'currentRestaurantId',
       ]),
     },
     created() {
       if (!this.remarkList) {
-        return fetchRemarkList().then(remarkList => {
+        const payload = {
+          cartId: this.cartId,
+          sig: this.sig,
+          restaurantId: this.currentRestaurantId,
+        }
+        return fetchRemarkList(payload).then(remarkList => {
           this.SAVE_REMARK_LIST(remarkList)
         })
       }
