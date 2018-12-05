@@ -373,13 +373,13 @@
         if (this.verify() !== '') return
       },
       verify() {
-        if (!this.selectedAddress) {
+        if (!this.selectedAddressId) {
           Toast.open({
             content: '请选择配送地址！',
             mask: false,
           })
           return (this.verifyFailedMsg = '请选择配送地址！')
-        } else if (!this.selectedDeliverDateTime) {
+        } else if (this.deliver_times && !this.selectedDeliverDateTime) {
           Toast.open({
             content: '请选择送达时间！',
             mask: false,
