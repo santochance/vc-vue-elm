@@ -12,6 +12,7 @@ import {
   INIT_CART,
   SAVE_CURRENT_RESTAURANT_ID,
   SAVE_SIG,
+  SAVE_CART_ID,
 
   SAVE_ADDRESS_LIST,
   ADD_ADDRESS,
@@ -137,6 +138,9 @@ export default {
   },
   [SAVE_SIG]: function (state, sig) {
     state.sig = sig
+  },
+  [SAVE_CART_ID]: function (state, cartId) {
+    state.cartId = cartId
   },
 
 /* address */

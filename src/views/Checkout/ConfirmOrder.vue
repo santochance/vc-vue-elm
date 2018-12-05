@@ -350,6 +350,7 @@
         this.loading = true
         return submitCart(payload).then(checkout => {
           this.$store.commit('SAVE_SIG', checkout.cart && checkout.cart.sig)
+          this.$store.commit('SAVE_CART_ID', checkout.cart && checkout.cart.id)
           this.checkout = checkout
           this.loading = false
 
@@ -409,10 +410,13 @@
       remarkText() { this.doCheckout() }
     },
   }
+
 </script>
 
 <style lang="scss" scoped>
+
 .checkout {
+
 }
 .checkout-body {
   margin-bottom: 88px;
