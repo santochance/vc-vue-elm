@@ -34,6 +34,7 @@
     "prerender-spa-plugin": "^3.4.0",
     "sass-loader": "^7.1.0",
     "style-resources-loader": "^1.2.1",
+    "stylelint-config-recommended": "^2.1.0",
     "vue-template-compiler": "^2.5.17",
     "webpack-bundle-analyzer": "^3.0.2"
   },
@@ -51,6 +52,13 @@
     },
     "parserOptions": {
       "parser": "babel-eslint"
+    }
+  },
+  "stylelint": {
+    "extends": "stylelint-config-recommended",
+    "rules": {
+      "block-no-empty": null,
+      "no-extra-semicolons": null
     }
   },
   "postcss": {
