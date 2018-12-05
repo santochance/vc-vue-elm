@@ -5,19 +5,19 @@
     >
       <section class="cart-address"
         @click="selectAddr">
-        <div v-if="selectedAddress" class="cart-address__item">
+        <div v-if="current_address" class="cart-address__item">
           <div class="cart-address__title">
             <span>订单配送至</span>
-            <span v-if="selectedAddress.tag_type" class="cart-address__address-tag">{{ { 1: '家', 2: '公司', 3: '学校' }[selectedAddress.tag_type] }}</span>
+            <span v-if="current_address.tag_type" class="cart-address__address-tag">{{ { 1: '家', 2: '公司', 3: '学校' }[current_address.tag_type] }}</span>
           </div>
           <div class="cart-address__address-detail">
-            <span class="ellipsis">{{ selectedAddress.address + selectedAddress.address_detail }}</span>
+            <span class="ellipsis">{{ current_address.address + current_address.address_detail }}</span>
             <svg><use xlink:href="#arrow-right-bold"></use></svg>
           </div>
           <div class="cart-address__address-name">
-            <span>{{ selectedAddress.name }}</span>
-            <span>({{ selectedAddress.sex === 1 ? '先生' : '女士' }})</span>
-            <span class="cart-address__address-phone">{{ selectedAddress.phone }}</span>
+            <span>{{ current_address.name }}</span>
+            <span>({{ current_address.sex === 1 ? '先生' : '女士' }})</span>
+            <span class="cart-address__address-phone">{{ current_address.phone }}</span>
           </div>
         </div>
         <div v-else class="cart-address__item">
@@ -265,11 +265,21 @@
         // mockTotalPrice() {
         //   return this.entities.reduce((rst, ent) => rst += ent.price * ent.quantity, 0)
         // },
-         'addressList': 'addressList',
       }),
-      ...mapGetters([
-        'selectedAddress', 'remarkText',
+      ...mapState([
+        'addressList',
+        'selectedAddressId',
       ]),
+      ...mapGetters([
+        'remarkText',
+      ]),
+      current_address() {
+        let value
+        try {
+          value = this.checkout.current_address
+        } catch(e) {/* empty */}
+        return Object.keys(value).length ? value : null
+      },
       delivery_type() {
         let value
         try {
@@ -318,10 +328,6 @@
         return this.$router.replace('/')
       }
 
-      if (!this.addressList) {
-        this.$store.dispatch('fetchAddressList')
-      }
-
       this.doCheckout()
     },
     methods: {
@@ -365,7 +371,6 @@
       },
       submit() {
         if (this.verify() !== '') return
-
       },
       verify() {
         if (!this.selectedAddress) {
@@ -404,7 +409,7 @@
       },
     },
     watch: {
-      selectedAddress() {  this.doCheckout() },
+      selectedAddressId() {  this.doCheckout() },
       selectedDeliverDateTime() { this.doCheckout() },
       selectedTableware() { this.doCheckout() },
       remarkText() { this.doCheckout() }

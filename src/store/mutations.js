@@ -11,6 +11,7 @@ import {
   CLEAR_CART,
   INIT_CART,
   SAVE_CURRENT_RESTAURANT_ID,
+
   SAVE_SIG,
   SAVE_CART_ID,
 
@@ -18,7 +19,7 @@ import {
   ADD_ADDRESS,
   SAVE_ADDRESS,
   REMOVE_ADDRESS,
-  SAVE_SELECTED_ADDRESS,
+  SAVE_SELECTED_ADDRESS_ID,
   SAVE_EDITING_ADDRESS,
 
   SAVE_REMARK_LIST,
@@ -136,6 +137,8 @@ export default {
   [SAVE_CURRENT_RESTAURANT_ID]: function (state, restaurant_id) {
     state.currentRestaurantId = restaurant_id
   },
+
+/* checkout */
   [SAVE_SIG]: function (state, sig) {
     state.sig = sig
   },
@@ -164,8 +167,8 @@ export default {
       state.addressList.splice(index, 1)
     }
   },
-  [SAVE_SELECTED_ADDRESS]: function (state, address) {
-    state.selectedAddressId = address.id
+  [SAVE_SELECTED_ADDRESS_ID]: function (state, addressId) {
+    state.selectedAddressId = addressId
   },
   [SAVE_EDITING_ADDRESS]: function (state, address) {
     state.editingAddress = address

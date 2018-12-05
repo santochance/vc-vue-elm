@@ -52,15 +52,13 @@
         })
     },
     methods: {
-      ...mapMutations(['SAVE_SELECTED_ADDRESS']),
+      ...mapMutations([
+        'SAVE_SELECTED_ADDRESS_ID',
+      ]),
       selectAddr(address) {
-        this.SAVE_SELECTED_ADDRESS(address)
+        this.SAVE_SELECTED_ADDRESS_ID(address && address.id)
         this.$router.go(-1)
       },
     }
   }
 </script>
-
-<style lang="scss" scoped>
-
-</style>
