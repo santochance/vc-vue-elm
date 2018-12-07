@@ -6,23 +6,19 @@
 
 <script>
   import Page from '@/components/Page'
-  
+
   export default {
     name: 'ProfileInfo',
     components: {
       Page,
     },
     props: {
-      
+
     },
     data() {
       return {
-        
+
       }
     },
   }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

@@ -33,11 +33,3 @@
     <span>IndexAddressEdit</span>
   </div>
 </template>
-
-
-<style lang="scss" scoped>
-  .b-namespace {}
-
-    .b-namespace__box {}
-
-</style>
