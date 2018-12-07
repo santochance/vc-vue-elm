@@ -1,9 +1,9 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-import IndexPage from '@/views/Index/IndexPage'
-
 Vue.use(Router);
+
+// import IndexPage from '@/views/Index/IndexPage'
 
 // import TabPage from '@/components/TabPage'
 // const tabPageWrapper = (tabKey, component) =>
@@ -17,10 +17,14 @@ Vue.use(Router);
 // const Order = tabPageWrapper('order', () => import(/* webpackChunkName: "Order" */ '@/views/Order'))
 // const Profile = tabPageWrapper('profile', () => import(/* webpackChunkName: "Profile" */ '@/views/Profile'))
 
+import Discover from '@/views/Discover'
+import Order from '@/views/Order'
+import Profile from '@/views/Profile'
+
 const Index = () => import(/* webpackChunkName: 'Index' */ '@/views/Index')
-const Discover = () => import(/* webpackChunkName: "Discover" */'@/views/Discover')
-const Order = () => import(/* webpackChunkName: "Order" */ '@/views/Order')
-const Profile = () => import(/* webpackChunkName: "Profile" */ '@/views/Profile')
+// const Discover = () => import(/* webpackChunkName: "Discover" */'@/views/Discover')
+// const Order = () => import(/* webpackChunkName: "Order" */ '@/views/Order')
+// const Profile = () => import(/* webpackChunkName: "Profile" */ '@/views/Profile')
 
 const IndexSelectAddress = () => import(/* webpackChunkName: 'IndexSelectAddress' */ '@/views/Index/IndexSelectAddress')
 const IndexAddressEdit = () => import(/* webpackChunkName: 'IndexAddressEdit' */ '@/views/Index/IndexAddressEdit')
