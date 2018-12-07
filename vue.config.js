@@ -12,7 +12,7 @@ module.exports = {
     quiet: false,
     stats: {
       colors: true,
-      assets: true,
+      assets: false,
       excludeAssets: /\.(jpe?g|png|gif|svg)$/,
       assetsSort: '!size', // 以 size 字段降序排序
       children: false,
