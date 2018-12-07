@@ -9,7 +9,7 @@
             class="info__avatar-file"
           >
           <span class="info__avatar-value"
-            :style="{ backgroundPosition: `0 ${$toRem(120 * random(0, 6))}` }"
+            :style="{ backgroundPosition: `0 ${$toRem(avatarPos)}` }"
           ></span>
           <span>
             <svg><use xlink:href="#arrow"></use></svg>
@@ -96,6 +96,9 @@
       ...mapState([
         'user',
       ]),
+      avatarPos() {
+        return 120 * this.random(0, 6)
+      },
     },
     methods: {
       loadData() {

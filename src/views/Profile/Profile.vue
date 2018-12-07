@@ -9,7 +9,7 @@
       <router-link to="/profile/info"
         class="profile__user">
         <div class="profile__avatar"
-          :style="{ backgroundPosition: `0 ${$toRem(120 * random(0, 6))}` }"
+          :style="{ backgroundPosition: `0 ${$toRem(avatarPos)}` }"
         ></div>
         <div class="profile__user-info">
           <p class="profile__user-name ellipsis"
@@ -56,7 +56,7 @@
       <router-link :to="{ path: '/login', query: { redirect: '/profile' } }"
         class="profile__user">
         <div class="profile__avatar"
-          :style="{ backgroundPosition: `0 ${$toRem(120 * random(0, 6))}` }"
+          :style="{ backgroundPosition: `0 ${$toRem(avatarPos)}` }"
         ></div>
         <div class="profile__user-info">
           <p class="profile__user-name ellipsis"
@@ -196,6 +196,9 @@
       ...mapState([
         'user',
       ]),
+      avatarPos() {
+        return 120 * this.random(0, 6)
+      },
     },
     created() {
       this.loadData()
