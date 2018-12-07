@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["profile-info"],{"0311":function(e,n,t){"use strict";t.r(n);var o=function(){var e=this,n=e.$createElement,t=e._self._c||n;return t("page",{attrs:{title:"账户信息"}},[t("router-view")],1)},r=[],a=(t("cadf"),t("551c"),t("097d"),t("4579")),i={name:"ProfileInfo",components:{Page:a["a"]},props:{},data:function(){return{}}},l=i,f=t("2877"),u=Object(f["a"])(l,o,r,!1,null,null,null);u.options.__file="ProfileInfo.vue";n["default"]=u.exports}}]);
+//# sourceMappingURL=profile-info.6d02bec5.js.map
