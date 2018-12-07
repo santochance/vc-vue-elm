@@ -1,5 +1,9 @@
 <template>
-  <Page title="发现" :back-btn="false">
+  <Page
+    title="发现"
+    :back-btn="false"
+    tabbar="discover"
+  >
 <!--     <NoDataTip
       class="p-discover__no-data"
       :data="emptyTip"

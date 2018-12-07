@@ -1,6 +1,16 @@
 <template>
-  <div class="p-index">
+  <Page
+    class="p-index"
+    :header="false"
+    tabbar="index"
+  >
     <div>
+      <IndexSkeleton class="p-index__loading"
+        v-if="!loaded"
+        :headerLoaded="locState > 0"
+        :entriesLoaded="entriesLoaded"
+        :listLoaded="listLoaded"
+      ></IndexSkeleton>
       <IndexHeader
         :location-name="location.locationName"
         :locating="locState === 0"
@@ -76,7 +86,7 @@
       <h3>输入地址后才能订餐哦！</h3>
       <button @click.stop.prevent="chooseAddress">手动选择地址</button>
     </div>
-  </div>
+  </Page>
 </template>
 
 <script>
@@ -414,6 +424,20 @@
     flex-direction: column;
     background-color: #fff;
   }
+
+    .p-index__loading {
+      position: fixed;
+      z-index: 1000;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      visibility: hidden;
+      > * {
+        visibility: visible;
+      }
+    }
+
     .p-index__shell {
       position: absolute;
       z-index: 1000;

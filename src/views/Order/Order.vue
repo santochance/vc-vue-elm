@@ -1,5 +1,9 @@
 <template>
-  <Page title="订单" :back-btn="false">
+  <Page
+    title="订单"
+    :back-btn="false"
+    tabbar="order"
+  >
     <NoDataTip
       v-if="user && user.user_id"
       class="p-order__no-data"

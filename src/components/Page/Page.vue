@@ -1,6 +1,7 @@
 <template>
   <div class="page__container">
     <page-header
+      v-if="header"
       :title="title"
       :back-btn="backBtn"
       @back="onBack"
@@ -8,6 +9,7 @@
     <div class="page__main">
       <slot></slot>
     </div>
+    <TabBar v-if="tabbar" :current-tab="tabbar" />
     <loading-image :visible="loading"></loading-image>
   </div>
 </template>
@@ -15,12 +17,14 @@
 <script>
   import PageHeader from './PageHeader'
   import LoadingImage from '../LoadingImage'
+  import TabBar from '../TabBar'
 
   export default {
     name: 'Page',
     components: {
       PageHeader,
       LoadingImage,
+      TabBar,
     },
     props: {
       title: {
@@ -37,6 +41,14 @@
       loading: {
         type: Boolean,
         default: false,
+      },
+      header: {
+        type: Boolean,
+        default: true,
+      },
+      tabbar: {
+        type: String,
+        default: '',
       },
     },
     data() {

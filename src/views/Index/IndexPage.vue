@@ -65,7 +65,7 @@
       <keep-alive :include="['TabPage', 'IndexSelectAddress']">
         <div class="p-index__view">
           <IndexSkeleton class="p-index__loading"
-            v-if="isIndexRoute"
+            v-if="!index.loaded"
             :headerLoaded="index.locState > 0"
             :entriesLoaded="index.entriesLoaded"
             :listLoaded="index.listLoaded"

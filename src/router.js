@@ -5,18 +5,22 @@ import IndexPage from '@/views/Index/IndexPage'
 
 Vue.use(Router);
 
-import TabPage from '@/components/TabPage'
-const tabPageWrapper = (tabKey, component) =>
-  ({
-    ...TabPage,
-    injectedTabKey: tabKey,
-    injectedComponent: component,
-  })
+// import TabPage from '@/components/TabPage'
+// const tabPageWrapper = (tabKey, component) =>
+//   ({
+//     ...TabPage,
+//     injectedTabKey: tabKey,
+//     injectedComponent: component,
+//   })
+// const Index = tabPageWrapper('index', () => import(/* webpackChunkName: 'Index' */ '@/views/Index'))
+// const Discover = tabPageWrapper('discover', () => import(/* webpackChunkName: "Discover" */'@/views/Discover'))
+// const Order = tabPageWrapper('order', () => import(/* webpackChunkName: "Order" */ '@/views/Order'))
+// const Profile = tabPageWrapper('profile', () => import(/* webpackChunkName: "Profile" */ '@/views/Profile'))
 
-const Index = tabPageWrapper('index', () => import(/* webpackChunkName: 'Index' */ '@/views/Index'))
-const Discover = tabPageWrapper('discover', () => import(/* webpackChunkName: "Discover" */'@/views/Discover'))
-const Order = tabPageWrapper('order', () => import(/* webpackChunkName: "Order" */ '@/views/Order'))
-const Profile = tabPageWrapper('profile', () => import(/* webpackChunkName: "Profile" */ '@/views/Profile'))
+const Index = () => import(/* webpackChunkName: 'Index' */ '@/views/Index')
+const Discover = () => import(/* webpackChunkName: "Discover" */'@/views/Discover')
+const Order = () => import(/* webpackChunkName: "Order" */ '@/views/Order')
+const Profile = () => import(/* webpackChunkName: "Profile" */ '@/views/Profile')
 
 const IndexSelectAddress = () => import(/* webpackChunkName: 'IndexSelectAddress' */ '@/views/Index/IndexSelectAddress')
 const IndexAddressEdit = () => import(/* webpackChunkName: 'IndexAddressEdit' */ '@/views/Index/IndexAddressEdit')
@@ -41,14 +45,20 @@ const ProfileAddressEdit = () => import(/* webpackChunkName: "profile-address-ed
 const router = new Router({
   routes: [{
     path: '/',
-    component: IndexPage,
+    component: Index,
     children: [{
       path: '',
       component: Index,
     }]
   }, {
+    path: '/index/address',
+    component: IndexSelectAddress,
+  }, {
+    path: '/index/create',
+    component: IndexAddressEdit,
+  }, {
     path: '/index',
-    component: IndexPage,
+    component: Index,
     children: [{
       path: 'address',
       component: IndexSelectAddress,

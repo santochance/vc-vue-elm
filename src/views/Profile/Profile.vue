@@ -1,6 +1,10 @@
 <template>
-  <page title="我的" :back-btn="false"
-    class="profile__block">
+  <Page
+    title="我的"
+    :back-btn="false"
+    tabbar="profile"
+    class="profile__block"
+    >
     <template v-if="user">
       <router-link to="/profile/info"
         class="profile__user">
@@ -169,7 +173,7 @@
         </router-link>
       </section>
     </template>
-  </page>
+  </Page>
 </template>
 
 <script>
