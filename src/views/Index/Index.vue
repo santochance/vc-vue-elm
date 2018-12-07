@@ -25,40 +25,42 @@
           :entries="entryGroupMap.main.entries"
         ></IndexMainEntries>
 
-        <div class="p-index__banner-mics-wrap">
-          <div class="p-index__activity-entries">
-            <div class="p-index__activity-entry"
-              :class="{ 'p-index__activity-entry_only': !favourEntries || !favourEntries.length }"
-            >
-              <h3 class="p-index__activity-entry-title">品质套餐</h3>
-              <div class="p-index__activity-entry-desc">搭配齐全吃得好</div>
-              <div class="p-index__activity-entry-go">立即抢购 ></div>
-              <img :src="$getImage('dd416ff085900d62b8d60fa7e9c6b65dpng', '?imageMogr/format/webp/thumbnail/!240x160r/gravity/Center/crop/240x160/')" alt="">
-            </div>
-            <div class="p-index__activity-entry p-index__favour-entry"
-              v-for="favour in favourEntries"
-              :key="favour.id"
-            >
-              <h3 class="p-index__activity-entry-title">{{ favour.name }}</h3>
-              <div class="p-index__activity-entry-desc">{{ favour.description }}</div>
-              <div class="p-index__activity-entry-go">
-                <span class="p-index__activity-entry-population">{{ favour.population }}</span> 正在抢 >
-              </div>
-              <img :src="$getImage(favour.image_hash, favourImgParam)" alt="">
-            </div>
+        <div class="p-index__activity-entries"
+          v-if="favourEntries"
+        >
+          <div class="p-index__activity-entry"
+            :class="{ 'p-index__activity-entry_only': !favourEntries || !favourEntries.length }"
+          >
+            <h3 class="p-index__activity-entry-title">品质套餐</h3>
+            <div class="p-index__activity-entry-desc">搭配齐全吃得好</div>
+            <div class="p-index__activity-entry-go">立即抢购 ></div>
+            <img :src="$getImage('dd416ff085900d62b8d60fa7e9c6b65dpng', '?imageMogr/format/webp/thumbnail/!240x160r/gravity/Center/crop/240x160/')" alt="">
           </div>
-          <IndexBanners
-            :banners="bannerList"
-          ></IndexBanners>
+          <div class="p-index__activity-entry p-index__favour-entry"
+            v-for="favour in favourEntries"
+            :key="favour.id"
+          >
+            <h3 class="p-index__activity-entry-title">{{ favour.name }}</h3>
+            <div class="p-index__activity-entry-desc">{{ favour.description }}</div>
+            <div class="p-index__activity-entry-go">
+              <span class="p-index__activity-entry-population">{{ favour.population }}</span> 正在抢 >
+            </div>
+            <img :src="$getImage(favour.image_hash, favourImgParam)" alt="">
+          </div>
         </div>
+        <IndexBanners
+          class="p-index__banner"
+          v-if="bannerList && bannerList.length"
+          :banners="bannerList"
+        ></IndexBanners>
 
+        <div class="p-index__shoplist-title">推荐商家</div>
+        <IndexShopListFilter
+          ref="filter"
+          :filterOptions="filterOptions"
+          @submit="onSubmitFilters"
+        ></IndexShopListFilter>
         <template v-if="listLoaded">
-          <div class="p-index__shoplist-title">推荐商家</div>
-          <IndexShopListFilter
-            ref="filter"
-            :filterOptions="filterOptions"
-            @submit="onSubmitFilters"
-          ></IndexShopListFilter>
           <IndexShopList
             ref="infinite"
             :items="restaurantList"
@@ -97,16 +99,23 @@
   import IndexSkeleton from './IndexSkeleton'
   import IndexHeader from './IndexHeader'
   import IndexSearch from './IndexSearch'
-  import IndexShopList from './IndexShopList'
   import IndexMainEntries from './IndexMainEntries'
-  import IndexBanners from './IndexBanners'
-  import IndexShopListFilter from './IndexShopListFilter'
-  import IndexShopListItem from './IndexShopListItem'
-  import InfiniteScroll from '@/components/common/InfiniteScroll'
+
+  // import IndexShopList from './IndexShopList'
+  // import IndexBanners from './IndexBanners'
+  // import IndexShopListFilter from './IndexShopListFilter'
+  // import IndexShopListItem from './IndexShopListItem'
+  // import InfiniteScroll from '@/components/common/InfiniteScroll'
+
+  const IndexBanners = () => import(/* webpackChunkName: "Index-deps" */ './IndexBanners')
+  const IndexShopListFilter = () => import(/* webpackChunkName: "Index-deps" */ './IndexShopListFilter')
+  const IndexShopList = () => import(/* webpackChunkName: "Index-deps" */ './IndexShopList')
+  const IndexShopListItem = () => import(/* webpackChunkName: "Index-deps" */ './IndexShopListItem')
+  const InfiniteScroll = () => import(/* webpackChunkName: "Index-deps" */ '@/components/common/InfiniteScroll')
 
   const importGeohash = () => import(/* webpackChunkName: "Geohash" */ 'ngeohash')
   const importShopContainer = () => import(/* webpackChunkName: "ShopContainer" */ '@/views/ShopContainer')
-
+  const importIndexSelectAddress = () => import(/* webpackChunkName: 'IndexSelectAddress' */ '@/views/Index/IndexSelectAddress')
 
   const debug = false
 
@@ -135,7 +144,7 @@
         restaurantList: [],
 
         loaded: false,
-        locState: 2, // 0: 正在定位, 1: 正在识别, 2: 识别完成, 3: 定位失败
+        locState: 0, // 0: 正在定位, 1: 正在识别, 2: 识别完成, 3: 定位失败
 
         offset: 0,
         rankId: '',
@@ -207,7 +216,6 @@
           } else {
             return Promise.resolve()
               .then(() => { this.locState = 1 })
-              .then(() => new Promise(resolve => setTimeout(resolve, 2000)))  // delay
               .then(() => this.loadData())
           }
         })
@@ -221,9 +229,9 @@
           this.$emit('load')
         })
         .then(() => {
-          // 预加载 Geohash
+          // 预加载
+          importIndexSelectAddress()
           importGeohash()
-          // 预加载 ShopContainer
           importShopContainer()
         })
     },
@@ -492,15 +500,12 @@
 
   /* activity-entries */
 
-    .p-index__banner-mics-wrap {
-      padding: 0 20px;
-      margin-bottom: 16px;
-      background-color: #fff;
-    }
     .p-index__activity-entries {
       display: flex;
       justify-content: center;
       margin-bottom: 6px;
+      padding: 0 20px;
+      background-color: #fff;
     }
     .p-index__activity-entry {
       box-sizing: border-box;
@@ -558,6 +563,13 @@
       .p-index__activity-entry-population {
         color: #e81919;
       }
+    }
+
+    .p-index__banner {
+      box-sizing: border-box;
+      padding: 0 20px;
+      margin-bottom: 16px;
+      background-color: #fff;
     }
 
   /* shoplist */

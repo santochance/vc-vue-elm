@@ -45,9 +45,8 @@
         </div>
       </div>
     <div class="shell__list"
-      v-show="!listLoaded"
+      :style="{ visibility: !listLoaded ? 'visible' : 'hidden' }"
     >
-
     </div>
   </div>
 </template>
