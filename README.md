@@ -1,5 +1,3 @@
-基于 vue 系列技术栈编写的 Web App，高度还原饿了么
-
 [在线演示地址](https://santochance.github.io/vc-vue-elm/)
 
 ![二维码](./docs/demo_qrcode.png)
@@ -17,10 +15,20 @@ vue2.5 + vuex + vue-router + vue-cli3(webpack) + Node.js
 ## 项目启动
 
 ```
+# 下载源码
 git clone https://github.com/santochance/vc-vue-elm.git
+
+# 进入项目
 cd vc-vue-elm
+
+# 安装依赖
 npm install
+
+# 运行开发环境
 npm run serve
+
+# 打包代码
+npm run build
 ```
 
 ## 项目功能
@@ -35,11 +43,12 @@ npm run serve
 - [x] 购物车功能
 - [x] 评论列表
 - [x] 商家详情
-- [x] 确认订单表单
+- [x] 确认订单页
 - [x] 选择和编辑收货地址
 - [x] 注册登录
 - [x] 个人中心
 - [x] 账户信息
+- [x] 发现活动页
 
 <!--
 ## 演示截图
