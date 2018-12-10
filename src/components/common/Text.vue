@@ -14,7 +14,12 @@ Exapmle:
 </template>
 
 <script>
-  let lineClampSupported
+  let lineClampSupported = false
+
+  try {
+    lineClampSupported = 'webkitLineClamp' in window.getComputedStyle(document.body)
+    console.warn('[-webkit-line-clamp] not supported')
+  } catch(e) {/* empty */}
 
   export default {
     name: 'Text',
@@ -66,8 +71,8 @@ Exapmle:
 
 <style lang="scss" scoped>
   .ellipsis {
-    white-space: nowrap;
     overflow: hidden;
+    white-space: nowrap;
     text-overflow: ellipsis;
   }
 
@@ -83,7 +88,7 @@ Exapmle:
     /* line-height: 1.2; */
     /* max-height: calc(1.2em * 3); */
     position: relative;
-    text-align: justify;
+    text-align: justify; // 使用 jusitfy 对齐看上去更整齐？
     margin-right: -1em;
     padding-right: 1em;
     /* set for :after inherit */
