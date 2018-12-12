@@ -12,24 +12,6 @@
 
 vue2.5 + vuex + vue-router + vue-cli3(webpack) + Node.js
 
-## 项目启动
-
-```
-# 下载源码
-git clone https://github.com/santochance/vc-vue-elm.git
-
-# 进入项目
-cd vc-vue-elm
-
-# 安装依赖
-npm install
-
-# 运行开发环境
-npm run serve
-
-# 打包代码
-npm run build
-```
 
 ## 项目功能
 
@@ -49,6 +31,27 @@ npm run build
 - [x] 个人中心
 - [x] 账户信息
 - [x] 发现活动页
+
+## 项目使用
+
+```
+# 下载源码
+git clone https://github.com/santochance/vc-vue-elm.git
+
+# 进入项目
+cd vc-vue-elm
+
+# 安装依赖
+npm install
+
+# 运行开发环境
+npm run serve
+
+# 打包代码
+npm run build
+```
+
+## 目录结构
 
 <!--
 ## 演示截图
@@ -78,4 +81,3 @@ InfiniteScroll
 Sticker?
 TabBar
 -->
-
