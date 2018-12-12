@@ -26,6 +26,23 @@ module.exports = {
     const types = ['vue-modules', 'vue', 'normal-modules', 'normal']
         types.forEach(type => addStyleResource(config.module.rule('scss').oneOf(type)))
 
+    // exclude some path from rule('svg')
+    // config.module.rule('svg')
+    //   .exclude
+    //     .add('@/assets/tabbar')
+    //     .end()
+
+    config.module.rules.delete('svg')
+
+    // include some path to rule('svg-sprite') to create svg spirtes with svg-sprite-loader
+    config.module.rule('svg-sprite')
+      .test(/\.(svg)(\?.*)?$/)
+      // .include
+      //   .add('@/assets/tabbar')
+      //   .end()
+      .use('svg-sprite')
+        .loader('svg-sprite-loader')
+
     if (process.env.NODE_ENV === 'production' && process.env.ANALYZE === 'true') {
       config.plugin('webpack-report')
         .use(BundleAnalyzerPlugin, [{

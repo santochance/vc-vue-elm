@@ -35,6 +35,7 @@
     "sass-loader": "^7.1.0",
     "style-resources-loader": "^1.2.1",
     "stylelint-config-recommended": "^2.1.0",
+    "svg-sprite-loader": "^4.1.3",
     "vue-template-compiler": "^2.5.17",
     "webpack-bundle-analyzer": "^3.0.2"
   },
