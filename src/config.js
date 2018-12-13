@@ -31,12 +31,12 @@ export default {
       "box-shadow": "0 -2px 4px rgba(0, 0, 0, .1)"
     },
     /**
-     * 图标目录路径, 相对路径 base 为项目根目录, '@' 是 './src' 的 alias
+     * (未实现)图标目录路径, 相对路径 base 为项目根目录, '@' 是 './src' 的 alias
      * @type {String}
      * @default "./src/assets/tabbar"
      * @optional
      */
-    "iconDir": "@/assets/tabbar",
+    // "iconDir": "@/assets/tabbar",
     /**
      * tab 列表，最少2个，最多5个 tab
      * @type {Array}

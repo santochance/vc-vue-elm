@@ -7,7 +7,10 @@
 </template>
 
 <script>
-  import Vue from 'vue'
+  // import Vue from 'vue'
+
+  let requireAll = requireContext => requireContext.keys().map(requireContext)
+  requireAll(require.context('./assets/icons', false, /\.svg$/))
 
   export default {
     name: 'App',
@@ -20,7 +23,7 @@
       }
     },
     created() {
-      this.mountSvgIcon()
+      // this.mountSvgIcon()
       // 初始化 user 和 address
       // this.$store.dispatch('fetchCurrentUser')
       //   .then(() => {
@@ -28,15 +31,15 @@
       //   })
     },
     methods: {
-      mountSvgIcon() {
-        import(/* webpackChunkName: "SvgIcon" */ '@/components/SvgIcon')
-          .then((module) => {
-            const SvgIcon = module.default || module
-            const icons = new (Vue.extend(SvgIcon))()
-            icons.$mount()
-            document.body.appendChild(icons.$el)
-          })
-      }
+      // mountSvgIcon() {
+      //   import(/* webpackChunkName: "SvgIcon" */ '@/components/SvgIcon')
+      //     .then((module) => {
+      //       const SvgIcon = module.default || module
+      //       const icons = new (Vue.extend(SvgIcon))()
+      //       icons.$mount()
+      //       document.body.appendChild(icons.$el)
+      //     })
+      // }
     }
   }
 </script>
