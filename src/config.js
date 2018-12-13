@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   /* 图片服务器域名 */
   "imageHost": "//fuss10.elemecdn.com",
   /* 跨域代理服务器域名 */
