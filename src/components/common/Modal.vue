@@ -31,8 +31,18 @@
 </template>
 
 <script>
+  const keyForModal = 'modal'
+  let cid = 0
+
+  function getActiveModalSet(query) {
+    if (query === null || typeof query !== 'object') return new TypeError('query must be an object')
+    return new Set(query[keyForModal] && query[keyForModal].split(',').map(Number))
+  }
+
+  const debug = true
 
   export default {
+    name: 'Modal',
     props: {
       /* modal 是否可见 */
       visible: Boolean,
@@ -77,8 +87,65 @@
     },
     data() {
       return {
-
+        cid: undefined,
+        willEmitChange: true,
       }
+    },
+    created() {
+      debug && (window[this.$options.name] = this)
+
+      this.cid = cid++
+    },
+    watch: {
+      // modal 可见状态变化时，写入 modal 状态信息到路由
+      visible(value) {
+        const query = {...this.$route.query}
+        const activeModalSet = getActiveModalSet(query)
+        const visibleInQuery = activeModalSet.has(this.cid)
+        // visible 变化了，但 query 中 modal 状态信息已经同步
+        if (value === visibleInQuery) return
+
+        // 用户点击视图改变 visible，modal 会更新路由，但不再通知视图 visible 变化
+        this.willEmitChange = false
+
+        if (value) {
+          activeModalSet.add(this.cid)
+        } else {
+          activeModalSet.delete(this.cid)
+        }
+
+        // 仅修改 query 中 modal 状态信息部分
+        const activeModalStr = [...activeModalSet].toString()
+        if (activeModalStr) {
+          query[keyForModal] = activeModalStr
+        } else {
+          // 如果没有活动状态的 modal, 则从 query 中删除 modal 状态信息
+          delete query[keyForModal]
+        }
+
+        this.$router.push({
+          ...this.$route,
+          query,
+        })
+      },
+      // 路由路线变化时, 检查 modal 活动状态，并通知变化
+      '$route'(to, from) {
+        if (!this.willEmitChange) {
+          this.willEmitChange = true
+          return
+        }
+
+        const visible = getActiveModalSet(to.query).has(this.cid)
+        const oldVisible = getActiveModalSet(from.query).has(this.cid)
+        if (visible === oldVisible) return
+
+        // 用户操作浏览器导航触发路由更新，modal 会通知视图改变 visible
+        const payload = {
+          visible,
+          cid: this.cid
+        }
+        this.$emit('change', payload)
+      },
     },
     methods: {
       onClose() {

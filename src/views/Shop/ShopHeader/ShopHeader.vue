@@ -36,10 +36,10 @@
       </div>
     </div>
 
-    <modal :visible="shopInfoShow" panel="center" closeBtn="center" @close="shopInfoShow = false">
+    <modal :visible="shopInfoShow" panel="center" closeBtn="center" @close="shopInfoShow = false" @change="onFoodInfoModalChange">
       <ShopInfo :shopDetails="shopDetails" />
     </modal>
-    <modal :visible="activityListShow" panel="bottom" @close="activityListShow = false">
+    <modal :visible="activityListShow" panel="bottom" @close="activityListShow = false" @change="onActivityListModalChange">
       <ActivityList :shopDetails="shopDetails" />
     </modal>
   </section>
@@ -70,12 +70,20 @@
         /* img params */
         shopPostImgParam: '?imageMogr/format/webp/thumbnail/750x/',
         shopLogoImgParam: '?imageMogr/format/webp/thumbnail/150x/',
+
+        debug: null,
       }
     },
     methods: {
       onBack() {
         this.$router.back()
       },
+      onFoodInfoModalChange(event) {
+        this.shopInfoShow = event.visible
+      },
+      onActivityListModalChange(event) {
+        this.activityListShow = event.visible
+      }
     },
   }
 </script>
