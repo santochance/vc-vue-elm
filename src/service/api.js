@@ -113,7 +113,11 @@ export const fetchBatchShop = ({ restaurantId, user_id,  latitude, longitude }) 
     terminal: 'h5',
     latitude,
     longitude,
-  })}`)
+  })}`, {
+    headers: {
+      "x-shard": `shopid=${restaurantId}`
+    }
+  })
 
 /**
  * 批量查询餐饮评价信息（评价概况，过滤标签）
@@ -123,7 +127,11 @@ export const fetchBatchComments = ({ restaurantId, has_content }) =>
       has_content,
       offset: 0,
       limit: 20,
-  })}`)
+  })}`, {
+    headers: {
+      "x-shard": `shopid=${restaurantId}`
+    }
+  })
 
 /**
  * 查询餐馆评价
@@ -134,7 +142,11 @@ export const fetchRatings = ({ restaurantId, has_content, tag_name, offset  }) =
       has_content,
       offset,
       limit: 20,
-  })}`)
+  })}`, {
+    headers: {
+      "x-shard": `shopid=${restaurantId}`
+    }
+  })
 
 /**
  * 更新购物车
@@ -143,7 +155,8 @@ export const updateCart = ({ geohash, user_id, restaurant_id, entities, sku_ids 
   request(`https://h5.ele.me/restapi/booking/v1/cart_client`, {
     method: 'POST',
     headers: {
-      'Content-Type': 'text/plain;chartset=utf-8'
+      'Content-Type': 'text/plain;chartset=utf-8',
+      "x-shard": `shopid=${restaurant_id}`
     },
     body: {
       "sub_channel": "",
@@ -173,6 +186,9 @@ export const updateCart = ({ geohash, user_id, restaurant_id, entities, sku_ids 
 export const submitCart = ({ userId, restaurantId, addressId, deliverTime, entities, tableware, remark, geohash, sig } = {}) =>
   request(`https://h5.ele.me/restapi/booking/v1/carts/checkout`, {
     method: 'POST',
+    headers: {
+      "x-shard": `shopid=${restaurantId}`
+    },
     body: {
       "restaurant_id": restaurantId,
       "entities": [
