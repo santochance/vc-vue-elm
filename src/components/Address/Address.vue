@@ -52,6 +52,7 @@
       -->
       <modal :visible="confirmShow" :closable="false"
         @close="closeConfirm"
+        @change="confirmShow = $event"
       >
         <div class="confirm-delete">
           <h2 class="confirm-delete__title">删除地址</h2>

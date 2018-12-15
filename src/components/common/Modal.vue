@@ -1,6 +1,6 @@
 <template>
   <transition name="modal-fade">
-    <div v-if="visible"
+    <div v-if="getValue(visible, 'visible')"
         class="modal__container"
         :class="panel === 'center' ? 'modal__container_center' : 'modal__container_bottom'"
         :style="{ zIndex: zIndex }"
@@ -38,6 +38,9 @@
     if (query === null || typeof query !== 'object') return new TypeError('query must be an object')
     return new Set(query[keyForModal] && query[keyForModal].split(',').map(Number))
   }
+  function isObject(value) {
+    return value !== null && typeof value === 'object'
+  }
 
   const debug = true
 
@@ -45,7 +48,7 @@
     name: 'Modal',
     props: {
       /* modal 是否可见 */
-      visible: Boolean,
+      visible: [Boolean, Object],
 
       /* 是否显示关闭按钮 */
       closable: {
@@ -98,35 +101,45 @@
     },
     watch: {
       // modal 可见状态变化时，写入 modal 状态信息到路由
-      visible(value) {
-        const query = {...this.$route.query}
-        const activeModalSet = getActiveModalSet(query)
-        const visibleInQuery = activeModalSet.has(this.cid)
-        // visible 变化了，但 query 中 modal 状态信息已经同步
-        if (value === visibleInQuery) return
+      visible(value, oldValue) {
+        // value 为对象, 并且 willUpdateUrl 为 false，表示这次 visible 变化是由于用户操作浏览器返回键引起的
+        if (isObject(value) && !value.willUpdateUrl) return
+
+        const visible = this.getValue(value, 'visible')
+        const oldVisible = this.getValue(oldValue, 'visible')
+        if (visible === oldVisible) return
 
         // 用户点击视图改变 visible，modal 会更新路由，但不再通知视图 visible 变化
         this.willEmitChange = false
 
-        if (value) {
-          activeModalSet.add(this.cid)
-        } else {
-          activeModalSet.delete(this.cid)
-        }
+        if (!visible && oldVisible) {
+          this.$router.back()
+        } else if (visible && !oldVisible) {
+          // push route
+          const query = {...this.$route.query}
+          const activeModalSet = getActiveModalSet(query)
+                  // const visibleInQuery = activeModalSet.has(this.cid)
+                  // visible 变化了，但 query 中 modal 状态信息已经同步
+                  // if (value === visibleInQuery) return
+          if (value) {
+            activeModalSet.add(this.cid)
+          } else {
+            activeModalSet.delete(this.cid)
+          }
+          // 仅修改 query 中 modal 状态信息部分
+          const activeModalStr = [...activeModalSet].toString()
+          if (activeModalStr) {
+            query[keyForModal] = activeModalStr
+          } else {
+            // 如果没有活动状态的 modal, 则从 query 中删除 modal 状态信息
+            delete query[keyForModal]
+          }
 
-        // 仅修改 query 中 modal 状态信息部分
-        const activeModalStr = [...activeModalSet].toString()
-        if (activeModalStr) {
-          query[keyForModal] = activeModalStr
-        } else {
-          // 如果没有活动状态的 modal, 则从 query 中删除 modal 状态信息
-          delete query[keyForModal]
+          this.$router.push({
+            ...this.$route,
+            query,
+          })
         }
-
-        this.$router.push({
-          ...this.$route,
-          query,
-        })
       },
       // 路由路线变化时, 检查 modal 活动状态，并通知变化
       '$route'(to, from) {
@@ -142,7 +155,8 @@
         // 用户操作浏览器导航触发路由更新，modal 会通知视图改变 visible
         const payload = {
           visible,
-          cid: this.cid
+          cid: this.cid,
+          willUpdateUrl: false,
         }
         this.$emit('change', payload)
       },
@@ -150,6 +164,14 @@
     methods: {
       onClose() {
         this.$emit('close')
+      },
+      getValue(obj, key) {
+        if (isObject(obj)) {
+          if (key === undefined) throw TypeError('key must be provided when get value from object')
+          return obj[key]
+        } else {
+          return obj
+        }
       },
     },
   }

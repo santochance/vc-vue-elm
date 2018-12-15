@@ -17,7 +17,7 @@
       @clearcart="clearCart"
       @submitcart="toCheckout"
     />
-    <modal :visible="specShow" panel="center" :closable="false" :zIndex="1001" @close="closeSpecPanel">
+    <modal :visible="specShow" panel="center" :closable="false" :zIndex="1001" @close="closeSpecPanel" @change="specShow = $event">
       <FoodSpec :item="specItem"
         @ok="saveSpecPanel"></FoodSpec>
     </modal>

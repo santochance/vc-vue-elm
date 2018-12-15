@@ -167,7 +167,7 @@
       <a href="javascript:" class="action-bar__submit-btn" @click.stop.prevent="submit">去支付</a>
     </footer>
 
-    <modal :visible="deliverTimesVisible" panel="bottom" :closable="false" @close="deliverTimesVisible = false">
+    <modal :visible="deliverTimesVisible" panel="bottom" :closable="false" @close="deliverTimesVisible = false" @change="deliverTimesVisible = $event">
       <div v-if="checkout" class="deliver-times__container">
         <h3 class="deliver-times__head">选择送达时间</h3>
         <div class="deliver-times__content">
@@ -195,7 +195,7 @@
       </div>
     </modal>
 
-    <modal :visible="tablewareVisible" panel="bottom" @close="tablewareVisible = false">
+    <modal :visible="tablewareVisible" panel="bottom" @close="tablewareVisible = false" @change="tablewareVisible = $event">
       <div class="tableware__container">
         <h2 class="tableware__head">餐具份数</h2>
         <ul class="tableware__list">

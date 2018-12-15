@@ -36,10 +36,10 @@
       </div>
     </div>
 
-    <modal :visible="shopInfoShow" panel="center" closeBtn="center" @close="shopInfoShow = false" @change="onFoodInfoModalChange">
+    <modal :visible="shopInfoShow" panel="center" closeBtn="center" @close="shopInfoShow = false" @change="shopInfoShow = $event">
       <ShopInfo :shopDetails="shopDetails" />
     </modal>
-    <modal :visible="activityListShow" panel="bottom" @close="activityListShow = false" @change="onActivityListModalChange">
+    <modal :visible="activityListShow" panel="bottom" @close="activityListShow = false" @change="activityListShow = $event">
       <ActivityList :shopDetails="shopDetails" />
     </modal>
   </section>
@@ -78,12 +78,6 @@
       onBack() {
         this.$router.back()
       },
-      onFoodInfoModalChange(event) {
-        this.shopInfoShow = event.visible
-      },
-      onActivityListModalChange(event) {
-        this.activityListShow = event.visible
-      }
     },
   }
 </script>

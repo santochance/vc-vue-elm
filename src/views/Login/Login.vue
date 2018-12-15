@@ -60,6 +60,7 @@
 
     <modal :visible="captchaShow" :closable="false"
       @close="captchaShow = false"
+      @change="captchaShow = $event"
     >
       <div class="captcha-panel">
         <h2 class="captcha-panel__title">请填写图形验证码</h2>
