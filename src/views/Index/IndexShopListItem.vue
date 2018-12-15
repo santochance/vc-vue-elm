@@ -158,7 +158,7 @@
         </div>
         <div class="b-item__activity-btn"
           v-if="item.activities.length > 2"
-          :class="{ 'b-item__activity-btn_expanded': activityListCollapsed}"
+          :class="{ 'b-item__activity-btn_expanded': !activityListCollapsed}"
           @click.stop="onToggleActivityList"
         >
           <span>{{ item.activities.length }}个活动</span>
