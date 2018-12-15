@@ -24,7 +24,7 @@
   const options = config.tabBar
   const tabs = options.list
   let requireAll = requireContext => requireContext.keys().map(requireContext)
-  requireAll(require.context('@/assets/tabbar', false, /\.svg$/))
+  requireAll(require.context('@svg-sprite/tabbar', false, /\.svg$/))
 
   export default {
     name: 'TabBar',

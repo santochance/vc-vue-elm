@@ -10,7 +10,7 @@
   // import Vue from 'vue'
 
   let requireAll = requireContext => requireContext.keys().map(requireContext)
-  requireAll(require.context('./assets/icons', false, /\.svg$/))
+  requireAll(require.context('@svg-sprite/icons', false, /\.svg$/))
 
   export default {
     name: 'App',
@@ -30,6 +30,9 @@
       //     this.$store.dispatch('fetchAddressList')
       //   })
     },
+    mounted() {
+      this.fixSvgSymbolForFirefox()
+    },
     methods: {
       // mountSvgIcon() {
       //   import(/* webpackChunkName: "SvgIcon" */ '@/components/SvgIcon')
@@ -40,6 +43,25 @@
       //       document.body.appendChild(icons.$el)
       //     })
       // }
+      fixSvgSymbolForFirefox() {
+        const isFirefox = window.navigator.userAgent.search(/firefox/i) !== -1
+        if (!isFirefox) return
+
+        console.warn('[svg] fix up svg symbol for Firefox')
+
+        this.$nextTick(() => {
+          var sprite = document.querySelector('#__SVG_SPRITE_NODE__')
+          if (sprite) {
+            var symbols = sprite.querySelectorAll('symbol')
+            symbols.forEach(symbol => {
+              var foundEl = symbol.querySelector('linearGradient')
+              if (foundEl) {
+                sprite.appendChild(foundEl.parentElement)
+              }
+            })
+          }
+        })
+      }
     }
   }
 </script>

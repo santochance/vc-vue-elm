@@ -27,22 +27,23 @@ module.exports = {
         types.forEach(type => addStyleResource(config.module.rule('scss').oneOf(type)))
 
     // exclude some path from rule('svg')
-    // config.module.rule('svg')
-    //   .exclude
-    //     .add('@/assets/tabbar')
-    //     .end()
+    config.resolve.alias
+      .set('@svg-sprite', path.resolve(__dirname, './src/assets/sprite'))
 
-    config.module.rules.delete('svg')
-
+    config.module.rule('svg')
+      .exclude
+        .add(path.resolve(__dirname, './src/assets/sprite'))
+        .end()
     // include some path to rule('svg-sprite') to create svg spirtes with svg-sprite-loader
     config.module.rule('svg-sprite')
       .test(/\.(svg)(\?.*)?$/)
-      // .include
-      //   .add('@/assets/tabbar')
-      //   .end()
+      .include
+        .add(path.resolve(__dirname, './src/assets/sprite'))
+        .end()
       .use('svg-sprite')
         .loader('svg-sprite-loader')
 
+    // webpack bundle analyzer
     if (process.env.NODE_ENV === 'production' && process.env.ANALYZE === 'true') {
       config.plugin('webpack-report')
         .use(BundleAnalyzerPlugin, [{
