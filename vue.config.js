@@ -1,8 +1,10 @@
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin
 const PrerenderSPAPlugin = require('prerender-spa-plugin')
-const Renderer = PrerenderSPAPlugin.PuppeteerRenderer
+// const Renderer = PrerenderSPAPlugin.PuppeteerRenderer
+// const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin')
 
 const path = require('path')
+// const fs = require('fs')
 const useMock = require('./src/service/mock/useMock')
 
 module.exports = {
@@ -61,17 +63,59 @@ module.exports = {
     // 删除 code splitting 自动生成的 prefetch
     config.plugins.delete('prefetch')
 
-    // 使用 prerender
-    config.plugin('prerender-spa')
-      .use(PrerenderSPAPlugin, [{
-        staticDir: path.join(__dirname, '/dist'),
-        routes: ['/', '/discover', '/order', '/profile'],
-        renderer: new Renderer({
-          // headless: false,
-        })
+    /* production only */
 
-      }])
-
+    /*
+     * prerender
+     */
+    // if (process.env.NODE_ENV === 'production') {
+    //   // 使用 prerender
+    //   config.plugin('prerender-spa')
+    //     .use(PrerenderSPAPlugin, [{
+    //       staticDir: path.join(__dirname, '/dist'),
+    //       routes: [
+    //         '/',
+    //         // '/discover',
+    //         // '/order',
+    //         // '/profile',
+    //         // '/shop',
+    //         // '/checkout'
+    //       ],
+    //       renderer: new Renderer({
+    //         headless: false,
+    //         // 注意只设置 injectProperty 不会产生效果，需要同时设置 inject
+    //         injectProperty: '__PRERENDER__',
+    //         inject: {
+    //           foo: 'bar'
+    //         },
+    //         renderAfterDocumentEvent: 'prerender-trigger',
+    //         // renderAfterElementExists: '#app',
+    //       }),
+    //       // postProcess (renderedRoute) {
+    //       //   // Ignore any redirects.
+    //       //   renderedRoute.route = renderedRoute.originalRoute
+    //       //   renderedRoute.html = renderedRoute.html.replace(/<link href="\/(css\/app\.\w+\.css)" rel="stylesheet">/, function (match, group) {
+    //       //     const filePath = path.join(__dirname, 'dist', group)
+    //       //     const styleContent = fs.readFileSync(filePath).toString()
+    //       //     return `<style>${styleContent}</style>`
+    //       //   })
+    //       //   return renderedRoute
+    //       // }
+    //     }])
+    //   // 从 preload 插件中排除 app.[hash].css 文件
+    //   config.plugin('preload')
+    //     .tap(options => {
+    //       options[0].fileBlacklist = options[0].fileBlacklist || []
+    //       options[0].fileBlacklist.push(/app([^/])*?\.css$/)
+    //       return options
+    //     })
+    //   // plugin('html-inline-source')
+    //   config.plugin('html').tap(args => {
+    //       args[0].inlineSource = '.css$'
+    //       return args
+    //   })
+    //   config.plugin('inline').use(HtmlWebpackInlineSourcePlugin)
+    // }
   }
 }
 
