@@ -3,20 +3,6 @@ import Router from 'vue-router';
 
 Vue.use(Router);
 
-// import IndexPage from '@/views/Index/IndexPage'
-
-// import TabPage from '@/components/TabPage'
-// const tabPageWrapper = (tabKey, component) =>
-//   ({
-//     ...TabPage,
-//     injectedTabKey: tabKey,
-//     injectedComponent: component,
-//   })
-// const Index = tabPageWrapper('index', () => import(/* webpackChunkName: 'Index' */ '@/views/Index'))
-// const Discover = tabPageWrapper('discover', () => import(/* webpackChunkName: "Discover" */'@/views/Discover'))
-// const Order = tabPageWrapper('order', () => import(/* webpackChunkName: "Order" */ '@/views/Order'))
-// const Profile = tabPageWrapper('profile', () => import(/* webpackChunkName: "Profile" */ '@/views/Profile'))
-
 import Discover from '@/views/Discover'
 import Order from '@/views/Order'
 import Profile from '@/views/Profile'
@@ -26,25 +12,25 @@ const Index = () => import(/* webpackChunkName: 'Index' */ '@/views/Index')
 // const Order = () => import(/* webpackChunkName: "Order" */ '@/views/Order')
 // const Profile = () => import(/* webpackChunkName: "Profile" */ '@/views/Profile')
 
-const IndexSelectAddress = () => import(/* webpackChunkName: 'IndexSelectAddress' */ '@/views/Index/IndexSelectAddress')
-const IndexAddressEdit = () => import(/* webpackChunkName: 'IndexAddressEdit' */ '@/views/Index/IndexAddressEdit')
+const IndexSelectAddress = () => import(/* webpackChunkName: 'Index' */ '@/views/Index/IndexSelectAddress')
+const IndexAddressEdit = () => import(/* webpackChunkName: 'Index' */ '@/views/Index/IndexAddressEdit')
 
 const Login = () => import(/* webpackChunkName: "login" */ '@/views/Login')
 const Shop = () => import(/* webpackChunkName: "ShopContainer" */ '@/views/ShopContainer')
 
-const Checkout = () => import(/* webpackChunkName: "checkout" */ '@/views/Checkout')
-const CheckoutConfirmOrder = () => import(/* webpackChunkName: "confirm-order" */ '@/views/Checkout/ConfirmOrder')
-const CheckoutAddress = () => import(/* webpackChunkName: "checkout-address" */ '@/views/Checkout/CheckoutAddress')
-const CheckoutAddressEdit = () => import(/* webpackChunkName: "checkout-address-edit" */ '@/views/Checkout/CheckoutAddressEdit')
-const CheckoutRemark = () => import(/* webpackChunkName: "remark" */ '@/views/Checkout/Remark')
+const Checkout = () => import(/* webpackChunkName: "Checkout" */ '@/views/Checkout')
+const CheckoutConfirmOrder = () => import(/* webpackChunkName: "Checkout" */ '@/views/Checkout/ConfirmOrder')
+const CheckoutAddress = () => import(/* webpackChunkName: "Checkout" */ '@/views/Checkout/CheckoutAddress')
+const CheckoutAddressEdit = () => import(/* webpackChunkName: "Checkout" */ '@/views/Checkout/CheckoutAddressEdit')
+const CheckoutRemark = () => import(/* webpackChunkName: "Checkout" */ '@/views/Checkout/Remark')
 
-const ProfileInfo = () => import(/* webpackChunkName: "profile-info" */ '@/views/Profile/ProfileInfo')
-const ProfileInfoMain = () => import(/* webpackChunkName: "profile-info-main" */ '@/views/Profile/ProfileInfoMain')
-const ProfileInfoUsername = () => import(/* webpackChunkName: "profile-info-username" */ '@/views/Profile/ProfileInfoUsername')
-const ProfileInfoPassword = () => import(/* webpackChunkName: "profile-info-password" */ '@/views/Profile/ProfileInfoPassword')
-const ProfileRebindMobile = () => import(/* webpackChunkName: "profile-rebind-mobile" */ '@/views/Profile/ProfileRebindMobile')
-const ProfileAddress = () => import(/* webpackChunkName: "profile-address" */ '@/views/Profile/ProfileAddress')
-const ProfileAddressEdit = () => import(/* webpackChunkName: "profile-address-edit" */ '@/views/Profile/ProfileAddressEdit')
+const ProfileInfo = () => import(/* webpackChunkName: "Profile" */ '@/views/Profile/ProfileInfo')
+const ProfileInfoMain = () => import(/* webpackChunkName: "Profile" */ '@/views/Profile/ProfileInfoMain')
+const ProfileInfoUsername = () => import(/* webpackChunkName: "Profile" */ '@/views/Profile/ProfileInfoUsername')
+const ProfileInfoPassword = () => import(/* webpackChunkName: "Profile" */ '@/views/Profile/ProfileInfoPassword')
+const ProfileRebindMobile = () => import(/* webpackChunkName: "Profile" */ '@/views/Profile/ProfileRebindMobile')
+const ProfileAddress = () => import(/* webpackChunkName: "Profile" */ '@/views/Profile/ProfileAddress')
+const ProfileAddressEdit = () => import(/* webpackChunkName: "Profile" */ '@/views/Profile/ProfileAddressEdit')
 
 const router = new Router({
   routes: [{
