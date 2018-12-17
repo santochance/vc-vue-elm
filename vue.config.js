@@ -20,6 +20,13 @@ module.exports = {
       modules: false,
     }
   },
+  configureWebpack: {
+    externals: {
+      'vue': 'Vue',
+      'vue-router': 'VueRouter',
+      'vuex': 'Vuex',
+    }
+  },
   chainWebpack: config => {
     // automatic imports style assets
     // See: https://cli.vuejs.org/guide/css.html#automatic-imports
