@@ -33,6 +33,8 @@ const ProfileAddress = () => import(/* webpackChunkName: "Profile" */ '@/views/P
 const ProfileAddressEdit = () => import(/* webpackChunkName: "Profile" */ '@/views/Profile/ProfileAddressEdit')
 
 const router = new Router({
+  mode: 'history',
+  base: process.env.NODE_ENV === 'production' ? '/vc-vue-elm/' : '/',
   routes: [{
     path: '/',
     component: Index,

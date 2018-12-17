@@ -6,7 +6,7 @@ const path = require('path')
 const useMock = require('./src/service/mock/useMock')
 
 module.exports = {
-  baseUrl: process.env.BASE_URL || '',
+  baseUrl: process.env.NODE_ENV === 'production' ? '/vc-vue-elm/' : '/',
   devServer: {
     before: useMock,
     quiet: false,
