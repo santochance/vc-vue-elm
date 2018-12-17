@@ -3,7 +3,8 @@
     <span v-if="backBtn"
       class="page-header__left"
       @click.stop.prevent="onBack">
-      <img src="./arrow-left.svg" alt="">
+      <!-- <img src="./arrow-left.svg" alt=""> -->
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 30" id="arrow-left"><path fill="#FFF" fill-rule="evenodd" d="M16.552 5.633L14.508 3.59 2.243 15.853 14.508 28.41l2.044-2.043-10.22-10.513z"/></svg>
     </span>
     <h1 class="page-header__title ellipsis"
       >{{ title }}</h1>
@@ -11,7 +12,6 @@
 </template>
 
 <script>
-
   export default {
     name: 'PageHeader',
     components: {
@@ -57,6 +57,11 @@
     height: 88px;
     img {
       width: 24px;
+    }
+    svg {
+      width: 20px;
+      height: 32px;
+      fill: #fff;
     }
   }
   .page-header__title {
