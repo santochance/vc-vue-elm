@@ -29,6 +29,7 @@
     "@vue/cli-service": "^3.0.0",
     "compression": "^1.7.3",
     "cross-env": "^5.2.0",
+    "html-webpack-inline-source-plugin": "0.0.10",
     "node-sass": "^4.9.3",
     "postcss-px2rem": "^0.3.0",
     "prerender-spa-plugin": "^3.4.0",
