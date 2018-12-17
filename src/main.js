@@ -3,7 +3,7 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 
-import '@/util/flexible';
+// import '@/util/flexible'; // embed in public/index.html
 import '@/util/preventPullToRefresh';
 import '@/assets/styles/base.scss';
 // import '@/assets/styles/util.scss';
