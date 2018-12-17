@@ -278,7 +278,7 @@
         try {
           value = this.checkout.current_address
         } catch(e) {/* empty */}
-        return Object.keys(value).length ? value : null
+        return value && Object.keys(value).length ? value : null
       },
       delivery_type() {
         let value
