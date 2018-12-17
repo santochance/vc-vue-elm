@@ -101,17 +101,17 @@
   import IndexSearch from './IndexSearch'
   import IndexMainEntries from './IndexMainEntries'
 
-  // import IndexShopList from './IndexShopList'
-  // import IndexBanners from './IndexBanners'
-  // import IndexShopListFilter from './IndexShopListFilter'
-  // import IndexShopListItem from './IndexShopListItem'
-  // import InfiniteScroll from '@/components/common/InfiniteScroll'
+  import IndexShopList from './IndexShopList'
+  import IndexBanners from './IndexBanners'
+  import IndexShopListFilter from './IndexShopListFilter'
+  import IndexShopListItem from './IndexShopListItem'
+  import InfiniteScroll from '@/components/common/InfiniteScroll'
 
-  const IndexBanners = () => import(/* webpackChunkName: "Index-deps" */ './IndexBanners')
-  const IndexShopListFilter = () => import(/* webpackChunkName: "Index-deps" */ './IndexShopListFilter')
-  const IndexShopList = () => import(/* webpackChunkName: "Index-deps" */ './IndexShopList')
-  const IndexShopListItem = () => import(/* webpackChunkName: "Index-deps" */ './IndexShopListItem')
-  const InfiniteScroll = () => import(/* webpackChunkName: "Index-deps" */ '@/components/common/InfiniteScroll')
+  // const IndexBanners = () => import(/* webpackChunkName: "Index-deps" */ './IndexBanners')
+  // const IndexShopListFilter = () => import(/* webpackChunkName: "Index-deps" */ './IndexShopListFilter')
+  // const IndexShopList = () => import( webpackChunkName: "Index-deps"  './IndexShopList')
+  // const IndexShopListItem = () => import(/* webpackChunkName: "Index-deps" */ './IndexShopListItem')
+  // const InfiniteScroll = () => import(/* webpackChunkName: "Index-deps" */ '@/components/common/InfiniteScroll')
 
   const importGeohash = () => import(/* webpackChunkName: "Geohash" */ 'ngeohash')
   const importShopContainer = () => import(/* webpackChunkName: "ShopContainer" */ '@/views/ShopContainer')
