@@ -1,6 +1,7 @@
 <template>
   <div class="page__container">
     <page-header
+      class="sticky-box"
       v-if="header"
       :title="title"
       :back-btn="backBtn"
