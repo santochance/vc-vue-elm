@@ -38,7 +38,7 @@
     justify-content: center;
 
     position: fixed;
-    z-index: 8888;
+    z-index: 999;
     top: 0;
     left: 0;
     width: 100%;

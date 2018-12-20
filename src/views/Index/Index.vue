@@ -25,7 +25,7 @@
           :entries="entryGroupMap.main.entries"
         ></IndexMainEntries>
 
-        <div class="p-index__activity-entries"
+<!--         <div class="p-index__activity-entries"
           v-if="favourEntries"
         >
           <div class="p-index__activity-entry"
@@ -47,7 +47,7 @@
             </div>
             <img :src="$getImage(favour.image_hash, favourImgParam)" alt="">
           </div>
-        </div>
+        </div> -->
         <IndexBanners
           class="p-index__banner"
           v-if="bannerList && bannerList.length"
