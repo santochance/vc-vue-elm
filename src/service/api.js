@@ -307,7 +307,7 @@ export const reverseGeoCoding = ({ latitude, longitude }) =>
  * 查询导航入口列表
  */
 export const fetchEntryList = ({ latitude, longitude }) =>
-  request(`https://h5.ele.me/restapi/shopping/openapi/entries` + `?${stringify({
+  request(`https://h5.ele.me/restapi/shopping/v2/entries` + `?${stringify({
     latitude,
     longitude,
     templates: ['main_template', 'favourable_template', 'svip_template'],
