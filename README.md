@@ -1,6 +1,8 @@
+![二维码](./docs/demo_qrcode.png)
+
 [在线演示地址](https://santochance.github.io/vc-vue-elm/)
 
-![二维码](./docs/demo_qrcode.png)
+> **纯移动端项目，推荐使用手机扫码打开，PC端打开建议切换到“移动设备模式”。**
 
 ## 前言
 
@@ -51,7 +53,7 @@ npm run serve
 npm run build
 ```
 
-## 目录结构
+<!-- ## 目录结构 -->
 
 <!--
 ## 演示截图
@@ -67,7 +69,7 @@ npm run build
 个人中心
 -->
 
-## 开发过程中的问题与解决
+<!-- ## 开发过程中的问题与解决 -->
 
 
 <!--
